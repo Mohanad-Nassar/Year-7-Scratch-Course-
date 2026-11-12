@@ -1,0 +1,1399 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Fruit Catch Scratch Course</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: Scratch-workspace dotted ground; a left "stack" of lesson blocks that snap together; each lesson runs Starter → I do → We do → You do → Exit ticket. */
+:root{
+  --bg:#f3f5fb; --dot:#d9deec; --panel:#ffffff; --panel2:#eef1f9; --ink:#1f2340; --ink2:#575d80; --line:#d8dcec;
+  --accent:#855cd6; --accent-ink:#ffffff; --focus:#ff8c1a;
+  --motion:#4c97ff; --looks:#9966ff; --sound:#cf63cf; --events:#ffbf00; --control:#ffab19; --sensing:#5cb1d6; --operators:#59c059; --variables:#ff8c1a; --myblocks:#ff6680;
+  --good:#1f9d55; --good-bg:#e3f6ea; --bad:#d64545; --bad-bg:#fde8e8; --warn-bg:#fff4d6;
+  --font-display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Lexend","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --shadow:0 1px 0 rgba(31,35,64,.06),0 6px 18px -10px rgba(31,35,64,.25);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141626; --dot:#262a42; --panel:#1d2036; --panel2:#252946; --ink:#eceefb; --ink2:#a9aed0; --line:#323757;
+  --accent:#a88bff; --accent-ink:#141626; --good:#5fd38d; --good-bg:#183a2a; --bad:#ff8a8a; --bad-bg:#3d1f26; --warn-bg:#3a3220; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141626; --dot:#262a42; --panel:#1d2036; --panel2:#252946; --ink:#eceefb; --ink2:#a9aed0; --line:#323757;
+  --accent:#a88bff; --accent-ink:#141626; --good:#5fd38d; --good-bg:#183a2a; --bad:#ff8a8a; --bad-bg:#3d1f26; --warn-bg:#3a3220; color-scheme:dark;}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{background:var(--bg);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:22px 22px;color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- top bar ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--panel)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topbar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;min-height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.25rem;text-decoration:none;color:var(--ink)}
+.brand img{width:34px;height:34px;object-fit:contain}
+.brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:.72rem;color:var(--ink2);letter-spacing:.04em;text-transform:uppercase}
+.topbar .spacer{flex:1}
+.pill-btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:.88rem;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.pill-btn:hover{border-color:var(--accent)}
+
+/* ---------- shell ---------- */
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;padding-block:24px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (max-width:900px){.shell{grid-template-columns:minmax(0,1fr);gap:16px;padding-block:14px 60px}}
+
+/* lesson stack nav = Scratch stack blocks */
+.stack{position:sticky;top:84px;align-self:start;display:flex;flex-direction:column}
+.stack .cap{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:0 0 8px 4px;font-weight:600}
+.sblock{--c:var(--motion);position:relative;display:flex;align-items:center;gap:10px;text-align:left;border:0;background:var(--c);color:#fff;font-family:var(--font-display);font-weight:600;font-size:1rem;padding:12px 14px 14px 14px;margin-top:-4px;border-radius:8px;filter:saturate(.9);opacity:.92;transition:transform .15s ease,opacity .15s,filter .15s;text-decoration:none}
+.sblock:first-of-type{margin-top:0;border-top-left-radius:22px;border-top-right-radius:22px;padding-top:18px}
+.sblock::before{content:"";position:absolute;left:18px;top:-1px;width:26px;height:7px;background:var(--bg);border-radius:0 0 7px 7px}
+.sblock:first-of-type::before{display:none}
+.sblock::after{content:"";position:absolute;left:18px;bottom:-6px;width:26px;height:7px;background:var(--c);border-radius:0 0 7px 7px;z-index:1}
+.sblock .num{display:grid;place-items:center;min-width:28px;height:28px;border-radius:999px;background:rgba(255,255,255,.25);font-size:.9rem}
+.sblock .t{line-height:1.15}
+.sblock .t small{display:block;font-family:var(--font-body);font-weight:500;font-size:.72rem;opacity:.92}
+.sblock .tick{margin-left:auto;font-size:.8rem;background:rgba(255,255,255,.28);border-radius:999px;padding:1px 8px;font-family:var(--font-body)}
+.sblock:hover{opacity:1;transform:translateX(3px)}
+.sblock[aria-current="page"]{opacity:1;filter:none;box-shadow:inset 0 0 0 3px rgba(255,255,255,.65);transform:translateX(6px)}
+.sblock.dark-text{color:#3b2a00}
+.sblock.dark-text .num{background:rgba(0,0,0,.12)}
+@media (max-width:900px){
+  .stack{position:static;flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:6px;scrollbar-width:thin}
+  .stack .cap{display:none}
+  .sblock,.sblock:first-of-type{margin:0;border-radius:12px;padding:8px 12px;white-space:nowrap;flex:0 0 auto}
+  .sblock::before,.sblock::after{display:none}
+  .sblock[aria-current="page"]{transform:none}
+  .sblock .t small{display:none}
+}
+
+/* ---------- views ---------- */
+main{min-width:0}
+.view{display:flex;flex-direction:column;gap:22px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}
+@media (max-width:600px){.panel{padding:16px}}
+.eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--ink2)}
+.lede{color:var(--ink2);max-width:65ch}
+
+/* lesson hero */
+.lhero{--c:var(--motion);position:relative;border-radius:22px;overflow:hidden;background:var(--c);color:#fff;padding:26px 26px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end}
+.lhero.dark-text{color:#2f2200}
+.lhero h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700}
+.lhero .bq{font-size:1.08rem;opacity:.95;margin-top:6px;max-width:52ch}
+.lhero .lnum{font-family:var(--font-display);font-weight:700;font-size:.95rem;opacity:.9;letter-spacing:.04em}
+.lhero .art{width:150px;height:110px;position:relative}
+.lhero .art img{position:absolute;object-fit:contain}
+@media (max-width:600px){.lhero{grid-template-columns:1fr;padding:20px}.lhero .art{display:none}}
+
+/* phase rail */
+.phases{display:flex;gap:6px;flex-wrap:wrap}
+.phase-link{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.phase-link .dot{width:9px;height:9px;border-radius:50%;background:var(--pc,var(--ink2))}
+.phase-link:hover{border-color:var(--pc)}
+
+.sec-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:1.5rem}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 10px;background:var(--pc);color:#fff}
+.tag.dark-text{color:#2f2200}
+.mins{font-size:.82rem;color:var(--ink2);margin-left:auto}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+
+.objectives{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.objectives li{display:flex;gap:10px;align-items:flex-start}
+.objectives li::before{content:"";flex:0 0 16px;height:10px;margin-top:8px;border-radius:3px 3px 3px 3px;background:var(--accent);box-shadow:4px 3px 0 -1px var(--panel2)}
+
+/* vocab flip cards */
+.vocab{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.vcard{perspective:700px;border:0;background:none;padding:0;height:118px;text-align:left}
+.vcard .in{position:relative;width:100%;height:100%;transition:transform .45s ease;transform-style:preserve-3d}
+.vcard[aria-pressed="true"] .in{transform:rotateY(180deg)}
+.vcard .f,.vcard .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:12px;display:flex;flex-direction:column;justify-content:center}
+.vcard .f{background:var(--panel2);border:2px solid var(--line);font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--ink)}
+.vcard .f small{font-family:var(--font-body);font-size:.72rem;color:var(--ink2);font-weight:500;margin-top:4px}
+.vcard .b{background:var(--accent);color:var(--accent-ink);transform:rotateY(180deg);font-size:.86rem;line-height:1.35}
+
+/* media */
+.vid{width:100%;border-radius:12px;background:#000;aspect-ratio:16/9;display:block}
+.shot{border-radius:10px;border:1px solid var(--line);width:100%;height:auto;display:block;cursor:zoom-in}
+figure{margin:0}
+figcaption{font-size:.82rem;color:var(--ink2);margin-top:6px}
+
+/* scratchblocks */
+.sb-wrap{overflow-x:auto;padding:4px 2px}
+.sb-wrap svg{max-width:none}
+pre.blocks{margin:0;white-space:pre;font-family:var(--font-mono);font-size:.8rem;color:var(--ink2)}
+.code-card{background:var(--panel2);border-radius:12px;padding:14px;border:1px solid var(--line);min-width:0}
+.code-card h4{font-size:.95rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.code-card h4 img{width:26px;height:26px;object-fit:contain}
+
+/* build animation */
+.builder{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:760px){.builder{grid-template-columns:minmax(0,1fr)}}
+.builder .canvas{background:var(--panel2);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:18px 18px;border-radius:12px;border:1px solid var(--line);min-height:250px;padding:16px;overflow-x:auto;position:relative}
+.builder .canvas .snap{animation:snap .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes snap{0%{transform:translate(-14px,-10px) scale(.97);opacity:.4}100%{transform:none;opacity:1}}
+.builder .say{font-size:1rem}
+.builder .added{display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-weight:600;font-size:.88rem;padding:6px 12px;border-radius:999px;color:#fff}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.btn{border:0;border-radius:999px;padding:9px 16px;font-weight:600;font-size:.92rem;background:var(--accent);color:var(--accent-ink);display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn.flag{background:var(--operators);color:#fff}
+.btn.stop{background:var(--bad);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.progress{height:8px;border-radius:99px;background:var(--panel2);overflow:hidden;flex:1;min-width:80px}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);transition:border-color .2s,background .2s}
+.step.done{border-color:var(--good);background:var(--good-bg)}
+.step .chk{width:40px;height:40px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;color:var(--ink2);font-size:1.05rem}
+.step.done .chk{background:var(--good);border-color:var(--good);color:#fff}
+.step h4{font-size:1.05rem;margin-bottom:4px}
+.step .body{display:flex;flex-direction:column;gap:10px;min-width:0}
+.step .body .shot{max-width:640px}
+.kbd{font-family:var(--font-mono);font-size:.82em;background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+.blk{display:inline-block;font-size:.84em;font-weight:600;color:#fff;border-radius:6px;padding:1px 7px;background:var(--bc,var(--motion))}
+.blk.y{color:#3b2a00}
+
+/* challenges */
+.chal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.chal{grid-template-columns:minmax(0,1fr)}}
+.ch{border-radius:14px;border:2px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--panel);min-width:0}
+.ch .medal{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:700;font-size:1.1rem}
+.ch .medal i{width:26px;height:26px;border-radius:50%;display:inline-block;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.ch.bronze .medal i{background:#c98a52}.ch.silver .medal i{background:#aab4c3}.ch.gold .medal i{background:#f2c230}
+details{border-radius:10px;background:var(--panel2);padding:8px 12px}
+details summary{cursor:pointer;font-weight:600;font-size:.9rem}
+details[open] summary{margin-bottom:8px}
+.ch label.done{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:500;margin-top:auto}
+
+/* quizzes */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.q{border-radius:12px;border:1.5px solid var(--line);padding:14px;background:var(--panel)}
+.q p.qt{font-weight:600;margin-bottom:10px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.opts{grid-template-columns:minmax(0,1fr)}}
+.opt{border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:10px;padding:10px 12px;text-align:left;font-size:.95rem}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{background:var(--good-bg);border-color:var(--good)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.fb{margin-top:8px;font-size:.9rem;padding:8px 10px;border-radius:8px}
+.fb.ok{background:var(--good-bg);color:var(--ink)}
+.fb.no{background:var(--bad-bg);color:var(--ink)}
+.score{font-family:var(--font-display);font-weight:600;font-size:1.1rem}
+
+/* stage sims */
+.stagebox{position:relative;width:100%;max-width:480px;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#9ff;touch-action:none}
+.stagebox canvas{width:100%;height:100%;display:block}
+.stagebar{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.touchpad{display:flex;gap:8px;margin-top:8px}
+.touchpad button{flex:1;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel2);font-size:1.2rem;color:var(--ink)}
+.readout{font-family:var(--font-mono);font-size:.9rem;display:flex;gap:14px;flex-wrap:wrap}
+.bool{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border-radius:999px;font-family:var(--font-mono);font-size:.85rem;border:2px solid var(--line);background:var(--panel2);transition:all .2s}
+.bool.true{background:var(--good-bg);border-color:var(--good)}
+.bool b{min-width:44px;text-align:right}
+
+/* parsons */
+.parsons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:700px){.parsons{grid-template-columns:minmax(0,1fr)}}
+.pz{min-height:180px;border-radius:12px;border:2px dashed var(--line);padding:10px;display:flex;flex-direction:column;gap:6px;background:var(--panel2);min-width:0}
+.pz h5{margin:0 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.pitem{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:2px;border-radius:8px;text-align:left;overflow-x:auto}
+.pitem:hover{background:rgba(133,92,214,.12)}
+.pitem .mv{margin-left:auto;display:flex;gap:4px}
+.pitem .mv button{border:1px solid var(--line);background:var(--panel);border-radius:6px;width:28px;height:28px;color:var(--ink)}
+
+/* trace table */
+.trace{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.trace th,.trace td{border:1px solid var(--line);padding:7px 8px;text-align:center;font-size:.9rem}
+.trace th{background:var(--panel2);font-family:var(--font-display);font-weight:600}
+.trace td.ev{text-align:left}
+.trace input{width:64px;text-align:center;font:inherit;border:1.5px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:3px}
+.trace input.ok{border-color:var(--good);background:var(--good-bg)}
+.trace input.no{border-color:var(--bad);background:var(--bad-bg)}
+.tablewrap{overflow-x:auto}
+
+/* hotspots */
+.hot{position:relative}
+.hot img{display:block;width:100%;border-radius:10px;border:1px solid var(--line)}
+.hot .zone{position:absolute;border:0;background:transparent;border-radius:10px}
+.hot .zone.show{outline:4px solid var(--good);background:rgba(31,157,85,.15)}
+.hot .zone.miss{outline:4px solid var(--bad);background:rgba(214,69,69,.15)}
+.hot-prompt{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:10px}
+
+/* overview */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:26px;align-items:center}
+@media (max-width:980px){.hero{grid-template-columns:minmax(0,1fr)}}
+.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:-.01em}
+.hero h1 span{color:var(--accent)}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.flow div{border-radius:12px;padding:12px;background:var(--panel2);border-top:5px solid var(--pc)}
+.flow b{font-family:var(--font-display);font-size:1.05rem;display:block}
+.flow span{font-size:.82rem;color:var(--ink2)}
+.lcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.lcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.lcards{grid-template-columns:minmax(0,1fr)}}
+.lcard{--c:var(--motion);text-decoration:none;color:var(--ink);border-radius:14px;background:var(--panel);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s}
+.lcard:hover{transform:translateY(-3px)}
+.lcard .top{background:var(--c);color:#fff;padding:12px 14px;font-family:var(--font-display);font-weight:600;font-size:1.1rem}
+.lcard.dark-text .top{color:#2f2200}
+.lcard .bd{padding:12px 14px;font-size:.9rem;color:var(--ink2);display:flex;flex-direction:column;gap:6px}
+.lcard .concept{font-size:.78rem;font-weight:600;color:var(--ink)}
+
+table.plain{width:100%;border-collapse:collapse;font-size:.92rem}
+table.plain th,table.plain td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}
+table.plain th{font-family:var(--font-display);font-weight:600;background:var(--panel2)}
+
+.note{border-radius:12px;padding:12px 14px;background:var(--warn-bg);font-size:.92rem}
+.lightbox{position:fixed;inset:0;background:rgba(10,12,25,.86);z-index:50;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lightbox img{max-width:min(1400px,100%);max-height:100%;border-radius:10px}
+.lightbox button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
+.next-row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.foot{font-size:.78rem;color:var(--ink2);text-align:center;margin-top:10px}
+textarea,input[type=text]{font:inherit;width:100%;border:1.5px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:8px 10px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+@media (max-width:600px){
+  .brand small{display:none}
+  .brand{font-size:1.1rem}
+  .pill-btn{padding:6px 10px;font-size:.8rem}
+  .topbar-in{gap:8px}
+  .vocab{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vcard{height:104px}
+  .step{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:12px}
+  .step .chk{width:32px;height:32px;border-radius:9px;font-size:.9rem}
+  .lhero h1{font-size:1.7rem}
+}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#overview"><img src="media/apple.png" alt=""><span>Fruit Catch<small>Year 7 · Scratch course</small></span></a>
+    <span class="spacer"></span>
+    <a class="pill-btn" href="#teacher">Teacher notes</a>
+    <a class="pill-btn" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener">Scratch ↗</a>
+  </div>
+</header>
+<div class="shell">
+  <nav class="stack" id="stack" aria-label="Lessons"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+<div class="lightbox" id="lightbox" hidden><img alt="" id="lbimg"><button class="btn" id="lbclose" type="button">Close ✕</button></div>
+<script src="https://cdn.jsdelivr.net/npm/scratchblocks@3.6.4/build/scratchblocks.min.js"></script>
+<script>
+// ---------- Course content ----------
+const PROJECT_URL = 'https://scratch.mit.edu/projects/1439568018/';
+const CAT = {motion:'var(--motion)',looks:'var(--looks)',sound:'var(--sound)',events:'var(--events)',control:'var(--control)',sensing:'var(--sensing)',operators:'var(--operators)',variables:'var(--variables)'};
+const PHASES = [
+  {id:'starter', name:'Starter', c:'var(--sensing)', mins:'5 min'},
+  {id:'ido', name:'I do', c:'var(--motion)', mins:'10 min'},
+  {id:'wedo', name:'We do', c:'var(--operators)', mins:'15 min'},
+  {id:'activity', name:'Try it', c:'var(--looks)', mins:'10 min'},
+  {id:'youdo', name:'You do', c:'var(--control)', mins:'15 min'},
+  {id:'exit', name:'Exit ticket', c:'var(--myblocks)', mins:'5 min'}
+];
+
+const LESSONS = [
+/* ================= LESSON 1 ================= */
+{
+  n:1, id:'lesson-1', title:'Meet Scratch', concept:'Sequence & coordinates', c:'var(--motion)', dark:false,
+  bq:'How do we give a computer step-by-step instructions?',
+  art:['cat1','apple'],
+  objectives:[
+    'Name the four main areas of the Scratch editor.',
+    'Add a sprite and a backdrop from the library.',
+    'Use x and y coordinates to place a sprite on the stage.',
+    'Build a script that runs when the green flag is clicked.'
+  ],
+  vocab:[['Sprite','A character or object in your project, such as the cat or the apple.'],['Stage','The 480 × 360 area where your project runs.'],['Script','A stack of blocks snapped together. It runs from top to bottom.'],['Algorithm','A set of step-by-step instructions to solve a problem.'],['Coordinates','Two numbers (x, y) that give a position. The centre is (0, 0).'],['Sequence','Instructions that run one after another, in order.']],
+  starter:[
+    {q:'What is an algorithm?', o:['A type of computer','A set of step-by-step instructions','A picture on the screen','A website'], a:1, why:'An algorithm is a precise set of steps. A recipe is an algorithm for cooking.'},
+    {q:'Why does the ORDER of instructions matter?', o:['It does not matter','Computers do exactly what we say, in the order we say it','Computers pick the best order themselves','Only the first instruction runs'], a:1, why:'Computers follow instructions exactly and in sequence. Wrong order, wrong result.'},
+    {q:'Which of these is an INPUT device?', o:['Monitor','Speaker','Keyboard','Printer'], a:2, why:'Keyboards send information INTO the computer. We will use the arrow keys as input in Lesson 2.'}
+  ],
+  ido:{ video:'media/ido-L1.mp4', poster:'media/01-interface.jpg',
+    notice:['The block palette is sorted by colour: blue Motion, purple Looks, yellow Events.','Blocks only run when they are snapped under a hat block like "when green flag clicked".','y: -120 puts the cat near the bottom because negative y means down.'],
+    build:{ sprite:'cat1', name:'Cat (Sprite1)', lines:[
+      ['when green flag clicked','events','A hat block starts the script when the green flag is clicked.'],
+      ['go to x: (0) y: (-120)','motion','Move to the middle (x: 0), near the bottom (y: -120).'],
+      ['say [Catch the apples!] for (2) seconds','looks','Show a speech bubble for 2 seconds.']
+    ]}
+  },
+  wedo:{ intro:'Follow each step with your teacher. Tick it off when it works on your screen.', steps:[
+    {h:'Open Scratch and start a project', html:'Go to <b>scratch.mit.edu</b>, sign in, then click <b>Create</b>. You will see the editor below.', img:'01-interface.jpg'},
+    {h:'Name your project', html:'Click the title box at the top and type <b>Fruit Catch – your name</b>. Press <span class="kbd">Enter</span>.'},
+    {h:'Add the Apple sprite', html:'Hover over the cat button in the bottom-right corner, then click the magnifying glass (<b>Choose a Sprite</b>).', img:'02-choose-sprite-menu.jpg'},
+    {h:'Search for the apple', html:'Type <b>Apple</b> in the search box and click it.', img:'03-search-apple.jpg'},
+    {h:'Choose a backdrop', html:'Click <b>Choose a Backdrop</b> (far bottom-right) and pick <b>Blue Sky</b>.', img:'06-backdrop-library.jpg'},
+    {h:'Build the cat’s first script', html:'Click <b>Sprite1</b> (the cat) in the sprite pane. Then drag in these three blocks and snap them together:', code:'when green flag clicked\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds', img:'10-L1-code-run.jpg'},
+    {h:'Test and save', html:'Click the green flag. The cat should jump to the bottom and talk. Then click <b>File → Save now</b>.'}
+  ]},
+  activities:[
+    {type:'hotspot', title:'Label the editor', intro:'Click the right part of the screenshot for each prompt.'},
+    {type:'coords', title:'Coordinate explorer', intro:'Drag the cat around the stage. Watch x and y change. Then try the missions.'}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Say more', task:'Make the cat say two different things, one after the other.', hint:'Add a second <b>say [ ] for (2) seconds</b> block under the first one.', sol:'when green flag clicked\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds\nsay [Use the arrow keys!] for (2) seconds'},
+    {lvl:'silver', t:'Apple at the top', task:'Give the Apple its own script so it always starts at the top-middle of the stage.', hint:'Click the Apple sprite first. The top of the stage is around y: 150.', sol:'when green flag clicked\ngo to x: (0) y: (150)'},
+    {lvl:'gold', t:'Slide on stage', task:'Make the cat start off the left side and glide into the middle.', hint:'Use <b>go to x: (-200) y: (-120)</b>, then a <b>glide</b> block from Motion.', sol:'when green flag clicked\ngo to x: (-200) y: (-120)\nglide (1) secs to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'}
+  ],
+  exit:[
+    {q:'What are the coordinates of the centre of the stage?', o:['(240, 180)','(0, 0)','(100, 100)','(-240, -180)'], a:1, why:'The centre is x: 0, y: 0. The stage runs from -240 to 240 across and -180 to 180 up and down.'},
+    {q:'Which block makes a script start when the green flag is clicked?', o:['go to x: y:','say for 2 seconds','when green flag clicked','next costume'], a:2, why:'Yellow Events hat blocks start scripts.'},
+    {q:'The cat is at y: -120. Where is it?', o:['Near the top','Near the bottom','Far left','Far right'], a:1, why:'Negative y values are below the centre, so -120 is near the bottom.'}
+  ],
+  sim:1
+},
+/* ================= LESSON 2 ================= */
+{
+  n:2, id:'lesson-2', title:'Move the cat', concept:'Events & input', c:'var(--events)', dark:true,
+  bq:'How can a program respond to the player?',
+  art:['cat2'],
+  objectives:[
+    'Explain what an event is.',
+    'Use "when key pressed" blocks to control a sprite.',
+    'Use direction and rotation style so the cat faces the way it moves.',
+    'Animate a sprite by changing its costume.'
+  ],
+  vocab:[['Event','Something that happens, like a key press or a click, that starts a script.'],['Input','Data that goes into the computer, such as pressing a key.'],['Output','What the computer does in response, like moving the cat.'],['x position','How far left or right a sprite is. Bigger x = further right.'],['Direction','Which way a sprite faces. 90 is right, -90 is left.'],['Costume','One of a sprite’s pictures. Switching costumes makes animation.']],
+  starter:[
+    {q:'A sprite is at x: 0. You run "change x by 50". Where is it now?', o:['x: -50','x: 50','x: 0','y: 50'], a:1, why:'Change x by 50 adds 50, so 0 + 50 = 50 (moves right).'},
+    {q:'Which way does y increase?', o:['Left','Right','Up','Down'], a:2, why:'Bigger y means higher up the stage.'},
+    {q:'What does a "hat" block do?', o:['Ends a script','Starts a script when something happens','Changes a sprite’s hat','Deletes blocks'], a:1, why:'Hat blocks have a rounded top. Nothing can go above them, so they start scripts.'}
+  ],
+  ido:{ video:'media/ido-L2.mp4', poster:'media/20-L2-code.jpg',
+    notice:['Each arrow key has its own script. The scripts are events that wait for input.','"point in direction" makes the cat face the way it moves.','"next costume" swaps between two pictures so the cat looks like it is walking.'],
+    build:{ sprite:'cat2', name:'Cat (Sprite1)', lines:[
+      ['when [right arrow v] key pressed','events','This event fires every time the right arrow is pressed.'],
+      ['point in direction (90)','motion','Face right. 90 degrees points to the right.'],
+      ['change x by (15)','motion','Move 15 steps to the right.'],
+      ['next costume','looks','Swap picture so the cat looks like it is walking.']
+    ]}
+  },
+  wedo:{ intro:'We will add two new scripts to the cat and improve the flag script.', steps:[
+    {h:'Select the cat', html:'Click <b>Sprite1</b> in the sprite pane so you are editing the cat’s code.'},
+    {h:'Stop the cat going upside down', html:'Under <b>when green flag clicked</b>, add <b>set rotation style [left-right]</b> and <b>point in direction (90)</b> from Motion.', code:'when green flag clicked\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'},
+    {h:'Add a key event', html:'From <b>Events</b>, drag out <b>when [space] key pressed</b>. Click the drop-down and choose <b>right arrow</b>.'},
+    {h:'Move right', html:'Snap these under it: <b>point in direction (90)</b>, <b>change x by (15)</b> and <b>next costume</b> (Looks).', code:'when [right arrow v] key pressed\npoint in direction (90)\nchange x by (15)\nnext costume'},
+    {h:'Duplicate for left', html:'Right-click the hat block and choose <b>Duplicate</b>. Change it to <b>left arrow</b>, direction <b>-90</b> and x by <b>-15</b>.', code:'when [left arrow v] key pressed\npoint in direction (-90)\nchange x by (-15)\nnext costume', img:'20-L2-code.jpg'},
+    {h:'Test', html:'Click the green flag, then press <span class="kbd">←</span> and <span class="kbd">→</span>. The cat should walk both ways and always stay the right way up. Save your work.'}
+  ]},
+  activities:[
+    {type:'parsons', title:'Build the left-arrow script', intro:'Tap blocks to add them in the right order. One block is a trap and is not needed.',
+      answer:['when [left arrow v] key pressed','point in direction (-90)','change x by (-15)','next costume'],
+      distract:['change y by (-15)']},
+    {type:'predict', title:'Predict it', items:[
+      {q:'You delete "set rotation style [left-right]". What happens when you press the left arrow?', o:['Nothing changes','The cat turns upside down','The cat moves up','The cat disappears'], a:1, why:'Without left-right rotation style, pointing in direction -90 flips the cat over, so it walks upside down.'},
+      {q:'You change "change x by (15)" to "change x by (40)". What happens?', o:['The cat moves faster (bigger jumps)','The cat moves slower','The cat moves up','Nothing'], a:0, why:'Each key press now moves 40 steps instead of 15.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Speed up', task:'Make the cat move faster in both directions.', hint:'Change both <b>change x by</b> numbers. Keep the left one negative.', sol:'when [right arrow v] key pressed\npoint in direction (90)\nchange x by (25)\nnext costume'},
+    {lvl:'silver', t:'Jump!', task:'When the space bar is pressed, make the cat jump up and come back down.', hint:'Use <b>change y by (60)</b>, then <b>wait</b>, then <b>change y by (-60)</b>.', sol:'when [space v] key pressed\nchange y by (60)\nwait (0.3) seconds\nchange y by (-60)'},
+    {lvl:'gold', t:'Click to talk', task:'When the player clicks the cat, it should say a random tip about the game.', hint:'Use <b>when this sprite clicked</b>. For a bonus, use <b>pick random</b> with <b>if</b> blocks to choose between tips.', sol:'when this sprite clicked\nsay [Watch out for falling fruit!] for (2) seconds'}
+  ],
+  exit:[
+    {q:'What is an event?', o:['A block that repeats code','Something that happens, like a key press, that starts a script','A type of variable','A sprite’s picture'], a:1, why:'Events, like a key press or a click, trigger scripts to run.'},
+    {q:'Which direction makes the cat face LEFT?', o:['90','0','-90','180'], a:2, why:'90 is right, -90 is left, 0 is up and 180 is down.'},
+    {q:'Pressing the arrow key is an example of…', o:['Output','Input','Storage','Processing'], a:1, why:'A key press is input. The cat moving is the output.'}
+  ],
+  sim:2
+},
+/* ================= LESSON 3 ================= */
+{
+  n:3, id:'lesson-3', title:'Make it rain apples', concept:'Iteration (loops)', c:'var(--control)', dark:true,
+  bq:'How do loops stop us repeating ourselves?',
+  art:['apple','apple'],
+  objectives:[
+    'Explain what iteration means.',
+    'Use a count-controlled loop (repeat) and an infinite loop (forever).',
+    'Use pick random to make a game less predictable.',
+    'Work out how far a sprite moves inside a loop.'
+  ],
+  vocab:[['Iteration','Repeating a set of instructions. Another word for looping.'],['Repeat','A loop that runs a set number of times. Count-controlled.'],['Forever','A loop that never stops (until the program stops).'],['Random','Unpredictable. "pick random" chooses a different number each time.'],['Nesting','Putting one block inside another, like a repeat inside a forever.'],['Efficient','Doing a job with less code. Loops make code efficient.']],
+  starter:[
+    {q:'Which block makes the cat face left?', o:['point in direction (90)','point in direction (-90)','change x by (-15)','next costume'], a:1, why:'Direction -90 faces left.'},
+    {q:'Why do we use "set rotation style [left-right]"?', o:['To make the cat faster','To stop the cat turning upside down','To change costume','To start the game'], a:1, why:'Left-right style only lets the sprite flip, never rotate upside down.'},
+    {q:'How many times would you need to write "change y by (-5)" to move 325 steps down?', o:['5','65','325','100'], a:1, why:'325 ÷ 5 = 65. Writing it 65 times would be a lot of blocks. A loop does it with one!'}
+  ],
+  ido:{ video:'media/ido-L3.mp4', poster:'media/30-L3-code.jpg',
+    notice:['The repeat loop is nested inside the forever loop.','pick random gives a new x position each time, so you never know where the apple will fall.','65 repeats × 5 steps = 325 steps. From y: 170 that ends at y: -155, just above the ground.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events','Start when the flag is clicked.'],
+      ['forever','control','Everything inside will repeat until the game stops.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Jump to a random spot along the top of the stage.'],
+      ['repeat (65)','control','A count-controlled loop: run the code inside 65 times.'],
+      ['change y by (-5)','motion','Move down 5 steps each time round the loop.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Today the Apple gets its own script.', steps:[
+    {h:'Select the Apple', html:'Click the <b>Apple</b> sprite. Its code area should be empty (unless you did the Lesson 1 silver challenge, which you can delete).'},
+    {h:'Add a forever loop', html:'Drag in <b>when green flag clicked</b>, then a <b>forever</b> block from <b>Control</b>.'},
+    {h:'Start at a random place', html:'Inside forever, add <b>go to x: () y: ()</b>. Drop a green <b>pick random (-200) to (200)</b> block into the x slot. Set y to <b>170</b>.'},
+    {h:'Fall with a repeat loop', html:'Under the go to block, add <b>repeat (65)</b> with <b>change y by (-5)</b> inside it.', code:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (65)\n    change y by (-5)\n  end\nend', img:'30-L3-code.jpg'},
+    {h:'Test', html:'Click the flag. The apple should fall, then start again from a new place at the top. Save.'}
+  ]},
+  activities:[
+    {type:'looplab', title:'Loop lab', intro:'Change the loop. Can you make the apple stop exactly on the grass line at y: -150?'},
+    {type:'predict', title:'Repeat or forever?', items:[
+      {q:'You want the cat to spin round exactly once (36 turns of 10°). Which loop?', o:['repeat (36)','forever'], a:0, why:'You know how many times, so a count-controlled repeat loop is right.'},
+      {q:'You want background music to play for the whole game. Which loop?', o:['repeat (10)','forever'], a:1, why:'The music never needs to stop during the game, so use forever.'},
+      {q:'What happens if you swap "repeat (65)" for "forever" inside the apple script?', o:['Nothing changes','The apple falls off the bottom and never comes back','The apple falls faster','The apple goes up'], a:1, why:'An inner forever never ends, so the code after it never runs again and the apple keeps going down.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Faster fruit', task:'Make the apple fall twice as fast but still stop near the ground.', hint:'Double the step and halve the repeats: 10 steps × 32 repeats ≈ 320.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (32)\n    change y by (-10)\n  end\nend'},
+    {lvl:'silver', t:'Spinning apple', task:'Make the apple spin as it falls.', hint:'Add a <b>turn ↻ (5) degrees</b> block inside the repeat loop.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (65)\n    change y by (-5)\n    turn @turnRight (5) degrees\n  end\nend'},
+    {lvl:'gold', t:'A second fruit', task:'Add a Strawberry that also falls from a random place.', hint:'Add the Strawberry sprite, then drag the Apple’s script onto the Strawberry in the sprite pane to copy it.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (40)\n    change y by (-8)\n  end\nend'}
+  ],
+  exit:[
+    {q:'What is iteration?', o:['Making a choice','Repeating instructions','Storing a number','Drawing a sprite'], a:1, why:'Iteration means looping: repeating instructions.'},
+    {q:'An apple starts at y: 170 and runs "repeat (10): change y by (-10)". Where does it end?', o:['y: 160','y: 70','y: 100','y: -10'], a:1, why:'10 × -10 = -100, and 170 - 100 = 70.'},
+    {q:'Which is a count-controlled loop?', o:['forever','repeat (10)','when flag clicked','if then'], a:1, why:'repeat (10) runs a set number of times.'}
+  ],
+  sim:3
+},
+/* ================= LESSON 4 ================= */
+{
+  n:4, id:'lesson-4', title:'Catch & score', concept:'Selection & variables', c:'var(--sensing)', dark:false,
+  bq:'How does a game make decisions?',
+  art:['cat1','apple'],
+  objectives:[
+    'Explain what selection (if…then) does.',
+    'Use a sensing condition: touching another sprite.',
+    'Create a variable and change it while the game runs.',
+    'Use a comparison (y position < -160) as a condition.'
+  ],
+  vocab:[['Selection','Choosing what to do based on a condition. In Scratch: if … then.'],['Condition','A question with a true or false answer, like "touching cat?"'],['Boolean','A value that is only ever true or false. Hexagon-shaped blocks.'],['Variable','A named store for data that can change, like score.'],['Initialise','Give a variable its starting value, such as set score to 0.'],['Comparison','Checking two values with <, > or =.']],
+  starter:[
+    {q:'Which loop runs forever?', o:['repeat (10)','forever','if then','wait (1)'], a:1, why:'forever is an infinite loop.'},
+    {q:'"repeat (4): change y by (-20)". How far does the sprite move?', o:['20 down','80 down','80 up','4 down'], a:1, why:'4 × -20 = -80, so 80 steps down.'},
+    {q:'What does pick random (1) to (6) do?', o:['Always gives 6','Gives a number from 1 to 6, like a dice','Gives 1 then 6','Picks a sprite'], a:1, why:'It picks a different number between 1 and 6 each time.'}
+  ],
+  ido:{ video:'media/ido-L4.mp4', poster:'media/40-L4-code.jpg',
+    notice:['The repeat loop is gone. Now the apple moves a little bit each time round forever, and checks two questions every time.','Conditions are hexagons. They fit in the hexagon gap in an if block.','After scoring, the apple must jump back to the top or it would keep scoring while it touches the cat.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events','Start the apple’s script.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Start at a random place at the top.'],
+      ['forever','control','Keep running these checks all game.'],
+      ['change y by (-5)','motion','Fall a little bit.'],
+      ['if <touching (Sprite1 v)?> then','control','Question 1: is the apple touching the cat?'],
+      ['change [score v] by (1)','variables','Yes! Add 1 to the score.'],
+      ['start sound (Chomp v)','sound','Play a crunch sound as feedback.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Go back to the top for the next catch.'],
+      ['end','control',''],
+      ['if <(y position) < [-160]> then','control','Question 2: has the apple reached the ground?'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Missed it. Back to the top.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'We will make a score variable, then rebuild the apple script with two if blocks.', steps:[
+    {h:'Make a variable', html:'Go to <b>Variables</b> and click <b>Make a Variable</b>. Name it <b>score</b> and keep <b>For all sprites</b> selected. Click OK.', img:'41-make-variable.jpg'},
+    {h:'Initialise the score', html:'Click the cat. At the top of its flag script (just under the hat block) add <b>set [score] to (0)</b>.', code:'when green flag clicked\nset [score v] to [0]\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'},
+    {h:'Rebuild the apple loop', html:'Click the Apple. Drag the <b>repeat</b> loop out and delete it. Move <b>go to x: (pick random…) y: (170)</b> above forever. Put <b>change y by (-5)</b> inside forever.'},
+    {h:'Add the catch check', html:'From Control add <b>if &lt; &gt; then</b>. From Sensing drop <b>touching (Sprite1)?</b> into the hexagon gap. Inside: <b>change score by 1</b>, <b>start sound (Chomp)</b>, and go back to the top.'},
+    {h:'Add the ground check', html:'Add a second <b>if</b>. From Operators use <b>( ) &lt; ( )</b>. Put <b>y position</b> (Motion) on the left and type <b>-160</b> on the right. Inside: go back to the top.', code:'when green flag clicked\ngo to x: (pick random (-200) to (200)) y: (170)\nforever\n  change y by (-5)\n  if <touching (Sprite1 v)?> then\n    change [score v] by (1)\n    start sound (Chomp v)\n    go to x: (pick random (-200) to (200)) y: (170)\n  end\n  if <(y position) < [-160]> then\n    go to x: (pick random (-200) to (200)) y: (170)\n  end\nend', img:'40-L4-code.jpg'},
+    {h:'Test', html:'Play! The score in the top-left of the stage should go up by exactly 1 each catch. Save.'}
+  ]},
+  activities:[
+    {type:'condlab', title:'Condition tester', intro:'Drag the apple around the stage. Watch each condition switch between true and false.'},
+    {type:'predict', title:'Bug hunt', items:[
+      {q:'Aisha’s score jumps up by about 10 for every catch. What did she forget inside the touching if block?', o:['start sound','go back to the top after scoring','set score to 0','change y by -5'], a:1, why:'If the apple stays touching the cat, the if is true on every loop, adding 1 again and again. Sending it back to the top fixes it.'},
+      {q:'Ben’s score starts at 12 instead of 0 when he restarts. What is missing?', o:['set [score] to (0) when the flag is clicked','change score by 1','a forever loop','a new sprite'], a:0, why:'Variables keep their value until you initialise them. Set score to 0 at the start.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Change the sound', task:'Pick a different catch sound for the apple.', hint:'Use the <b>Sounds</b> tab to add a sound from the library, then choose it in <b>start sound</b>.', sol:'start sound (Pop v)'},
+    {lvl:'silver', t:'Level up message', task:'When the score reaches 10, make the cat say “Level up!”.', hint:'In the cat’s sprite: <b>forever</b> with <b>if &lt;(score) = 10&gt; then</b>. Or wait until.', sol:'when green flag clicked\nwait until <(score) = [10]>\nsay [Level up!] for (2) seconds'},
+    {lvl:'gold', t:'Smooth movement', task:'Replace the key events with smooth controls that work while a key is held down.', hint:'Use <b>forever</b> with two <b>if &lt;key (right arrow) pressed?&gt; then</b> blocks.', sol:'when green flag clicked\nforever\n  if <key (right arrow v) pressed?> then\n    point in direction (90)\n    change x by (8)\n  end\n  if <key (left arrow v) pressed?> then\n    point in direction (-90)\n    change x by (-8)\n  end\nend'}
+  ],
+  exit:[
+    {q:'What shape are condition (Boolean) blocks?', o:['Rounded','Hexagon','Square','Hat'], a:1, why:'Boolean blocks are hexagons and give true or false.'},
+    {q:'Why do we "set score to 0" when the flag is clicked?', o:['To make the game harder','So every new game starts from zero','To play a sound','To move the cat'], a:1, why:'This is called initialising the variable.'},
+    {q:'The apple is at y: -170. Is "y position < -160" true or false?', o:['True','False'], a:0, why:'-170 is lower than -160, so the condition is true.'}
+  ],
+  sim:4
+},
+/* ================= LESSON 5 ================= */
+{
+  n:5, id:'lesson-5', title:'Lives, speed & game over', concept:'Variables, operators & broadcasts', c:'var(--looks)', dark:false,
+  bq:'How do games get harder, and how do they end?',
+  art:['cat1'],
+  objectives:[
+    'Use more than one variable in a program.',
+    'Use operators (=, <, join) to compare and combine values.',
+    'Send and receive a broadcast message between sprites.',
+    'Trace how variable values change as a program runs.'
+  ],
+  vocab:[['Broadcast','A message one sprite sends so other sprites can react.'],['Operator','A block that does maths or comparisons: +, −, <, =, join.'],['Trace table','A table that tracks how variable values change, step by step.'],['Join','Sticks two pieces of text together, like "Score: " and 5.'],['Difficulty','How hard a game is. Speeding up raises the difficulty.'],['Game state','Whether the game is playing or over.']],
+  starter:[
+    {q:'What is a variable?', o:['A sprite','A named store for data that can change','A sound','A loop'], a:1, why:'Variables store data, like score, that can change.'},
+    {q:'What does "if <touching (Sprite1)?> then" check?', o:['If the apple is touching the cat','If a key is pressed','If score is 0','If the flag was clicked'], a:0, why:'Sprite1 is the cat, so it checks if the apple touches it.'},
+    {q:'score = 4. The program runs "change score by 1" twice. What is score now?', o:['5','6','2','4'], a:1, why:'4 + 1 + 1 = 6.'}
+  ],
+  ido:{ video:'media/ido-L5.mp4', poster:'media/50-L5-apple-code.jpg',
+    notice:['speed starts at -4. Because it is negative, "change y by (speed)" moves the apple DOWN.','Every catch makes speed 0.5 more negative, so apples fall faster and the game gets harder.','The apple broadcasts "game over". The cat receives it and shows the score. Sprites talk using messages.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events',''],
+      ['show','looks','Make sure the apple is visible at the start.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['forever','control',''],
+      ['change y by (speed)','motion','Fall by the value of speed (starts at -4).'],
+      ['if <touching (Sprite1 v)?> then','control',''],
+      ['change [score v] by (1)','variables',''],
+      ['change [speed v] by (-0.5)','variables','Get faster after every catch.'],
+      ['start sound (Chomp v)','sound',''],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['end','control',''],
+      ['if <(y position) < [-160]> then','control',''],
+      ['change [lives v] by (-1)','variables','Missed one: lose a life.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['end','control',''],
+      ['if <(lives) = [0]> then','control','No lives left?'],
+      ['hide','looks',''],
+      ['broadcast (game over v)','events','Tell every sprite the game is over.'],
+      ['stop [this script v]','control','Stop the apple’s loop.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Two more variables, a faster apple, and a proper ending.', steps:[
+    {h:'Make two variables', html:'Make <b>lives</b> and <b>speed</b> (For all sprites). Untick the box next to <b>speed</b> so it does not show on the stage.'},
+    {h:'Initialise them', html:'In the cat’s flag script add <b>set [lives] to (3)</b> and <b>set [speed] to (-4)</b> under set score.', code:'when green flag clicked\nset [score v] to [0]\nset [lives v] to [3]\nset [speed v] to [-4]\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds', img:'51-L5-cat-code.jpg'},
+    {h:'Use speed', html:'In the apple’s forever loop, drag the orange <b>(speed)</b> reporter into <b>change y by ( )</b>.'},
+    {h:'Speed up and lose lives', html:'Inside the touching if, add <b>change [speed] by (-0.5)</b>. Inside the ground if, add <b>change [lives] by (-1)</b>.'},
+    {h:'Detect game over', html:'Add a third <b>if</b> using <b>( ) = ( )</b> from Operators: <b>(lives) = 0</b>. Inside: <b>hide</b>, <b>broadcast (new message: game over)</b>, <b>stop [this script]</b>. Add <b>show</b> under the apple’s flag hat.', img:'50-L5-apple-code.jpg'},
+    {h:'Receive the message', html:'Click the cat. Add <b>when I receive [game over]</b>, then <b>say (join [Game over! Score: ] (score)) for (3) seconds</b>, then <b>stop [all]</b>.', code:'when I receive [game over v]\nsay (join [Game over! Score: ] (score)) for (3) seconds\nstop [all v]', img:'52-L5-gameover.jpg'},
+    {h:'Test', html:'Miss three apples on purpose. Does the game end and show your score? Save.'}
+  ]},
+  activities:[
+    {type:'trace', title:'Trace table', intro:'The game starts, then these events happen in order. Fill in the values after each event, then check.'},
+    {type:'predict', title:'Think like a programmer', items:[
+      {q:'What happens if speed starts at 4 instead of -4?', o:['Apples fall faster','Apples float upwards','Nothing changes','The game ends'], a:1, why:'change y by 4 moves up, so apples rise off the top and are never caught.'},
+      {q:'Why does the apple use "stop [this script]" after broadcasting?', o:['To save memory','Otherwise it would broadcast "game over" again and again, restarting the cat’s message','To hide the apple','To reset the score'], a:1, why:'Lives stays at 0, so the if would be true on every loop.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'More lives', task:'Give the player 5 lives instead of 3.', hint:'Change the number in <b>set [lives] to</b>.', sol:'set [lives v] to [5]'},
+    {lvl:'silver', t:'Game over screen', task:'Make the stage switch to a different backdrop when the game ends.', hint:'Add a second backdrop. On the <b>Stage</b>, use <b>when I receive [game over]</b> and <b>switch backdrop to</b>. Switch back to Blue Sky when the flag is clicked.', sol:'when I receive [game over v]\nswitch backdrop to (Game Over v)'},
+    {lvl:'gold', t:'High score', task:'Keep a high score that only changes when you beat it.', hint:'Make a <b>high score</b> variable. Do NOT reset it on green flag. When the game ends, compare it with score.', sol:'when I receive [game over v]\nif <(score) > (high score)> then\n  set [high score v] to (score)\nend'}
+  ],
+  exit:[
+    {q:'speed is -4. After two catches (change speed by -0.5 each), what is speed?', o:['-3','-5','-4.5','-6'], a:1, why:'-4 - 0.5 - 0.5 = -5.'},
+    {q:'What does a broadcast do?', o:['Plays a sound','Sends a message that other sprites can react to','Makes a variable','Draws a sprite'], a:1, why:'Broadcasts let sprites communicate.'},
+    {q:'What does join [Score: ] (score) give if score = 7?', o:['Score: 7','7','Score:','join 7'], a:0, why:'Join sticks the two values together.'}
+  ],
+  sim:5
+},
+/* ================= LESSON 6 ================= */
+{
+  n:6, id:'lesson-6', title:'Polish, test & share', concept:'Testing & evaluation', c:'var(--sound)', dark:false,
+  bq:'What makes a game great, and how do we know it works?',
+  art:['bananas','cat1'],
+  objectives:[
+    'Add a bonus sprite using repeat until and an "or" condition.',
+    'Test a game against a test plan and fix bugs.',
+    'Give and use peer feedback (What Went Well / Even Better If).',
+    'Share a finished project on Scratch.'
+  ],
+  vocab:[['Bug','A mistake in code that makes a program behave wrongly.'],['Debugging','Finding and fixing bugs.'],['Test plan','A list of tests with the expected result and the actual result.'],['Repeat until','A loop that repeats until a condition becomes true.'],['Evaluation','Judging how well your game meets its goals.'],['Remix','Making your own version of someone else’s shared project.']],
+  starter:[
+    {q:'What does "broadcast (game over)" do?', o:['Ends Scratch','Sends a message to all sprites','Plays a sound','Resets lives'], a:1, why:'Any sprite with "when I receive [game over]" will run.'},
+    {q:'lives = 1 and the player misses an apple. What happens next?', o:['lives = 0, so game over is broadcast','lives = 2','score goes up','nothing'], a:0, why:'Lives drops to 0, the third if is true and the apple broadcasts game over.'},
+    {q:'Which operator joins text together?', o:['+','join','<','='], a:1, why:'join combines two pieces of text.'}
+  ],
+  ido:{ video:'media/ido-L6.mp4', poster:'media/61-L6-bananas.jpg',
+    notice:['Bananas wait a random time, so the bonus is a surprise.','repeat until stops when EITHER condition is true: caught OR missed.','Sound and costumes give feedback to the player, which makes games feel better.'],
+    build:{ sprite:'bananas', name:'Bananas', lines:[
+      ['when green flag clicked','events',''],
+      ['hide','looks','Hidden until it is time to fall.'],
+      ['forever','control',''],
+      ['wait (pick random (4) to (8)) seconds','control','A surprise delay.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['show','looks',''],
+      ['repeat until <<touching (Sprite1 v)?> or <(y position) < [-160]>>','control','Fall until caught OR missed.'],
+      ['change y by (-7)','motion','Bananas fall faster than apples.'],
+      ['end','control',''],
+      ['if <touching (Sprite1 v)?> then','control',''],
+      ['change [score v] by (3)','variables','Bonus! 3 points.'],
+      ['start sound (Bite v)','sound',''],
+      ['end','control',''],
+      ['hide','looks',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Add a bonus fruit, add finishing touches, then test and share.', steps:[
+    {h:'Add Bananas', html:'Choose a Sprite → <b>Food</b> → <b>Bananas</b>. Set its size to <b>60</b> in the sprite info panel.', img:'60-food-library.jpg'},
+    {h:'Build the bonus script', html:'Build this script on the Bananas sprite. The <b>or</b> block is in Operators.', code:'when green flag clicked\nhide\nforever\n  wait (pick random (4) to (8)) seconds\n  go to x: (pick random (-200) to (200)) y: (170)\n  show\n  repeat until <<touching (Sprite1 v)?> or <(y position) < [-160]>>\n    change y by (-7)\n  end\n  if <touching (Sprite1 v)?> then\n    change [score v] by (3)\n    start sound (Bite v)\n  end\n  hide\nend', img:'61-L6-bananas.jpg'},
+    {h:'Finishing touches', html:'Add <b>start sound (Meow)</b> to the cat’s flag script. On the Stage, add <b>when green flag clicked → switch backdrop to (Blue Sky)</b>.'},
+    {h:'Test with the test plan', html:'Work through the test plan below. Fix anything that fails, then test again.'},
+    {h:'Share', html:'Click <b>Share</b> at the top of the editor. Write instructions (“Use ← and → to catch fruit”) and give credit in Notes and Credits.'}
+  ]},
+  activities:[
+    {type:'testplan', title:'Test plan', intro:'Run each test on YOUR game. Choose Pass or Fail. For any fail, write what happened.'},
+    {type:'play', title:'Play the finished game', intro:'This is what a finished Fruit Catch looks like. Use ← → (or the buttons).'},
+    {type:'review', title:'Peer review', intro:'Play a partner’s game. Write one What Went Well and one Even Better If.'}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Rotten apple', task:'Add a hazard: a rotten apple that costs a life if you catch it.', hint:'Duplicate the Apple, recolour it in the Costumes tab, and change its code to <b>change [lives] by (-1)</b> when touching.', sol:'if <touching (Sprite1 v)?> then\n  change [lives v] by (-1)\n  go to x: (pick random (-200) to (200)) y: (170)\nend'},
+    {lvl:'silver', t:'Countdown timer', task:'Give the player 60 seconds. When time runs out, broadcast game over.', hint:'Make a <b>time</b> variable. On the Stage: set time to 60, then repeat 60: wait 1, change time by -1.', sol:'when green flag clicked\nset [time v] to [60]\nrepeat (60)\n  wait (1) seconds\n  change [time v] by (-1)\nend\nbroadcast (game over v)'},
+    {lvl:'gold', t:'Start screen', task:'Add a title screen with a Play button sprite. The game only starts when Play is clicked.', hint:'The Play sprite broadcasts <b>start</b>. Change your fruit scripts to begin with <b>when I receive [start]</b>.', sol:'when this sprite clicked\nhide\nbroadcast (start v)'}
+  ],
+  exit:[
+    {q:'When does "repeat until <<touching (Sprite1)?> or <(y position) < -160>>" stop?', o:['Only when touching the cat','Only when it reaches the ground','When EITHER is true','Never'], a:2, why:'"or" is true if at least one side is true.'},
+    {q:'What is debugging?', o:['Adding sprites','Finding and fixing mistakes in code','Sharing a project','Drawing costumes'], a:1, why:'Bugs are mistakes. Debugging finds and fixes them.'},
+    {q:'Which of these is a good test?', o:['"Play the game"','"Catch an apple: score should go up by exactly 1"','"Check it works"','"Look at the code"'], a:1, why:'A good test says what you do and the exact result you expect.'}
+  ],
+  sim:6
+}
+];
+// ---------- helpers ----------
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, attrs = {}, html) => { const e = document.createElement(tag); for (const k in attrs) { if (k === 'class') e.className = attrs[k]; else if (k === 'style') e.style.cssText = attrs[k]; else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); } if (html != null) e.innerHTML = html; return e; };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('fc:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('fc:' + k, JSON.stringify(v)); } catch (e) {} }
+};
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function blocksSVG(code, scale = 0.68) {
+  const host = el('div', { class: 'sb-wrap' });
+  try {
+    if (!window.scratchblocks) throw 0;
+    const doc = scratchblocks.parse(code, { languages: ['en'] });
+    const svg = scratchblocks.render(doc, { style: 'scratch3', scale });
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Scratch blocks: ' + code.replace(/\n/g, '; '));
+    host.appendChild(svg);
+  } catch (e) {
+    host.appendChild(el('pre', { class: 'blocks' }, code.replace(/</g, '&lt;')));
+  }
+  return host;
+}
+function catColor(c) { return CAT[c] || 'var(--motion)'; }
+
+// lightbox
+function openLightbox(src, alt) { $('#lbimg').src = src; $('#lbimg').alt = alt || ''; $('#lightbox').hidden = false; $('#lbclose').focus(); }
+document.addEventListener('click', e => { const s = e.target.closest('.shot'); if (s) openLightbox(s.src, s.alt); });
+$('#lbclose').addEventListener('click', () => { $('#lightbox').hidden = true; });
+$('#lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') $('#lightbox').hidden = true; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#lightbox').hidden = true; });
+
+function shot(name, alt) { return `<img class="shot" loading="lazy" src="media/${name}" alt="${alt || 'Screenshot of the Scratch editor'}" width="1436" height="840">`; }
+
+// ---------- images ----------
+const IMG = {};
+['cat1', 'cat2', 'apple', 'bananas'].forEach(n => { IMG[n] = new Image(); IMG[n].src = 'media/' + n + '.png'; });
+IMG.sky = new Image(); IMG.sky.src = 'media/bluesky.jpg';
+const SIZE = { cat1: 0.416, cat2: 0.416, apple: 0.25, bananas: 0.24 }; // px per natural px
+
+// ---------- tiny audio ----------
+let actx = null;
+function blip(freq = 520, dur = 0.12, type = 'square') {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, actx.currentTime); o.frequency.exponentialRampToValueAtTime(freq * 0.55, actx.currentTime + dur);
+    g.gain.setValueAtTime(0.06, actx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + dur);
+  } catch (e) {}
+}
+
+// ---------- stage drawing ----------
+function setupCanvas(cv) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = 480 * dpr; cv.height = 360 * dpr;
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return ctx;
+}
+const sx = x => 240 + x, sy = y => 180 - y;
+function drawSprite(ctx, name, x, y, flip) {
+  const im = IMG[name]; if (!im || !im.complete || !im.naturalWidth) return;
+  const w = im.naturalWidth * SIZE[name], h = im.naturalHeight * SIZE[name];
+  ctx.save(); ctx.translate(sx(x), sy(y)); if (flip) ctx.scale(-1, 1);
+  ctx.drawImage(im, -w / 2, -h / 2, w, h); ctx.restore();
+}
+function spriteBox(name, x, y, inset = 0.72) {
+  const im = IMG[name]; const w = (im.naturalWidth || 200) * SIZE[name] * inset, h = (im.naturalHeight || 200) * SIZE[name] * inset;
+  return { l: x - w / 2, r: x + w / 2, b: y - h / 2, t: y + h / 2 };
+}
+const overlap = (a, b) => a.l < b.r && a.r > b.l && a.b < b.t && a.t > b.b;
+function drawSky(ctx) { if (IMG.sky.complete && IMG.sky.naturalWidth) ctx.drawImage(IMG.sky, 0, 0, 480, 360); else { ctx.fillStyle = '#99ffff'; ctx.fillRect(0, 0, 480, 360); } }
+function drawBubble(ctx, text, x, y) {
+  ctx.save(); ctx.font = '600 14px Lexend, system-ui, sans-serif';
+  const w = Math.min(220, ctx.measureText(text).width + 24), h = 34;
+  let bx = sx(x) + 30, by = sy(y) - 80; if (bx + w > 474) bx = sx(x) - 30 - w;
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(bx, by, w, h, 14); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); const tx = bx < sx(x) ? bx + w - 26 : bx + 18; ctx.moveTo(tx, by + h - 1); ctx.lineTo(tx + 8, by + h + 12); ctx.lineTo(tx + 14, by + h - 1); ctx.fill();
+  ctx.fillStyle = '#575e75'; ctx.textBaseline = 'middle'; ctx.fillText(text, bx + 12, by + h / 2, w - 24); ctx.restore();
+}
+function drawMonitor(ctx, label, val, i) {
+  ctx.save(); ctx.font = '600 12px Lexend, system-ui, sans-serif';
+  const lw = ctx.measureText(label).width; const vw = Math.max(28, ctx.measureText(String(val)).width + 16);
+  const x = 6, y = 6 + i * 26, w = lw + vw + 22;
+  ctx.fillStyle = 'rgba(230,240,255,.95)'; ctx.strokeStyle = '#c4ccdf'; ctx.beginPath(); ctx.roundRect(x, y, w, 22, 5); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#575e75'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + 7, y + 11);
+  ctx.fillStyle = '#ff8c1a'; ctx.beginPath(); ctx.roundRect(x + lw + 14, y + 3, vw, 16, 4); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText(String(val), x + lw + 14 + vw / 2, y + 11); ctx.restore();
+}
+
+// ---------- Fruit Catch game simulator ----------
+let activeGame = null;
+class FruitGame {
+  constructor(host, level) {
+    this.level = level; this.host = host;
+    const bar = el('div', { class: 'stagebar' });
+    this.flagBtn = el('button', { class: 'btn flag', type: 'button', 'aria-label': 'Green flag: start' }, '⚑ Start');
+    this.stopBtn = el('button', { class: 'btn stop', type: 'button', 'aria-label': 'Stop' }, '■ Stop');
+    this.info = el('span', { class: 'readout', 'aria-live': 'polite' }, '');
+    bar.append(this.flagBtn, this.stopBtn, this.info);
+    this.box = el('div', { class: 'stagebox', tabindex: '0', 'aria-label': 'Game stage. Use left and right arrow keys after pressing Start.' });
+    this.cv = el('canvas', { width: 480, height: 360 }); this.box.appendChild(this.cv);
+    host.append(bar, this.box);
+    if (level >= 2) {
+      const tp = el('div', { class: 'touchpad' });
+      this.lb = el('button', { type: 'button', 'aria-label': 'Move left' }, '←'); this.rb = el('button', { type: 'button', 'aria-label': 'Move right' }, '→');
+      tp.append(this.lb, this.rb); host.appendChild(tp);
+      const hold = (dir, btn) => { let t = null; const go = e => { e.preventDefault(); this.press(dir); clearInterval(t); t = setInterval(() => this.press(dir), 90); }; const end = () => clearInterval(t); btn.addEventListener('pointerdown', go); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, end)); };
+      hold(1, this.rb); hold(-1, this.lb);
+    }
+    this.ctx = setupCanvas(this.cv);
+    this.flagBtn.onclick = () => this.start(); this.stopBtn.onclick = () => this.stop(true);
+    this.reset(); this.running = false; this.over = false;
+    const draw = () => this.draw(); Object.values(IMG).forEach(i => i.complete ? 0 : i.addEventListener('load', draw)); this.draw();
+    this.updateInfo();
+  }
+  reset() {
+    this.cat = { x: 0, y: -120, dir: 90, cos: 0 }; this.say = null; this.score = 0; this.lives = 3; this.speed = -4;
+    this.apple = { x: this.level === 1 ? 110 : 0, y: this.level === 1 ? 120 : 150, vis: true, rep: 0 };
+    this.ban = { x: 120, y: 150, vis: false, state: 'wait', t: 0 }; this.over = false; this.stopMsg = null;
+  }
+  top(o) { o.x = Math.round(Math.random() * 400 - 200); o.y = 170; }
+  start() {
+    if (activeGame && activeGame !== this) activeGame.stop(false);
+    activeGame = this; this.reset(); this.running = true; this.frame = 0;
+    this.say = { text: 'Catch the apples!', until: 60 };
+    if (this.level >= 3) this.top(this.apple);
+    if (this.level >= 6) { this.ban.t = 30 * (4 + Math.random() * 4); blip(660, .2, 'triangle'); }
+    this.box.focus({ preventScroll: true });
+    cancelAnimationFrame(this.raf); this.last = performance.now(); this.acc = 0;
+    const loop = now => { this.acc += now - this.last; this.last = now; let n = 0; while (this.acc >= 1000 / 30 && n < 4) { this.step(); this.acc -= 1000 / 30; n++; } this.draw(); if (this.running) this.raf = requestAnimationFrame(loop); };
+    this.raf = requestAnimationFrame(loop);
+  }
+  stop(user) { this.running = false; cancelAnimationFrame(this.raf); if (user) { this.stopMsg = 'Stopped'; } this.draw(); this.updateInfo(); }
+  press(dir) {
+    if (!this.running || this.level < 2) return;
+    this.cat.dir = dir > 0 ? 90 : -90; this.cat.x = Math.max(-225, Math.min(225, this.cat.x + 15 * dir)); this.cat.cos ^= 1;
+  }
+  step() {
+    this.frame++;
+    if (this.say && this.say.until && this.frame > this.say.until) this.say = null;
+    const L = this.level, a = this.apple, catB = spriteBox(this.cat.cos ? 'cat2' : 'cat1', this.cat.x, this.cat.y, 0.62);
+    if (this.overT != null) { if (this.frame > this.overT) { this.running = false; this.say = null; this.stopMsg = 'Game over'; this.updateInfo(); } return; }
+    if (L === 3) { a.y -= 5; a.rep++; if (a.rep >= 65) { a.rep = 0; this.top(a); } }
+    if (L === 4) {
+      a.y -= 5;
+      if (overlap(spriteBox('apple', a.x, a.y), catB)) { this.score++; blip(440); this.top(a); }
+      if (a.y < -160) this.top(a);
+    }
+    if (L >= 5 && a.vis) {
+      a.y += this.speed;
+      if (overlap(spriteBox('apple', a.x, a.y), catB)) { this.score++; this.speed -= 0.5; blip(440); this.top(a); }
+      if (a.y < -160) { this.lives--; blip(160, .18, 'sawtooth'); this.top(a); }
+      if (this.lives === 0) { a.vis = false; this.ban.vis = false; this.ban.state = 'done'; this.say = { text: 'Game over! Score: ' + this.score }; this.overT = this.frame + 90; this.over = true; }
+    }
+    if (L >= 6 && this.ban.state !== 'done') {
+      const b = this.ban;
+      if (b.state === 'wait') { if (--b.t <= 0) { this.top(b); b.vis = true; b.state = 'fall'; } }
+      else if (b.state === 'fall') {
+        b.y -= 7;
+        const hit = overlap(spriteBox('bananas', b.x, b.y), catB);
+        if (hit || b.y < -160) { if (hit) { this.score += 3; blip(880, .2, 'triangle'); } b.vis = false; b.state = 'wait'; b.t = 30 * (4 + Math.random() * 4); }
+      }
+    }
+    if (this.frame % 6 === 0) this.updateInfo();
+  }
+  updateInfo() {
+    const L = this.level; const parts = [`x: ${this.cat.x}`];
+    if (L >= 4) parts.push(`score: ${this.score}`); if (L >= 5) parts.push(`lives: ${this.lives}`, `speed: ${this.speed}`);
+    this.info.textContent = parts.join('   ');
+  }
+  draw() {
+    const c = this.ctx; drawSky(c);
+    if (this.level >= 2 || this.level === 1) {
+      if (this.apple.vis && (this.level !== 1 || true)) drawSprite(c, 'apple', this.apple.x, this.apple.y);
+      if (this.ban.vis) drawSprite(c, 'bananas', this.ban.x, this.ban.y);
+    }
+    drawSprite(c, this.cat.cos ? 'cat2' : 'cat1', this.cat.x, this.cat.y, this.cat.dir < 0);
+    if (this.say) drawBubble(c, this.say.text, this.cat.x, this.cat.y);
+    if (this.level >= 4) drawMonitor(c, 'score', this.score, 0);
+    if (this.level >= 5) drawMonitor(c, 'lives', this.lives, 1);
+    if (!this.running) {
+      c.save(); c.fillStyle = 'rgba(20,22,38,.35)'; c.fillRect(0, 0, 480, 360);
+      c.fillStyle = '#fff'; c.font = '700 26px Fredoka, system-ui, sans-serif'; c.textAlign = 'center';
+      c.fillText(this.stopMsg === 'Game over' ? 'Game over! Score: ' + this.score : 'Press ⚑ Start', 240, 172);
+      c.font = '500 14px Lexend, system-ui, sans-serif';
+      c.fillText(this.level >= 2 ? 'Then use ← and → to move the cat' : 'Watch what the cat’s script does', 240, 198);
+      c.restore();
+    }
+  }
+}
+document.addEventListener('keydown', e => {
+  if (!activeGame || !activeGame.running) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    const r = activeGame.box.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    e.preventDefault(); activeGame.press(e.key === 'ArrowRight' ? 1 : -1);
+  }
+});
+
+// ---------- components ----------
+function quiz(items, key) {
+  const wrap = el('div', { class: 'quiz' });
+  const saved = store.get('quiz:' + key, {});
+  const scoreEl = el('p', { class: 'score' });
+  const upd = () => { const s = store.get('quiz:' + key, {}); const n = Object.keys(s).length; const r = Object.keys(s).filter(k => s[k] === items[k].a).length; scoreEl.textContent = n ? `Score: ${r} / ${items.length}` + (n === items.length && r === items.length ? '  ★ Perfect!' : '') : `${items.length} questions`; };
+  items.forEach((it, qi) => {
+    const q = el('div', { class: 'q' });
+    q.appendChild(el('p', { class: 'qt' }, `${qi + 1}. ${it.q}`));
+    const opts = el('div', { class: 'opts' }); const fb = el('div', { class: 'fb', 'aria-live': 'polite' }); fb.hidden = true;
+    const show = (choice, record) => {
+      [...opts.children].forEach((b, i) => { b.disabled = true; if (i === it.a) b.classList.add('right'); if (i === choice && choice !== it.a) b.classList.add('wrong'); });
+      fb.hidden = false; fb.className = 'fb ' + (choice === it.a ? 'ok' : 'no');
+      fb.innerHTML = (choice === it.a ? '<b>Correct.</b> ' : '<b>Not quite.</b> ') + it.why;
+      if (record) { const s = store.get('quiz:' + key, {}); s[qi] = choice; store.set('quiz:' + key, s); upd(); renderNav(); }
+    };
+    it.o.forEach((o, oi) => opts.appendChild(el('button', { class: 'opt', type: 'button', onclick: () => show(oi, true) }, o)));
+    q.append(opts, fb); wrap.appendChild(q);
+    if (typeof saved[qi] === 'number') show(saved[qi], false);
+  });
+  const reset = el('button', { class: 'btn ghost', type: 'button', onclick: () => { store.set('quiz:' + key, {}); const n = quiz(items, key); wrap.replaceWith(n); } }, '↺ Try again');
+  const foot = el('div', { class: 'ctrls' }); foot.append(scoreEl, reset); wrap.appendChild(foot); upd();
+  return wrap;
+}
+
+function builder(b) {
+  const box = el('div', { class: 'builder' });
+  const canvas = el('div', { class: 'canvas' });
+  const side = el('div');
+  const steps = b.lines.map((l, i) => i).filter(i => b.lines[i][0] !== 'end');
+  let k = steps.length - 1, timer = null;
+  side.innerHTML = `<div class="code-card" style="background:transparent;border:0;padding:0"><h4><img src="media/${b.sprite}.png" alt="">${b.name}</h4></div>`;
+  const counter = el('p', { class: 'eyebrow' }); const say = el('p', { class: 'say' }); const chip = el('span', { class: 'added' });
+  const prog = el('div', { class: 'progress' }, '<i></i>');
+  const prev = el('button', { class: 'btn ghost', type: 'button', 'aria-label': 'Previous block' }, '◀');
+  const play = el('button', { class: 'btn', type: 'button' }, '▶ Watch it build');
+  const next = el('button', { class: 'btn ghost', type: 'button', 'aria-label': 'Next block' }, '▶|');
+  const ctrls = el('div', { class: 'ctrls' }); ctrls.append(prev, play, next, prog);
+  side.append(counter, chip, say, ctrls);
+  const render = (anim) => {
+    const upto = steps[k]; let depth = 0; const lines = [];
+    for (let i = 0; i <= upto; i++) { const t = b.lines[i][0]; lines.push(t); if (/^(forever|repeat|if )/.test(t)) depth++; if (t === 'end') depth--; }
+    for (let i = upto + 1; i < b.lines.length && b.lines[i][0] === 'end' && depth > 0; i++) { lines.push('end'); depth--; }
+    while (depth-- > 0) lines.push('end');
+    const svg = blocksSVG(lines.join('\n'), 0.9); if (anim && !reduceMotion) svg.classList.add('snap');
+    canvas.replaceChildren(svg);
+    const L = b.lines[upto];
+    counter.textContent = `Block ${k + 1} of ${steps.length}`;
+    chip.style.background = catColor(L[1]); chip.style.color = L[1] === 'events' || L[1] === 'control' ? '#2f2200' : '#fff';
+    chip.textContent = '+ ' + L[1].charAt(0).toUpperCase() + L[1].slice(1) + ' block';
+    say.textContent = L[2] || 'This block closes the loop above it.';
+    prog.firstChild.style.width = ((k + 1) / steps.length * 100) + '%';
+    prev.disabled = k === 0; next.disabled = k === steps.length - 1;
+  };
+  const stopPlay = () => { clearInterval(timer); timer = null; play.textContent = '▶ Watch it build'; };
+  prev.onclick = () => { stopPlay(); k = Math.max(0, k - 1); render(true); };
+  next.onclick = () => { stopPlay(); k = Math.min(steps.length - 1, k + 1); render(true); };
+  play.onclick = () => {
+    if (timer) return stopPlay();
+    if (k === steps.length - 1) k = -1;
+    play.textContent = '❚❚ Pause';
+    const adv = () => { k++; render(true); if (k >= steps.length - 1) stopPlay(); };
+    adv(); timer = setInterval(adv, 2200);
+  };
+  box.append(canvas, side); render(false);
+  return box;
+}
+
+function stepsList(lesson) {
+  const key = 'steps:' + lesson.n; let done = store.get(key, []);
+  const wrap = el('div');
+  const head = el('div', { class: 'ctrls' }); const prog = el('div', { class: 'progress' }, '<i></i>'); const lbl = el('span', { class: 'eyebrow' });
+  head.append(lbl, prog);
+  const ol = el('ol', { class: 'steps' });
+  const upd = () => { const n = done.length; lbl.textContent = `${n} of ${lesson.wedo.steps.length} steps done`; prog.firstChild.style.width = (n / lesson.wedo.steps.length * 100) + '%'; renderNav(); };
+  lesson.wedo.steps.forEach((s, i) => {
+    const li = el('li', { class: 'step' + (done.includes(i) ? ' done' : '') });
+    const chk = el('button', { class: 'chk', type: 'button', 'aria-pressed': String(done.includes(i)), 'aria-label': `Mark step ${i + 1} done` }, done.includes(i) ? '✓' : String(i + 1));
+    chk.onclick = () => { if (done.includes(i)) done = done.filter(x => x !== i); else done.push(i); store.set(key, done); const d = done.includes(i); li.classList.toggle('done', d); chk.textContent = d ? '✓' : String(i + 1); chk.setAttribute('aria-pressed', String(d)); upd(); };
+    const body = el('div', { class: 'body' });
+    body.appendChild(el('h4', {}, s.h)); body.appendChild(el('p', {}, s.html));
+    if (s.code) body.appendChild(blocksSVG(s.code, 0.68));
+    if (s.img) body.appendChild(el('figure', {}, shot(s.img, s.h) + '<figcaption>Screenshot from Scratch. Click to enlarge.</figcaption>'));
+    li.append(chk, body); ol.appendChild(li);
+  });
+  wrap.append(el('p', { class: 'lede', style: 'margin-bottom:12px' }, lesson.wedo.intro), head, el('div', { style: 'height:12px' }), ol); upd();
+  return wrap;
+}
+
+function challenges(lesson) {
+  const g = el('div', { class: 'chal' });
+  lesson.youdo.forEach((c, i) => {
+    const key = `ch:${lesson.n}:${i}`;
+    const card = el('div', { class: 'ch ' + c.lvl });
+    card.innerHTML = `<div class="medal"><i></i>${c.lvl[0].toUpperCase() + c.lvl.slice(1)}: ${c.t}</div><p>${c.task}</p>`;
+    const h = el('details', {}, `<summary>Hint</summary><p>${c.hint}</p>`);
+    const s = el('details', {}, '<summary>Show a solution</summary>'); s.appendChild(blocksSVG(c.sol, 0.62));
+    const lab = el('label', { class: 'done' }); const cb = el('input', { type: 'checkbox', id: 'cb-' + lesson.n + '-' + i }); cb.checked = store.get(key, false);
+    cb.onchange = () => { store.set(key, cb.checked); renderNav(); }; lab.append(cb, document.createTextNode(' I completed this'));
+    card.append(h, s, lab); g.appendChild(card);
+  });
+  return g;
+}
+
+// ---------- activities ----------
+function hotspot() {
+  const zones = [
+    { id: 'flag', name: 'the green flag button (it starts the project)', r: [66.6, 6, 2.8, 4.2] },
+    { id: 'stage', name: 'the Stage (where the game runs)', r: [67, 10.5, 32.4, 41.9] },
+    { id: 'palette', name: 'the block palette (where you find blocks)', r: [0, 10.5, 21, 85.5] },
+    { id: 'code', name: 'the code area (where you build scripts)', r: [21.2, 10.5, 45, 85.5] },
+    { id: 'sprites', name: 'the sprite pane (choose which sprite to edit)', r: [67, 53.6, 27, 45.8] }
+  ];
+  const order = ['stage', 'palette', 'code', 'sprites', 'flag'];
+  let qi = 0, right = 0;
+  const w = el('div');
+  const prompt = el('p', { class: 'hot-prompt', 'aria-live': 'polite' });
+  const box = el('div', { class: 'hot' }); box.innerHTML = '<img src="media/01-interface.jpg" alt="The Scratch editor with block palette, code area, stage and sprite pane" loading="lazy" width="1436" height="840">';
+  const fb = el('p', { class: 'fb' }); fb.hidden = true;
+  const again = el('button', { class: 'btn ghost', type: 'button' }, '↺ Start again'); again.hidden = true;
+  zones.forEach(z => { const b = el('button', { class: 'zone', type: 'button', 'aria-label': z.name, style: `left:${z.r[0]}%;top:${z.r[1]}%;width:${z.r[2]}%;height:${z.r[3]}%` }); b.dataset.id = z.id; box.appendChild(b); });
+  const ask = () => { if (qi >= order.length) { prompt.textContent = `Done! ${right} / ${order.length} first time.`; again.hidden = false; return; } prompt.innerHTML = `Click ${zones.find(z => z.id === order[qi]).name}`; };
+  box.addEventListener('click', e => {
+    const b = e.target.closest('.zone'); if (!b || qi >= order.length) return;
+    const ok = b.dataset.id === order[qi];
+    b.classList.add(ok ? 'show' : 'miss'); setTimeout(() => b.classList.remove('show', 'miss'), 900);
+    fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no'); fb.textContent = ok ? 'Yes, that’s it!' : 'Not that one. Try again.';
+    if (ok) { if (!b.dataset.missed) right++; qi++; ask(); } else { box.querySelectorAll('.zone').forEach(z => { if (z.dataset.id === order[qi]) z.dataset.missed = 1; }); }
+  });
+  again.onclick = () => { qi = 0; right = 0; box.querySelectorAll('.zone').forEach(z => delete z.dataset.missed); again.hidden = true; fb.hidden = true; ask(); };
+  ask(); w.append(prompt, box, fb, again); return w;
+}
+
+function coords() {
+  const w = el('div', { class: 'grid2' });
+  const left = el('div'); const right = el('div');
+  const sbx = el('div', { class: 'stagebox' }); const cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  const ro = el('p', { class: 'readout', style: 'margin-top:8px' });
+  left.appendChild(ro);
+  const ctx = setupCanvas(cv); const cat = { x: 0, y: 0 };
+  const missions = [
+    { t: 'Put the cat in its game spot: x: 0, y: -120', x: 0, y: -120 },
+    { t: 'Top-right corner area: x: 180, y: 120', x: 180, y: 120 },
+    { t: 'Left side, halfway up: x: -180, y: 0', x: -180, y: 0 },
+    { t: 'Where the apple starts falling: x: 0, y: 170', x: 0, y: 170 }
+  ];
+  const doneSet = new Set();
+  const list = el('ul', { class: 'objectives' });
+  const draw = () => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = 'rgba(30,40,90,.18)'; ctx.lineWidth = 1;
+    for (let x = -240; x <= 240; x += 60) { ctx.beginPath(); ctx.moveTo(sx(x), 0); ctx.lineTo(sx(x), 360); ctx.stroke(); }
+    for (let y = -180; y <= 180; y += 60) { ctx.beginPath(); ctx.moveTo(0, sy(y)); ctx.lineTo(480, sy(y)); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(30,40,90,.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 180); ctx.lineTo(480, 180); ctx.moveTo(240, 0); ctx.lineTo(240, 360); ctx.stroke();
+    ctx.fillStyle = 'rgba(20,25,60,.75)'; ctx.font = '600 11px JetBrains Mono, monospace';
+    [-180, -120, -60, 60, 120, 180].forEach(x => ctx.fillText(String(x), sx(x) + 3, 194)); [-120, -60, 60, 120].forEach(y => ctx.fillText(String(y), 244, sy(y) - 3));
+    ctx.fillText('x →', 450, 174); ctx.fillText('y ↑', 248, 14);
+    drawSprite(ctx, 'cat1', cat.x, cat.y);
+    ctx.strokeStyle = '#ff8c1a'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(sx(cat.x), 180); ctx.lineTo(sx(cat.x), sy(cat.y)); ctx.moveTo(240, sy(cat.y)); ctx.lineTo(sx(cat.x), sy(cat.y)); ctx.stroke();
+    ctx.restore();
+    ro.innerHTML = `<span>x: <b>${cat.x}</b></span><span>y: <b>${cat.y}</b></span><span>→ go to x: (${cat.x}) y: (${cat.y})</span>`;
+    missions.forEach((m, i) => { if (Math.abs(cat.x - m.x) <= 15 && Math.abs(cat.y - m.y) <= 15) doneSet.add(i); });
+    list.innerHTML = missions.map((m, i) => `<li style="${doneSet.has(i) ? 'color:var(--good);font-weight:600' : ''}">${doneSet.has(i) ? '✓ ' : ''}${m.t}</li>`).join('');
+  };
+  let drag = false;
+  const pos = e => { const r = cv.getBoundingClientRect(); cat.x = Math.round(((e.clientX - r.left) / r.width * 480 - 240) / 5) * 5; cat.y = Math.round((180 - (e.clientY - r.top) / r.height * 360) / 5) * 5; cat.x = Math.max(-240, Math.min(240, cat.x)); cat.y = Math.max(-180, Math.min(180, cat.y)); draw(); };
+  cv.addEventListener('pointerdown', e => { drag = true; cv.setPointerCapture(e.pointerId); pos(e); });
+  cv.addEventListener('pointermove', e => { if (drag) pos(e); });
+  cv.addEventListener('pointerup', () => drag = false);
+  sbx.tabIndex = 0; sbx.setAttribute('aria-label', 'Coordinate stage. Use arrow keys to move the cat by 10.');
+  sbx.addEventListener('keydown', e => { const m = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] }[e.key]; if (m) { e.preventDefault(); cat.x = Math.max(-240, Math.min(240, cat.x + m[0])); cat.y = Math.max(-180, Math.min(180, cat.y + m[1])); draw(); } });
+  right.append(el('h4', { style: 'margin-bottom:8px' }, 'Missions'), list, el('p', { class: 'note', style: 'margin-top:14px' }, 'The stage is 480 steps wide (x: -240 to 240) and 360 steps tall (y: -180 to 180). Up is positive y. Right is positive x.'));
+  w.append(left, right);
+  Object.values(IMG).forEach(i => i.addEventListener('load', draw)); draw();
+  return w;
+}
+
+function looplab() {
+  const w = el('div', { class: 'grid2' }); const left = el('div'); const right = el('div', { style: 'display:flex;flex-direction:column;gap:12px' });
+  const sbx = el('div', { class: 'stagebox' }); const cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  const ctx = setupCanvas(cv);
+  let n = 30, s = 5, cur = 170, anim = null;
+  const rN = el('input', { type: 'range', min: 1, max: 100, value: n, id: 'rep-n' }); const rS = el('input', { type: 'range', min: 1, max: 15, value: s, id: 'rep-s' });
+  const lN = el('label', { for: 'rep-n' }); const lS = el('label', { for: 'rep-s' });
+  const code = el('div'); const out = el('p', { class: 'readout' }); const res = el('p', { class: 'fb' }); res.hidden = true;
+  const run = el('button', { class: 'btn flag', type: 'button' }, '⚑ Run loop');
+  const draw = (trail) => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = '#d64545'; ctx.setLineDash([6, 5]); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, sy(-150)); ctx.lineTo(480, sy(-150)); ctx.stroke();
+    ctx.fillStyle = '#7a1f1f'; ctx.font = '600 12px JetBrains Mono, monospace'; ctx.fillText('target  y: -150', 8, sy(-150) - 6);
+    if (trail) { ctx.fillStyle = 'rgba(214,69,69,.55)'; for (let y = 170; y >= cur; y -= s) { ctx.beginPath(); ctx.arc(240, sy(y), 2, 0, 7); ctx.fill(); } }
+    ctx.restore(); drawSprite(ctx, 'apple', 0, cur);
+  };
+  const upd = () => {
+    n = +rN.value; s = +rS.value; lN.innerHTML = `repeat <b>${n}</b> times`; lS.innerHTML = `change y by <b>-${s}</b>`;
+    code.replaceChildren(blocksSVG(`go to x: (0) y: (170)\nrepeat (${n})\n  change y by (-${s})\nend`, 0.68));
+    out.innerHTML = `<span>distance = ${n} × ${s} = <b>${n * s}</b></span><span>end y = 170 − ${n * s} = <b>${170 - n * s}</b></span>`;
+    if (!anim) { cur = 170; draw(false); }
+  };
+  rN.oninput = upd; rS.oninput = upd;
+  run.onclick = () => {
+    cancelAnimationFrame(anim); cur = 170; let i = 0; res.hidden = true;
+    const tick = () => { if (i < n) { cur -= s; i++; draw(true); anim = requestAnimationFrame(tick); } else { anim = null; const ok = Math.abs(cur + 150) <= 3; res.hidden = false; res.className = 'fb ' + (ok ? 'ok' : 'no'); res.innerHTML = ok ? `<b>Bullseye!</b> ${n} × ${s} = ${n * s} steps, landing at y: ${cur}.` : (cur < -180 ? `It fell off the bottom of the stage (y: ${cur}). Use fewer repeats or smaller steps.` : `It stopped at y: ${cur}. ${cur > -150 ? 'Not far enough yet.' : 'Too far.'} Try again.`); } };
+    tick();
+  };
+  right.append(lN, rN, lS, rS, code, out, el('div', { class: 'ctrls' }, ''), res);
+  right.querySelector('.ctrls').appendChild(run);
+  w.append(left, right);
+  Object.values(IMG).forEach(i => i.addEventListener('load', () => draw(false))); upd();
+  return w;
+}
+
+function condlab() {
+  const w = el('div', { class: 'grid2' }); const left = el('div'); const right = el('div', { style: 'display:flex;flex-direction:column;gap:12px' });
+  const sbx = el('div', { class: 'stagebox' }); const cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  left.appendChild(el('p', { style: 'font-size:.85rem;color:var(--ink2);margin-top:6px' }, 'Drag the apple. The dashed line is y: -160.'));
+  const ctx = setupCanvas(cv); const ap = { x: 60, y: 60 };
+  const b1 = el('div', { class: 'bool' }); const b2 = el('div', { class: 'bool' }); const act = el('p', { class: 'note' });
+  const draw = () => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = '#7a3b00'; ctx.setLineDash([6, 5]); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, sy(-160)); ctx.lineTo(480, sy(-160)); ctx.stroke(); ctx.restore();
+    drawSprite(ctx, 'cat1', 0, -120); drawSprite(ctx, 'apple', ap.x, ap.y);
+    const t = overlap(spriteBox('apple', ap.x, ap.y), spriteBox('cat1', 0, -120, 0.62)); const g = ap.y < -160;
+    b1.className = 'bool' + (t ? ' true' : ''); b1.innerHTML = `&lt;touching (Sprite1)?&gt; <b>${t}</b>`;
+    b2.className = 'bool' + (g ? ' true' : ''); b2.innerHTML = `&lt;(y position) &lt; -160&gt; <span class="mono">y=${ap.y}</span> <b>${g}</b>`;
+    act.innerHTML = t ? '<b>Catch!</b> The first if runs: score + 1, crunch sound, back to the top.' : g ? '<b>Missed.</b> The second if runs: back to the top (and from Lesson 5, lose a life).' : 'Both conditions are <b>false</b>, so the code inside both if blocks is skipped. The apple just keeps falling.';
+  };
+  let drag = false;
+  const pos = e => { const r = cv.getBoundingClientRect(); ap.x = Math.round((e.clientX - r.left) / r.width * 480 - 240); ap.y = Math.round(180 - (e.clientY - r.top) / r.height * 360); ap.x = Math.max(-230, Math.min(230, ap.x)); ap.y = Math.max(-180, Math.min(175, ap.y)); draw(); };
+  cv.addEventListener('pointerdown', e => { drag = true; cv.setPointerCapture(e.pointerId); pos(e); });
+  cv.addEventListener('pointermove', e => { if (drag) pos(e); }); cv.addEventListener('pointerup', () => drag = false);
+  sbx.tabIndex = 0; sbx.setAttribute('aria-label', 'Condition stage. Arrow keys move the apple.');
+  sbx.addEventListener('keydown', e => { const m = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] }[e.key]; if (m) { e.preventDefault(); ap.x += m[0]; ap.y += m[1]; draw(); } });
+  right.append(el('h4', {}, 'Live conditions'), b1, b2, act, blocksSVG('if <touching (Sprite1 v)?> then\n  change [score v] by (1)\nend\nif <(y position) < [-160]> then\n  go to x: (pick random (-200) to (200)) y: (170)\nend', 0.62));
+  w.append(left, right); Object.values(IMG).forEach(i => i.addEventListener('load', draw)); draw();
+  return w;
+}
+
+function trace() {
+  const rows = [['Green flag clicked', 0, 3, -4], ['Catch an apple', 1, 3, -4.5], ['Catch an apple', 2, 3, -5], ['Miss an apple', 2, 2, -5], ['Catch an apple', 3, 2, -5.5], ['Miss an apple', 3, 1, -5.5], ['Miss an apple', 3, 0, -5.5]];
+  const w = el('div'); const tw = el('div', { class: 'tablewrap' });
+  const t = el('table', { class: 'trace' });
+  t.innerHTML = '<thead><tr><th>#</th><th>Event</th><th>score</th><th>lives</th><th>speed</th></tr></thead>';
+  const tb = el('tbody'); const inputs = [];
+  rows.forEach((r, i) => {
+    const tr = el('tr'); tr.appendChild(el('td', {}, String(i + 1))); tr.appendChild(el('td', { class: 'ev' }, r[0]));
+    for (let c = 1; c <= 3; c++) {
+      const td = el('td');
+      if (i === 0) td.innerHTML = `<b>${r[c]}</b>`; else { const inp = el('input', { type: 'text', inputmode: 'decimal', 'aria-label': `${['score', 'lives', 'speed'][c - 1]} after event ${i + 1}`, id: `tr-${i}-${c}` }); inp.dataset.ans = r[c]; inputs.push(inp); td.appendChild(inp); }
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb); tw.appendChild(t);
+  const fb = el('p', { class: 'fb' }); fb.hidden = true;
+  const check = el('button', { class: 'btn', type: 'button' }, 'Check my table');
+  const showA = el('button', { class: 'btn ghost', type: 'button' }, 'Show answers');
+  check.onclick = () => { let ok = 0; inputs.forEach(i => { const good = parseFloat(i.value) === parseFloat(i.dataset.ans); i.className = good ? 'ok' : 'no'; if (good) ok++; }); fb.hidden = false; fb.className = 'fb ' + (ok === inputs.length ? 'ok' : 'no'); fb.innerHTML = ok === inputs.length ? '<b>Perfect trace!</b> After event 7, lives = 0, so the apple broadcasts game over.' : `${ok} / ${inputs.length} correct. Remember: speed only changes on a catch, lives only on a miss.`; };
+  showA.onclick = () => { inputs.forEach(i => { i.value = i.dataset.ans; i.className = 'ok'; }); };
+  const c = el('div', { class: 'ctrls' }); c.append(check, showA);
+  w.append(tw, c, fb); return w;
+}
+
+function parsons(a) {
+  const w = el('div');
+  const all = [...a.answer.map((t, i) => ({ t, i })), ...a.distract.map(t => ({ t, i: -1 }))].sort(() => Math.random() - 0.5);
+  let chosen = [];
+  const g = el('div', { class: 'parsons' }); const pool = el('div', { class: 'pz' }, '<h5>Blocks</h5>'); const ans = el('div', { class: 'pz' }, '<h5>Your script</h5>');
+  const fb = el('p', { class: 'fb' }); fb.hidden = true;
+  const draw = () => {
+    pool.querySelectorAll('.pitem').forEach(n => n.remove()); ans.querySelectorAll('.pitem').forEach(n => n.remove());
+    all.forEach(it => { if (chosen.includes(it)) return; const b = el('button', { class: 'pitem', type: 'button', 'aria-label': 'Add block: ' + it.t }); b.appendChild(blocksSVG(it.t, 0.62)); b.onclick = () => { chosen.push(it); draw(); }; pool.appendChild(b); });
+    chosen.forEach((it, k) => {
+      const row = el('div', { class: 'pitem' }); row.appendChild(blocksSVG(it.t, 0.62));
+      const mv = el('span', { class: 'mv' });
+      mv.append(el('button', { type: 'button', 'aria-label': 'Move up', onclick: () => { if (k > 0) { [chosen[k - 1], chosen[k]] = [chosen[k], chosen[k - 1]]; draw(); } } }, '↑'), el('button', { type: 'button', 'aria-label': 'Move down', onclick: () => { if (k < chosen.length - 1) { [chosen[k + 1], chosen[k]] = [chosen[k], chosen[k + 1]]; draw(); } } }, '↓'), el('button', { type: 'button', 'aria-label': 'Remove', onclick: () => { chosen.splice(k, 1); draw(); } }, '✕'));
+      row.appendChild(mv); ans.appendChild(row);
+    });
+  };
+  const check = el('button', { class: 'btn', type: 'button' }, 'Check');
+  const reset = el('button', { class: 'btn ghost', type: 'button' }, '↺ Reset');
+  check.onclick = () => {
+    fb.hidden = false; const ok = chosen.length === a.answer.length && chosen.every((it, k) => it.i === k);
+    fb.className = 'fb ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = ok ? '<b>Correct!</b> The hat block goes first, then face left, move left, and change costume.' : chosen.some(c => c.i === -1) ? 'One of your blocks is the trap. Moving left changes x, not y.' : chosen.length < a.answer.length ? 'Not finished yet. You need 4 blocks.' : 'Check the order. Which block has to be at the top?';
+  };
+  reset.onclick = () => { chosen = []; fb.hidden = true; draw(); };
+  g.append(pool, ans); const c = el('div', { class: 'ctrls' }); c.append(check, reset);
+  w.append(g, c, fb); draw(); return w;
+}
+
+function testplan() {
+  const tests = [
+    ['Click the green flag', 'Score 0, lives 3, cat at the bottom saying “Catch the apples!”'],
+    ['Press → and ←', 'Cat moves and faces the right way, never upside down'],
+    ['Catch an apple', 'Score goes up by exactly 1, crunch sound plays'],
+    ['Miss an apple', 'Lives goes down by 1, apple restarts at the top'],
+    ['Catch 4 apples', 'Apples fall noticeably faster'],
+    ['Catch the bananas', 'Score goes up by 3'],
+    ['Lose all lives', 'Apple disappears, cat says “Game over! Score: …”, game stops'],
+    ['Click the green flag again', 'Everything resets: score 0, lives 3, apple visible']
+  ];
+  const saved = store.get('tests', {});
+  const tw = el('div', { class: 'tablewrap' }); const t = el('table', { class: 'plain' });
+  t.innerHTML = '<thead><tr><th>#</th><th>Test</th><th>Expected result</th><th>Result</th><th>What happened?</th></tr></thead>';
+  const tb = el('tbody');
+  tests.forEach((r, i) => {
+    const tr = el('tr'); tr.innerHTML = `<td>${i + 1}</td><td>${r[0]}</td><td>${r[1]}</td>`;
+    const td = el('td'); const sel = el('select', { id: 'tp-' + i, 'aria-label': 'Result for test ' + (i + 1), style: 'font:inherit;padding:4px;border-radius:8px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)' });
+    sel.innerHTML = '<option value="">–</option><option value="pass">Pass ✓</option><option value="fail">Fail ✗</option>'; sel.value = (saved[i] || {}).r || '';
+    const td2 = el('td'); const inp = el('input', { type: 'text', id: 'tpn-' + i, 'aria-label': 'Notes for test ' + (i + 1), placeholder: 'Only if it failed' }); inp.value = (saved[i] || {}).n || '';
+    const save = () => { const s = store.get('tests', {}); s[i] = { r: sel.value, n: inp.value }; store.set('tests', s); };
+    sel.onchange = save; inp.oninput = save; td.appendChild(sel); td2.appendChild(inp); tr.append(td, td2); tb.appendChild(tr);
+  });
+  t.appendChild(tb); tw.appendChild(t);
+  return el('div', {}, '').appendChild(tw).parentNode;
+}
+
+function review() {
+  const w = el('div', { class: 'grid2' }); const s = store.get('review', { www: '', ebi: '' });
+  const a = el('textarea', { rows: 4, id: 'rv-www', placeholder: 'What went well… e.g. The bananas bonus is a great surprise.' }); a.value = s.www;
+  const b = el('textarea', { rows: 4, id: 'rv-ebi', placeholder: 'Even better if… e.g. It would be even better if there was a start screen.' }); b.value = s.ebi;
+  const save = () => store.set('review', { www: a.value, ebi: b.value }); a.oninput = save; b.oninput = save;
+  const la = el('div'); la.append(el('label', { for: 'rv-www', style: 'font-weight:600;display:block;margin-bottom:6px' }, 'What Went Well (WWW)'), a);
+  const lb = el('div'); lb.append(el('label', { for: 'rv-ebi', style: 'font-weight:600;display:block;margin-bottom:6px' }, 'Even Better If (EBI)'), b);
+  w.append(la, lb); return w;
+}
+
+function activity(a, lesson) {
+  const p = el('div', { class: 'panel' });
+  p.appendChild(el('h3', { style: 'font-size:1.2rem;margin-bottom:6px' }, a.title));
+  if (a.intro) p.appendChild(el('p', { class: 'lede', style: 'margin-bottom:14px' }, a.intro));
+  const t = a.type;
+  if (t === 'hotspot') p.appendChild(hotspot());
+  else if (t === 'coords') p.appendChild(coords());
+  else if (t === 'looplab') p.appendChild(looplab());
+  else if (t === 'condlab') p.appendChild(condlab());
+  else if (t === 'trace') p.appendChild(trace());
+  else if (t === 'parsons') p.appendChild(parsons(a));
+  else if (t === 'predict') p.appendChild(quiz(a.items, 'pred:' + lesson.n + ':' + a.title));
+  else if (t === 'testplan') p.appendChild(testplan());
+  else if (t === 'review') p.appendChild(review());
+  else if (t === 'play') { const h = el('div', { style: 'max-width:480px' }); p.appendChild(h); new FruitGame(h, 6); }
+  return p;
+}
+// ---------- progress ----------
+function lessonProgress(L) {
+  const steps = store.get('steps:' + L.n, []).length / L.wedo.steps.length;
+  const ex = store.get('quiz:exit:' + L.n, {}); const exitDone = Object.keys(ex).length / L.exit.length;
+  const ch = L.youdo.filter((c, i) => store.get(`ch:${L.n}:${i}`, false)).length / L.youdo.length;
+  return Math.round((steps * 0.5 + exitDone * 0.3 + ch * 0.2) * 100);
+}
+
+// ---------- nav ----------
+let current = 'overview';
+function renderNav() {
+  const nav = $('#stack'); nav.replaceChildren(el('p', { class: 'cap' }, 'Course'));
+  const mk = (href, c, dark, num, title, sub, tick) => {
+    const a = el('a', { class: 'sblock' + (dark ? ' dark-text' : ''), href: '#' + href, style: `--c:${c}` });
+    a.innerHTML = `<span class="num">${num}</span><span class="t">${title}${sub ? `<small>${sub}</small>` : ''}</span>${tick != null ? `<span class="tick">${tick}%</span>` : ''}`;
+    if (current === href) a.setAttribute('aria-current', 'page');
+    nav.appendChild(a);
+  };
+  mk('overview', 'var(--operators)', false, '⚑', 'Start here', 'Course overview');
+  LESSONS.forEach(L => mk(L.id, L.c, L.dark, L.n, L.title, L.concept, lessonProgress(L)));
+  mk('teacher', 'var(--myblocks)', false, '✎', 'Teacher notes', 'Planning & assessment');
+}
+
+// ---------- overview ----------
+function viewOverview() {
+  const v = el('div', { class: 'view' });
+  const hero = el('section', { class: 'panel hero' });
+  const left = el('div', { style: 'display:flex;flex-direction:column;gap:14px' });
+  left.innerHTML = `<p class="eyebrow">Year 7 Computer Science · 6 lessons</p>
+    <h1>Build <span>Fruit Catch</span> in Scratch</h1>
+    <p class="lede">Over six lessons you will build one real game, a little more each lesson. Move the cat, catch falling fruit, keep score, lose lives and beat your high score. On the way you will learn the three big ideas of programming: <b>sequence</b>, <b>selection</b> and <b>iteration</b>.</p>
+    <div class="ctrls"><a class="btn" href="#lesson-1" style="text-decoration:none">Start Lesson 1 →</a><a class="btn ghost" href="#teacher" style="text-decoration:none">Teacher notes</a></div>`;
+  const right = el('div'); right.appendChild(el('p', { class: 'eyebrow', style: 'margin-bottom:8px' }, 'Play the finished game'));
+  hero.append(left, right); new FruitGame(right, 6);
+  v.appendChild(hero);
+
+  const flow = el('section', { class: 'panel' });
+  flow.innerHTML = `<div class="sec-head"><h2>How every lesson works</h2></div>
+    <div class="flow">${[['Starter', 'Quick quiz on last lesson', 'var(--sensing)'], ['I do', 'Watch the demo video & block build', 'var(--motion)'], ['We do', 'Build it together, step by step', 'var(--operators)'], ['You do', 'Bronze, silver & gold challenges', 'var(--control)'], ['Exit ticket', 'Three questions to show what you learnt', 'var(--myblocks)']].map(f => `<div style="--pc:${f[2]}"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('')}</div>
+    <p class="lede" style="margin-top:12px">Every lesson also has a <b>Try it</b> activity: an interactive puzzle, simulator or bug hunt. Your ticks and answers are saved in this browser only.</p>`;
+  v.appendChild(flow);
+
+  const real = el('section', { class: 'panel grid2', style: 'align-items:center' });
+  real.innerHTML = `<div><p class="eyebrow">Recorded in Scratch</p><h2 style="margin:6px 0 10px">The real thing</h2><p class="lede">This clip was recorded from the teacher model project in the Scratch editor. Your finished game will look just like this: apples, a bonus bunch of bananas, a score, lives and a game-over message.</p></div>
+    <video class="vid" src="media/gameplay.mp4" controls muted playsinline loop preload="metadata" aria-label="Fruit Catch gameplay recorded in Scratch" style="aspect-ratio:4/3"></video>`;
+  v.appendChild(real);
+
+  const cards = el('section', { class: 'panel' }); cards.innerHTML = '<div class="sec-head"><h2>The six lessons</h2></div>';
+  const g = el('div', { class: 'lcards' });
+  LESSONS.forEach(L => {
+    const a = el('a', { class: 'lcard' + (L.dark ? ' dark-text' : ''), href: '#' + L.id, style: `--c:${L.c}` });
+    a.innerHTML = `<div class="top">Lesson ${L.n} · ${L.title}</div><div class="bd"><span class="concept">${L.concept}</span><span>${L.bq}</span><div class="progress" style="flex:none"><i style="width:${lessonProgress(L)}%"></i></div></div>`;
+    g.appendChild(a);
+  });
+  cards.appendChild(g); v.appendChild(cards);
+  v.appendChild(el('p', { class: 'foot' }, 'Scratch is a project of the Scratch Foundation, in collaboration with the Lifelong Kindergarten Group at the MIT Media Lab. Sprite and backdrop artwork © Scratch, used under CC BY-SA 2.0.'));
+  return v;
+}
+
+// ---------- lesson ----------
+function viewLesson(L) {
+  const v = el('div', { class: 'view' });
+  const hero = el('section', { class: 'lhero' + (L.dark ? ' dark-text' : ''), style: `--c:${L.c}` });
+  const art = L.art.map((a, i) => `<img src="media/${a}.png" alt="" style="${i === 0 ? 'right:0;bottom:0;height:100px' : 'left:0;top:0;height:54px;transform:rotate(-12deg)'}">`).join('');
+  hero.innerHTML = `<div><p class="lnum">LESSON ${L.n} OF 6 · ${L.concept.toUpperCase()}</p><h1>${L.title}</h1><p class="bq">${L.bq}</p></div><div class="art" aria-hidden="true">${art}</div>`;
+  v.appendChild(hero);
+
+  const rail = el('nav', { class: 'phases', 'aria-label': 'Lesson sections' });
+  PHASES.forEach(p => { const b = el('button', { class: 'phase-link', type: 'button', style: `--pc:${p.c}`, onclick: () => { const t = document.getElementById(`${L.id}-${p.id}`); if (t) t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); } }, `<span class="dot"></span>${p.name}`); rail.appendChild(b); });
+  v.appendChild(rail);
+
+  const goals = el('section', { class: 'panel grid2' });
+  const og = el('div'); og.innerHTML = `<p class="eyebrow" style="margin-bottom:10px">By the end of this lesson I can…</p><ul class="objectives">${L.objectives.map(o => `<li>${o}</li>`).join('')}</ul>`;
+  const vg = el('div'); vg.appendChild(el('p', { class: 'eyebrow', style: 'margin-bottom:10px' }, 'Key words · tap a card to flip it'));
+  const vc = el('div', { class: 'vocab' });
+  L.vocab.forEach(([t, d]) => { const b = el('button', { class: 'vcard', type: 'button', 'aria-pressed': 'false' }); b.innerHTML = `<div class="in"><div class="f">${t}<small>tap to flip</small></div><div class="b">${d}</div></div>`; b.onclick = () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); vc.appendChild(b); });
+  vg.appendChild(vc); goals.append(og, vg); v.appendChild(goals);
+
+  const section = (pid, title, sub) => {
+    const p = PHASES.find(x => x.id === pid);
+    const s = el('section', { class: 'panel', id: `${L.id}-${pid}`, style: 'scroll-margin-top:80px' });
+    s.innerHTML = `<div class="sec-head"><span class="tag${pid === 'youdo' ? ' dark-text' : ''}" style="--pc:${p.c}">${p.name}</span><h2>${title}</h2><span class="mins">${p.mins}</span></div>${sub ? `<p class="lede" style="margin:-4px 0 16px">${sub}</p>` : ''}`;
+    v.appendChild(s); return s;
+  };
+
+  section('starter', 'Do now', 'Answer on your own, from memory. No peeking at Scratch!').appendChild(quiz(L.starter, 'start:' + L.n));
+
+  const ido = section('ido', 'Watch the demo', 'Your teacher will play this or demo it live. Watch for the three things below.');
+  const g1 = el('div', { class: 'grid2', style: 'align-items:start' });
+  g1.innerHTML = `<div><video class="vid" controls playsinline preload="metadata" poster="${L.ido.poster}" src="${L.ido.video}" aria-label="Demo video for lesson ${L.n}"></video></div>
+    <div><h4 style="margin-bottom:10px">Watch out for</h4><ul class="objectives">${L.ido.notice.map(n => `<li>${n}</li>`).join('')}</ul></div>`;
+  ido.appendChild(g1);
+  ido.appendChild(el('h3', { style: 'font-size:1.15rem;margin:22px 0 10px' }, 'Watch the script build, one block at a time'));
+  ido.appendChild(builder(L.ido.build));
+  ido.appendChild(el('h3', { style: 'font-size:1.15rem;margin:22px 0 6px' }, `Your game after Lesson ${L.n}`));
+  ido.appendChild(el('p', { class: 'lede', style: 'margin-bottom:10px' }, L.n === 1 ? 'Press Start to see what the cat’s first script does.' : 'Press Start and play. This is what your Scratch project should do by the end of today.'));
+  const simHost = el('div', { style: 'max-width:480px' }); ido.appendChild(simHost); new FruitGame(simHost, L.sim);
+
+  section('wedo', 'Build it together').appendChild(stepsList(L));
+
+  const act = el('section', { class: 'view', id: `${L.id}-activity`, style: 'scroll-margin-top:80px;gap:14px' });
+  act.appendChild(el('div', { class: 'sec-head', style: 'margin:0' }, `<span class="tag" style="--pc:var(--looks)">Try it</span><h2>Interactive practice</h2><span class="mins">10 min</span>`));
+  L.activities.forEach(a => act.appendChild(activity(a, L)));
+  v.appendChild(act);
+
+  section('youdo', 'Your turn', 'Start with Bronze. Move up when you finish. Use the hint before the solution.').appendChild(challenges(L));
+
+  section('exit', 'Exit ticket', 'Three questions. Show what you learnt today.').appendChild(quiz(L.exit, 'exit:' + L.n));
+
+  const nx = el('div', { class: 'next-row' });
+  const prevL = LESSONS[L.n - 2], nextL = LESSONS[L.n];
+  nx.innerHTML = `${prevL ? `<a class="btn ghost" style="text-decoration:none" href="#${prevL.id}">← Lesson ${prevL.n}</a>` : '<a class="btn ghost" style="text-decoration:none" href="#overview">← Overview</a>'}${nextL ? `<a class="btn" style="text-decoration:none" href="#${nextL.id}">Lesson ${nextL.n}: ${nextL.title} →</a>` : '<a class="btn" style="text-decoration:none" href="#teacher">Teacher notes →</a>'}`;
+  v.appendChild(nx);
+  return v;
+}
+
+// ---------- teacher ----------
+function viewTeacher() {
+  const v = el('div', { class: 'view' });
+  const hero = el('section', { class: 'lhero', style: '--c:var(--myblocks)' });
+  hero.innerHTML = `<div><p class="lnum">FOR TEACHERS</p><h1>Teacher notes</h1><p class="bq">Planning, timings, model project, misconceptions and assessment for the Fruit Catch unit.</p></div><div class="art" aria-hidden="true"><img src="media/cat1.png" alt="" style="right:0;bottom:0;height:100px"></div>`;
+  v.appendChild(hero);
+
+  const p1 = el('section', { class: 'panel' });
+  p1.innerHTML = `<div class="sec-head"><h2>Unit at a glance</h2></div><div class="tablewrap"><table class="plain"><thead><tr><th>Lesson</th><th>Big idea</th><th>New blocks</th><th>Students finish with…</th></tr></thead><tbody>
+  <tr><td>1 · Meet Scratch</td><td>Sequence, coordinates</td><td>when flag clicked, go to x:y:, say</td><td>Cat at the bottom of a Blue Sky stage, an Apple sprite added</td></tr>
+  <tr><td>2 · Move the cat</td><td>Events, input/output</td><td>when key pressed, point in direction, change x, next costume, set rotation style</td><td>Arrow-key controlled cat that walks</td></tr>
+  <tr><td>3 · Make it rain</td><td>Iteration</td><td>forever, repeat, pick random, change y</td><td>Apple that falls from random places forever</td></tr>
+  <tr><td>4 · Catch & score</td><td>Selection, variables</td><td>if then, touching?, &lt;, y position, set/change variable, start sound</td><td>Working catch detection and score</td></tr>
+  <tr><td>5 · Lives & game over</td><td>Operators, broadcasts, tracing</td><td>=, join, broadcast, when I receive, hide/show, stop</td><td>Complete game with lives, speed-up and an ending</td></tr>
+  <tr><td>6 · Polish & share</td><td>Testing, evaluation</td><td>repeat until, or, wait (random)</td><td>Bonus bananas, tested and shared project</td></tr></tbody></table></div>`;
+  v.appendChild(p1);
+
+  const p2 = el('section', { class: 'panel grid2' });
+  p2.innerHTML = `<div><h3 style="margin-bottom:10px">Model project</h3><p>The finished teacher model (all six lessons) is saved to your Scratch account as <b>Fruit Catch – Y7 Teacher Model</b>.</p><p style="margin-top:10px"><a href="${PROJECT_URL}" target="_blank" rel="noopener">Open the model project ↗</a></p><p class="note" style="margin-top:12px">It is <b>not shared yet</b>, so students cannot see it. When you want them to play it or click See inside, open it and press <b>Share</b>. To stop early finishers copying the solution, share it after Lesson 6.</p></div>
+  <div><h3 style="margin-bottom:10px">Lesson timing (60 min)</h3><table class="plain"><tbody>${PHASES.map(p => `<tr><td><span class="tag${p.id === 'youdo' ? ' dark-text' : ''}" style="--pc:${p.c}">${p.name}</span></td><td>${p.mins}</td><td>${{ starter: 'Retrieval quiz, cold-call answers', ido: 'Play video or demo live; watch the block build', wedo: 'Step-by-step, everyone at the same step; check screens', activity: 'Interactive practice, pairs work well', youdo: 'Independent challenges, bronze → gold', exit: 'Individual; use to plan next lesson' }[p.id]}</td></tr>`).join('')}</tbody></table></div>`;
+  v.appendChild(p2);
+
+  const p3 = el('section', { class: 'panel' });
+  p3.innerHTML = `<div class="sec-head"><h2>Common misconceptions</h2></div><div class="tablewrap"><table class="plain"><thead><tr><th>Lesson</th><th>Misconception</th><th>What to say or do</th></tr></thead><tbody>
+  <tr><td>1</td><td>Blocks run just because they are in the code area.</td><td>Only blocks attached under a hat block run when the flag is clicked. Drag a loose block away and test.</td></tr>
+  <tr><td>1</td><td>y gets bigger going down (like reading a page).</td><td>Use the coordinate explorer: up is positive, like a maths graph.</td></tr>
+  <tr><td>2</td><td>The cat walks upside down: “Scratch is broken”.</td><td>Show rotation style. Direction -90 rotates the sprite unless it is set to left-right.</td></tr>
+  <tr><td>3</td><td>Putting “forever” inside the apple’s fall instead of “repeat”.</td><td>Ask: when does a forever loop end? Then the code after it never runs.</td></tr>
+  <tr><td>4</td><td>Score jumps by lots for one catch.</td><td>The if is checked every frame. After scoring the apple must move away (back to the top).</td></tr>
+  <tr><td>4</td><td>Score carries over between games.</td><td>Variables keep values. Initialise with set score to 0 on green flag.</td></tr>
+  <tr><td>5</td><td>A negative speed means slower.</td><td>Negative means direction (down). Bigger negative = faster down. Use the trace table.</td></tr>
+  <tr><td>5</td><td>Broadcast and receive must be in the same sprite.</td><td>Broadcasts go to every sprite and the stage. That is the point of them.</td></tr></tbody></table></div>`;
+  v.appendChild(p3);
+
+  const p4 = el('section', { class: 'panel grid2' });
+  p4.innerHTML = `<div><h3 style="margin-bottom:10px">Adaptive teaching</h3><ul class="objectives">
+  <li><b>Support:</b> pair students at the We do stage; print the We do screenshots; let them watch the I do video again at their own pace with headphones.</li>
+  <li><b>Support:</b> the block-by-block build animation can be paused and stepped back. It shows the exact block and colour to look for.</li>
+  <li><b>Stretch:</b> gold challenges introduce ideas from later lessons (selection in Lesson 2, high score in Lesson 5).</li>
+  <li><b>Stretch:</b> ask early finishers to write a test for their partner’s game, or to explain their code using the key words.</li>
+  <li><b>Reading:</b> the page uses Lexend, a typeface designed to support reading fluency. Key words have flip cards with short definitions.</li></ul></div>
+  <div><h3 style="margin-bottom:10px">Assessment</h3><ul class="objectives">
+  <li><b>Exit tickets:</b> three questions per lesson. Ask students to show their score before leaving (it is saved only on their device).</li>
+  <li><b>Project:</b> check each student’s Scratch project against the lesson’s “Your game after Lesson N” preview.</li>
+  <li><b>Lesson 5 trace table:</b> a good check of whether students understand variables, not just copying blocks.</li>
+  <li><b>Lesson 6 test plan & peer review:</b> evidence of testing and evaluation.</li>
+  <li><b>Key Stage 3 links:</b> designing and debugging programs, using selection and repetition, using variables, simple Boolean logic (and, or, not), and evaluating solutions.</li></ul></div>`;
+  v.appendChild(p4);
+
+  const p5 = el('section', { class: 'panel' });
+  p5.innerHTML = `<div class="sec-head"><h2>Before Lesson 1</h2></div><ul class="objectives">
+  <li>Make sure every student can log in to Scratch. A Scratch Teacher Account lets you create student accounts for a class without email addresses.</li>
+  <li>Check scratch.mit.edu is not blocked on student machines, and that sound works (headphones help for the Chomp sound).</li>
+  <li>Students should save with <b>File → Save now</b> at the end of every lesson. Their project carries on from lesson to lesson.</li>
+  <li>The demo videos and screenshots on this page were recorded from the real Scratch editor, so they match what students see.</li></ul>`;
+  v.appendChild(p5);
+  return v;
+}
+
+// ---------- router ----------
+function route() {
+  const h = (location.hash || '#overview').slice(1);
+  const L = LESSONS.find(x => x.id === h);
+  current = L ? L.id : h === 'teacher' ? 'teacher' : 'overview';
+  if (activeGame) { activeGame.stop(false); activeGame = null; }
+  const main = $('#main');
+  main.replaceChildren(L ? viewLesson(L) : current === 'teacher' ? viewTeacher() : viewOverview());
+  renderNav();
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  try { store.set('last', current); } catch (e) {}
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+
+</body></html>
