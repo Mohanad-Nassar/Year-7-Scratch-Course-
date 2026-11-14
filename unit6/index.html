@@ -1,0 +1,1986 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fruit Catch Quest</title>
+<meta name="description" content="Year 7 Unit 6 – Scratch: build the Fruit Catch game over six levels, with demo videos, block-by-block builds, step-by-step screenshots, stage simulators and bronze, silver and gold challenges.">
+<style>
+:root{
+  --bg:#f5f7fb; --surface:#ffffff; --surface-2:#eef2f8; --text:#122033; --muted:#526075; --border:#d8dfea;
+  --primary:#7c4dcc; --primary-ink:#ffffff; --primary-soft:#ece4fb; --accent:#f59e0b; --accent-soft:#fff4dc;
+  --ok:#15803d; --ok-soft:#dcf5e5; --bad:#b91c1c; --bad-soft:#fde4e4; --warn:#b45309; --warn-soft:#fff1d6; --info:#1d4ed8; --info-soft:#e0eaff;
+  --cpu:#2563eb; --ram:#7c3aed; --sto:#ea580c; --net:#0d9488; --io:#db2777;
+  --on:#16a34a; --off:#94a3b8;
+  --shadow:0 1px 2px rgba(18,32,51,.06),0 4px 16px rgba(18,32,51,.06);
+  --r:12px; --font:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif; --mono:Consolas,"Cascadia Mono",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1624; --surface:#18233a; --surface-2:#1f2c46; --text:#eef2f8; --muted:#a3b0c4; --border:#2d3c5a;
+    --primary:#a78bfa; --primary-ink:#0f1624; --primary-soft:#2e2350; --accent:#fbbf24; --accent-soft:#3a2f12;
+    --ok:#4ade80; --ok-soft:#163626; --bad:#f87171; --bad-soft:#3d1a1d; --warn:#fbbf24; --warn-soft:#3a2f12; --info:#93b4ff; --info-soft:#1c2b50;
+    --cpu:#60a5fa; --ram:#a78bfa; --sto:#fb923c; --net:#2dd4bf; --io:#f472b6; --on:#4ade80; --off:#64748b;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1624; --surface:#18233a; --surface-2:#1f2c46; --text:#eef2f8; --muted:#a3b0c4; --border:#2d3c5a;
+  --primary:#a78bfa; --primary-ink:#0f1624; --primary-soft:#2e2350; --accent:#fbbf24; --accent-soft:#3a2f12;
+  --ok:#4ade80; --ok-soft:#163626; --bad:#f87171; --bad-soft:#3d1a1d; --warn:#fbbf24; --warn-soft:#3a2f12; --info:#93b4ff; --info-soft:#1c2b50;
+  --cpu:#60a5fa; --ram:#a78bfa; --sto:#fb923c; --net:#2dd4bf; --io:#f472b6; --on:#4ade80; --off:#64748b;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.55}
+h1,h2,h3,h4{line-height:1.2;margin:0 0 .5em}
+h1{font-size:1.875rem} h2{font-size:1.5rem} h3{font-size:1.2rem} h4{font-size:1.05rem}
+p{margin:0 0 .75em;max-width:72ch}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.stack>*+*{margin-top:16px}
+.grid2{display:grid;gap:16px;grid-template-columns:1fr}
+.grid3{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.top-in{max-width:1240px;margin:0 auto;padding:8px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:1.05rem;background:none;border:0;padding:4px;text-align:left}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:var(--primary);display:grid;place-items:center;color:var(--primary-ink)}
+.brand small{display:block;font-weight:600;color:var(--muted);font-size:.75rem}
+.xpbox{display:flex;align-items:center;gap:10px;margin-left:auto;min-width:220px}
+.rank{font-weight:700;font-size:.85rem;white-space:nowrap}
+.bar{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden;border:1px solid var(--border);flex:1;min-width:80px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0;transition:width .5s}
+.xpnum{font-weight:800;color:var(--primary);font-size:.9rem;white-space:nowrap}
+.navbtns{display:flex;gap:6px;flex-wrap:wrap}
+.icon-btn{border:1px solid var(--border);background:var(--surface);border-radius:10px;min-height:40px;padding:6px 12px;font-weight:600;font-size:.9rem}
+.icon-btn:hover{background:var(--surface-2)}
+
+/* ---------- generic ---------- */
+main{max-width:1240px;margin:0 auto;padding:24px 16px 80px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.card.tight{padding:16px}
+.btn{border:0;border-radius:10px;min-height:44px;padding:10px 20px;font-weight:700;background:var(--primary);color:var(--primary-ink);transition:transform .1s,filter .15s}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.btn.sec{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn.sec:hover{background:var(--surface-2)}
+.btn.ghost{background:none;color:var(--primary);padding:10px 12px}
+.btn.ok{background:var(--ok);color:#fff}
+.btn.small{min-height:36px;padding:6px 12px;font-size:.9rem}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border)}
+.callout{border-left:5px solid var(--info);background:var(--info-soft);padding:12px 16px;border-radius:8px;margin:12px 0}
+.callout.tip{border-color:var(--accent);background:var(--accent-soft)}
+.callout.ok{border-color:var(--ok);background:var(--ok-soft)}
+.callout.bad{border-color:var(--bad);background:var(--bad-soft)}
+.callout.def{border-color:var(--primary);background:var(--primary-soft)}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+.callout>:last-child{margin-bottom:0}
+.fb{margin-top:8px;font-weight:600;min-height:1.4em}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pop{animation:pop .35s}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- home ---------- */
+.hero{display:grid;gap:24px;grid-template-columns:1fr;align-items:center;margin-bottom:24px}
+@media(min-width:900px){.hero{grid-template-columns:1.3fr 1fr}}
+.hero h1{font-size:2.1rem}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
+.stat b{display:block;font-size:1.6rem;color:var(--primary)}
+.stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+.layers{display:grid;gap:6px;margin-top:16px}
+.layers div{border-radius:10px;padding:8px 14px;font-weight:700;color:#fff;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.layers small{font-weight:600;opacity:.9}
+.map{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:700px){.map{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1050px){.map{grid-template-columns:repeat(4,1fr)}}
+.lvl{position:relative;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-height:210px;border-top:6px solid var(--lc,var(--primary))}
+.lvl:hover:not([disabled]){transform:translateY(-2px);transition:transform .15s}
+.lvl[disabled]{opacity:.6;cursor:not-allowed}
+.lvl .num{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--lc)}
+.lvl .ico{font-size:2rem;line-height:1}
+.lvl h3{margin:0;font-size:1.1rem}
+.lvl .q{color:var(--muted);font-size:.9rem;flex:1}
+.lvl .stars{font-size:.85rem;font-weight:700}
+.lvl .lock{position:absolute;top:16px;right:16px;font-size:1.3rem}
+.minibar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.minibar i{display:block;height:100%;background:var(--lc,var(--primary))}
+.badges{display:flex;gap:12px;flex-wrap:wrap}
+.badge{width:96px;text-align:center;font-size:.75rem;font-weight:700;color:var(--muted)}
+.badge .b{width:64px;height:64px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center;font-size:1.8rem;background:var(--surface-2);border:3px dashed var(--border);filter:grayscale(1);opacity:.55}
+.badge.got .b{filter:none;opacity:1;border:3px solid var(--accent);background:var(--accent-soft)}
+.badge.got{color:var(--text)}
+
+/* ---------- lesson ---------- */
+.lhead{border-radius:16px;padding:24px;color:#fff;background:var(--lc);position:relative;overflow:hidden;margin-bottom:16px}
+.lhead::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.12)}
+.lhead .k{font-weight:800;letter-spacing:.06em;font-size:.8rem;text-transform:uppercase;opacity:.9}
+.lhead h1{margin:.2em 0 .3em;color:#fff}
+.lhead .bq{font-size:1.15rem;font-weight:600}
+.objs{display:grid;gap:8px;margin-top:12px}
+.obj{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.14);border-radius:10px;padding:8px 12px;font-weight:600;font-size:.95rem}
+.obj .tk{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:.8rem}
+.obj.met .tk{background:#fff;color:var(--lc)}
+.lwrap{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:960px){.lwrap{grid-template-columns:260px minmax(0,1fr)}}
+.steps{display:flex;flex-direction:column;gap:6px}
+@media(max-width:959px){.steps{flex-direction:row;overflow-x:auto;padding-bottom:6px}.steps .st{min-width:150px}}
+.st{display:flex;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-weight:600;font-size:.9rem;min-height:52px}
+.st .d{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font-size:.95rem}
+.st small{display:block;font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+.st.cur{border:2px solid var(--lc);background:var(--primary-soft)}
+.st.done .d{background:var(--ok);color:#fff}
+.stage-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.stype{font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:99px;color:#fff;background:var(--lc)}
+.objref{font-size:.85rem;color:var(--muted);font-weight:600}
+.stage-f{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap}
+.gradual{display:flex;gap:4px;align-items:center;font-size:.75rem;font-weight:700;color:var(--muted)}
+.gradual span{padding:3px 8px;border-radius:99px;background:var(--surface-2)}
+.gradual span.on{background:var(--lc);color:#fff}
+
+/* ---------- widgets ---------- */
+.q{margin-bottom:20px}
+.qtext{font-weight:700;margin-bottom:8px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:2px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 14px;min-height:44px;font-weight:600;display:flex;gap:10px;align-items:center}
+.opt:hover:not([disabled]){border-color:var(--primary)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.why{font-size:.92rem;margin-top:6px;color:var(--muted)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mi{border:2px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;min-height:48px;font-weight:600;font-size:.95rem}
+.mi.sel{border-color:var(--primary);background:var(--primary-soft)}
+.mi.done{border-color:var(--ok);background:var(--ok-soft);cursor:default}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:12px;border:2px dashed var(--border);border-radius:12px;background:var(--surface-2)}
+.chip{border:2px solid var(--border);background:var(--surface);border-radius:99px;padding:8px 14px;font-weight:600;font-size:.92rem;min-height:40px}
+.chip.sel{border-color:var(--primary);background:var(--primary-soft);box-shadow:0 0 0 3px var(--primary-soft)}
+.chip.ok{border-color:var(--ok);background:var(--ok-soft);cursor:default}
+.bins{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px}
+@media(min-width:640px){.bins{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}}
+.bin{border:2px solid var(--border);border-radius:12px;padding:12px;background:var(--surface);min-height:120px;text-align:left;display:flex;flex-direction:column;gap:8px}
+.bin.hot{border-color:var(--primary);background:var(--primary-soft)}
+.bin h4{margin:0;display:flex;gap:8px;align-items:center}
+.bin .inner{display:flex;flex-wrap:wrap;gap:6px}
+.ord{list-style:none;padding:0;margin:0;display:grid;gap:8px;counter-reset:o}
+.ord li{display:flex;gap:10px;align-items:center;border:2px solid var(--border);border-radius:10px;padding:8px 10px;background:var(--surface);counter-increment:o}
+.ord li::before{content:counter(o);flex:none;width:28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-weight:800;font-size:.85rem}
+.ord li.good{border-color:var(--ok);background:var(--ok-soft)}
+.ord li.badpos{border-color:var(--warn);background:var(--warn-soft)}
+.ord li span{flex:1;font-weight:600}
+.ord li.drag{opacity:.4}
+.mv{border:1px solid var(--border);background:var(--surface);border-radius:8px;width:36px;height:36px;font-weight:800}
+.gap select{border:2px solid var(--primary);border-radius:8px;padding:4px 8px;background:var(--surface);font-weight:700;min-height:36px;margin:2px}
+.gap select.ok{border-color:var(--ok);background:var(--ok-soft)}
+.gap select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.gap .line{margin:8px 0;line-height:2.2}
+textarea,input[type=text],input[type=number]{width:100%;border:2px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface);min-height:44px}
+textarea{min-height:150px;line-height:1.6}
+textarea:focus,input:focus{border-color:var(--primary);outline:none}
+label.lab{display:block;font-weight:700;margin:12px 0 6px}
+.checks{display:grid;gap:6px;margin:12px 0}
+.checks label{display:flex;gap:10px;align-items:center;font-weight:600}
+.checks input{width:20px;height:20px;flex:none}
+.hintbox{margin-top:12px}
+.hint{border-left:4px solid var(--accent);background:var(--accent-soft);padding:8px 12px;border-radius:6px;margin-top:8px;font-weight:600}
+.levels{display:grid;gap:12px;grid-template-columns:1fr;margin:12px 0 20px}
+@media(min-width:700px){.levels{grid-template-columns:repeat(3,1fr)}}
+.lvlpick{border:2px solid var(--border);border-radius:14px;padding:16px;text-align:left;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-height:130px}
+.lvlpick b{font-size:1.05rem}
+.lvlpick .xp{font-size:.8rem;font-weight:800;color:var(--primary)}
+.lvlpick.on{border-color:var(--lc);background:var(--primary-soft);box-shadow:0 0 0 3px var(--primary-soft)}
+.lvlpick .done{color:var(--ok);font-weight:800;font-size:.8rem}
+.flip{perspective:900px;border:0;background:none;padding:0;min-height:170px;text-align:left}
+.flip .in{position:relative;width:100%;height:100%;min-height:170px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .fa,.flip .fb2{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:16px;border:2px solid var(--border);background:var(--surface);display:flex;flex-direction:column;gap:6px;justify-content:center;align-items:center;text-align:center}
+.flip .fb2{transform:rotateY(180deg);background:var(--primary-soft);border-color:var(--primary)}
+.flip .big{font-size:2.4rem;line-height:1}
+.flip h4{margin:0}
+.model{border:2px solid var(--border);border-radius:14px;overflow:hidden}
+.model .mh{display:flex;justify-content:space-between;align-items:center;background:var(--surface-2);padding:10px 16px;font-weight:700;gap:12px;flex-wrap:wrap}
+.model .mb{padding:20px}
+.think{display:flex;gap:12px;align-items:flex-start;background:var(--info-soft);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.think .av{font-size:1.8rem;line-height:1}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.dots i.on{background:var(--primary)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--text);color:var(--bg);padding:12px 20px;border-radius:12px;font-weight:700;z-index:50;transition:transform .3s,opacity .3s;box-shadow:var(--shadow);max-width:90vw;text-align:center;opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.modal{position:fixed;inset:0;background:rgba(10,15,30,.6);display:grid;place-items:center;z-index:60;padding:16px}
+.modal .card{max-width:460px;text-align:center}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.trace{width:100%;border-collapse:collapse;font-size:.95rem}
+.trace th,.trace td{border:1px solid var(--border);padding:6px 8px;text-align:center}
+.trace th{background:var(--surface-2)}
+.trace tr.cur td{background:var(--accent-soft);font-weight:800}
+.trace select{min-height:36px;border:2px solid var(--primary);border-radius:8px;background:var(--surface);font-weight:800;padding:2px 6px}
+.trace select.ok{border-color:var(--ok);background:var(--ok-soft)}
+.trace select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.ko{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:800px){.ko{grid-template-columns:repeat(2,1fr)}}
+.kwrow{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.kwrow .ic{font-size:1.6rem;text-align:center}
+.pipe{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.pipe-s{flex:1;min-width:130px;border:2px solid var(--border);border-radius:14px;padding:12px;text-align:center;background:var(--surface)}
+.pipe-a{display:grid;place-items:center;font-size:1.5rem;color:var(--primary)}
+.blitz{border:2px solid var(--border);border-radius:16px;padding:24px;background:var(--surface-2)}
+.blitz .bq{font-size:1.5rem;font-weight:800;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:16px}
+.tbar{height:10px;border-radius:99px;background:var(--border);overflow:hidden}.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--ok),var(--accent),var(--bad))}
+.hpbar{height:16px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden;margin-top:4px}.hpbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#dc2626,#f97316);transition:width .5s}
+.boss{font-size:4rem;line-height:1}
+.boss.hit{animation:hit .5s}
+@keyframes hit{20%{transform:translateX(-10px) rotate(-10deg);filter:brightness(2)}60%{transform:translateX(10px) rotate(8deg)}}
+
+/* ---------- simulations ---------- */
+.sim{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.sim{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
+.svgbox{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:8px;display:flex;justify-content:center;overflow:hidden}
+.svgbox svg{max-width:100%;height:auto;display:block}
+.screen{border:10px solid #1e293b;border-radius:16px;background:#0b1220;color:#e2e8f0;min-height:230px;padding:16px;position:relative}
+.screen .title{font-family:var(--mono);font-size:.8rem;color:#94a3b8;margin-bottom:8px}
+.screen input{background:#1e293b;color:#fff;border-color:#334155}
+.screen canvas{background:#fff;border-radius:8px;display:block;max-width:100%;touch-action:none;cursor:crosshair}
+.keys{display:flex;gap:4px}
+.keys button{flex:1;min-height:110px;border-radius:0 0 8px 8px;border:1px solid #334155;background:#f8fafc;color:#0f172a;font-weight:800;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.keys button.hit{background:#fbbf24}
+.appgrid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.appbtn{border:2px solid var(--border);border-radius:12px;background:var(--surface);padding:10px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px}
+.appbtn .e{font-size:1.8rem}
+.appbtn.on{border-color:var(--primary);background:var(--primary-soft)}
+.appbtn.used::after{content:"✓ tried";font-size:.7rem;color:var(--ok)}
+.cpu{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:860px){.cpu{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.memtab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.95rem}
+.memtab td,.memtab th{border:1px solid var(--border);padding:6px 10px;text-align:left}
+.memtab th{background:var(--surface-2);font-family:var(--font)}
+.memtab tr.pc td{background:var(--accent-soft)}
+.memtab tr.pc td:first-child::before{content:"▶ ";color:var(--warn)}
+.reg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.regbox{border:3px solid var(--cpu);border-radius:10px;padding:8px 10px;background:var(--surface)}
+.regbox small{display:block;font-weight:700;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+.regbox b{font-family:var(--mono);font-size:1.25rem}
+.regbox.chg{box-shadow:0 0 0 5px var(--accent-soft)}
+.phase{display:flex;gap:6px}
+.phase span{flex:1;text-align:center;padding:8px;border-radius:10px;background:var(--surface-2);font-weight:800;border:2px solid transparent}
+.phase span.on{background:var(--cpu);color:#fff}
+.lane{display:flex;gap:2px;flex-wrap:wrap;min-height:30px;padding:4px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);align-content:flex-start}
+.lane i{width:14px;height:22px;border-radius:3px;display:block}
+.progrow{display:grid;grid-template-columns:110px 1fr 48px;gap:8px;align-items:center;font-weight:700;font-size:.9rem}
+.gl{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.gl{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}}
+.sw{min-width:72px;min-height:56px;border-radius:12px;border:3px solid var(--off);background:var(--surface);font-weight:800;font-size:1.1rem}
+.sw.on{border-color:var(--on);background:var(--on);color:#fff}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);padding:8px 14px;min-height:42px;font-weight:700}
+.seg button.on{background:var(--primary);color:var(--primary-ink)}
+.circ text{font-family:var(--font)}
+.circ .tog{cursor:pointer}
+.circ .tog:focus{outline:none}
+.circ .tog:focus-visible rect{stroke:var(--accent);stroke-width:4}
+.fruitpool{display:flex;flex-wrap:wrap;gap:8px;min-height:80px;padding:10px;border:2px dashed var(--border);border-radius:12px;background:var(--surface-2)}
+.fruit{border:2px solid var(--border);background:var(--surface);border-radius:12px;padding:4px;width:72px;height:72px;display:grid;place-items:center}
+.fruit.sel{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.fruit svg{width:58px;height:58px}
+.classbox{border:2px solid var(--border);border-radius:12px;padding:10px;background:var(--surface);min-height:110px;text-align:left;display:flex;flex-direction:column;gap:6px}
+.classbox.hot{border-color:var(--primary)}
+.classbox .inner{display:flex;flex-wrap:wrap;gap:4px}
+.classbox .inner .fruit{width:48px;height:48px;padding:2px}
+.classbox .inner .fruit svg{width:38px;height:38px}
+.conf{height:14px;border-radius:99px;overflow:hidden;display:flex;border:1px solid var(--border)}
+.conf i{display:block;height:100%}
+.sblocks{display:flex;flex-direction:column;gap:3px;font-weight:700;font-size:.9rem;color:#fff}
+.sb{border-radius:6px;padding:7px 12px;display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;width:max-content;max-width:100%}
+.sb .v{background:#fff;color:#333;border-radius:99px;padding:1px 9px}
+.sb.ev{background:#c88b00;border-radius:14px 14px 6px 6px}
+.sb.lk{background:#7c5cd6}.sb.ct{background:#d99a12}.sb.op{background:#4caf50}.sb.vr{background:#e87c1e}.sb.sn{background:#5c8de0}
+.sb.in1{margin-left:22px}.sb.in2{margin-left:44px}
+.elf{border:2px solid var(--border);border-radius:16px;padding:16px;background:linear-gradient(180deg,#e0f2fe,#f0fdf4);color:#0f172a;text-align:center}
+.elf .who{font-size:3.4rem;line-height:1}
+.elf .say{display:inline-block;background:#fff;border:2px solid #0f172a;border-radius:16px;padding:8px 14px;font-weight:700;margin:8px 0;max-width:100%}
+.elf input{max-width:140px;text-align:center;font-size:1.2rem;background:#fff;color:#0f172a}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;font-weight:700}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.labs{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.labs{grid-template-columns:repeat(3,1fr)}}
+
+/* ===== Binary Quest additions ===== */
+.bits{display:grid;grid-template-columns:repeat(var(--n,8),minmax(0,1fr));gap:6px;max-width:760px}
+.bitc{display:flex;flex-direction:column;align-items:center;gap:4px}
+.bitc .pv{font-weight:800;font-size:.95rem;color:var(--muted);font-family:var(--mono)}
+.bitbtn{width:100%;max-width:78px;aspect-ratio:3/4;border-radius:12px;border:3px solid var(--off);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:var(--mono);font-weight:900;font-size:1.7rem;color:var(--muted);cursor:pointer;transition:transform .12s,background .15s}
+.bitbtn .sw{display:block;flex:none;width:22px;min-width:0;min-height:0;height:34px;border-radius:12px;background:var(--surface-2);border:2px solid var(--off);position:relative}
+.bitbtn .sw::after{content:"";position:absolute;left:2px;right:2px;height:14px;bottom:2px;border-radius:8px;background:var(--off);transition:bottom .15s}
+.bitbtn.on{background:var(--on);border-color:var(--on);color:#fff}
+.bitbtn.on .sw{background:#bbf7d0;border-color:#fff}
+.bitbtn.on .sw::after{bottom:16px;background:#fff}
+.bitbtn:active{transform:scale(.96)}
+.bitbtn[disabled]{cursor:default}
+.bitbtn.lamp .sw{display:none}
+.bitc .add{font-family:var(--mono);font-weight:800;font-size:.9rem;min-height:1.2em;color:var(--on)}
+.bitbig{font-family:var(--mono);font-size:2rem;font-weight:900;letter-spacing:.12em}
+.sumline{font-family:var(--mono);font-weight:800;font-size:1.15rem;background:var(--surface-2);border-radius:10px;padding:10px 14px;min-height:48px}
+.pvt{border-collapse:collapse;font-family:var(--mono);font-size:1.15rem}
+.pvt th,.pvt td{border:2px solid var(--border);min-width:44px;height:44px;text-align:center;font-weight:800}
+.pvt th{background:var(--surface-2);color:var(--muted);font-size:.95rem}
+.pvt td.one{background:var(--ok-soft);color:var(--ok)}
+.pvt td.hl{outline:3px solid var(--accent);outline-offset:-3px}
+.pvt td.lab{text-align:left;padding:0 10px;font-family:var(--font);font-size:.9rem;color:var(--muted);border:0;min-width:80px}
+.pvt input{width:40px;height:38px;text-align:center;font-family:var(--mono);font-size:1.15rem;font-weight:900;border:2px solid var(--primary);border-radius:8px;background:var(--surface);color:var(--text)}
+.pvt input.ok{border-color:var(--ok);background:var(--ok-soft)}
+.pvt input.bad{border-color:var(--bad);background:var(--bad-soft)}
+.pvt td.cur{background:var(--accent-soft)}
+.adder td.carry{font-size:.9rem;color:var(--warn);height:28px}
+.numin{width:130px!important;flex:none;min-height:46px;font-family:var(--mono);font-size:1.3rem;font-weight:900;text-align:center}
+.ladder{display:flex;align-items:flex-end;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+.ladder div{flex:1;min-width:72px;font-size:.9rem;border-radius:12px;color:#fff;font-weight:800;padding:10px;text-align:center;display:flex;flex-direction:column;justify-content:flex-end}
+.ladder small{display:block;font-weight:600;opacity:.92}
+.divtab td{font-family:var(--mono);font-weight:800;padding:4px 10px;border-bottom:1px solid var(--border)}
+.divtab td.r{color:var(--on)}
+.spy{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;font-family:var(--mono);font-size:.8rem}
+.spy span{background:var(--surface-2);border-radius:6px;text-align:center;padding:3px 0}
+@media print{.top,.stage-f,.steps,.navbtns{display:none!important}body{background:#fff}.card{box-shadow:none}}
+/* ---------- Unit 6 Scratch ---------- */
+:root{--motion:#4c97ff;--looks:#9966ff;--sound:#cf63cf;--events:#ffbf00;--control:#ffab19;--sensing:#5cb1d6;--operators:#59c059;--variables:#ff8c1a}
+.sb-wrap{overflow-x:auto;max-width:100%}
+.sb-wrap svg{display:block;max-width:none}
+pre.blocks{font-family:var(--mono);font-size:.88rem;background:var(--surface-2);border-radius:10px;padding:10px 12px;white-space:pre;overflow-x:auto}
+.shot{border-radius:10px;border:1px solid var(--border);width:100%;max-width:640px;height:auto;display:block;cursor:zoom-in}
+figure{margin:0}
+figcaption{font-size:.8rem;color:var(--muted);margin-top:4px}
+.vidwrap{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#111;max-width:760px}
+.vidwrap video{display:block;width:100%;height:auto;aspect-ratio:16/10}
+.sclist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.scnote{font-size:.92rem;color:var(--muted)}
+.eyebrow{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0}
+.scprog{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;flex:1;min-width:80px}
+.scprog i{display:block;height:100%;background:var(--primary);width:0;transition:width .3s}
+/* builder */
+.code-card{background:var(--surface-2);border-radius:12px;padding:12px;border:1px solid var(--border)}
+.code-card h4{font-size:.95rem;display:flex;align-items:center;gap:8px;margin:0}
+.code-card h4 img{width:26px;height:26px;object-fit:contain}
+.builder{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+.builder>div:last-child{display:flex;flex-direction:column;gap:10px}
+@media (max-width:760px){.builder{grid-template-columns:minmax(0,1fr)}}
+.builder .canvas{background:var(--surface-2);background-image:radial-gradient(rgba(120,120,160,.25) 1.2px,transparent 1.3px);background-size:18px 18px;border-radius:12px;border:1px solid var(--border);min-height:250px;padding:16px;overflow-x:auto}
+.builder .snap{animation:scsnap .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes scsnap{from{transform:translateY(-8px);opacity:.4}to{transform:none;opacity:1}}
+.scsay{font-size:1rem;margin:0}
+.added{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;font-weight:700;font-size:.88rem;padding:6px 12px;border-radius:999px;color:#fff}
+.btn.flag{background:#2f9e44;color:#fff}
+.btn.stop{background:var(--bad);color:#fff}
+/* steps */
+.scsteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.scstep{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:14px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);transition:border-color .2s,background .2s}
+.scstep.done{border-color:var(--ok);background:var(--ok-soft)}
+.scstep .chk{width:40px;height:40px;border-radius:12px;border:2px solid var(--border);background:var(--surface-2);display:grid;place-items:center;font-weight:800;color:var(--text);font-size:1.05rem;cursor:pointer}
+.scstep.done .chk{background:var(--ok);border-color:var(--ok);color:#fff}
+.scstep h4{font-size:1.05rem;margin:0 0 4px}
+.scstep .body{display:flex;flex-direction:column;gap:10px;min-width:0}
+.scstep .body p{margin:0}
+@media (max-width:560px){.scstep{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:12px}.scstep .chk{width:32px;height:32px;border-radius:9px;font-size:.9rem}}
+/* stage */
+.gamehost{display:flex;flex-direction:column;gap:8px}
+.stagebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stagebox{position:relative;width:100%;max-width:480px;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#9ff;touch-action:none}
+.stagebox:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.stagebox canvas{width:100%;height:100%;display:block}
+.touchpad{display:flex;gap:8px;max-width:480px}
+.touchpad button{flex:1;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface-2);font-size:1.2rem;color:var(--text);touch-action:none}
+.readout{font-family:var(--mono);font-size:.9rem;display:flex;gap:14px;flex-wrap:wrap}
+.bool{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border-radius:999px;font-family:var(--mono);font-size:.85rem;border:2px solid var(--border);background:var(--surface-2);transition:all .2s;align-self:flex-start}
+.bool.true{background:var(--ok-soft);border-color:var(--ok)}
+/* parsons */
+.parsons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:700px){.parsons{grid-template-columns:minmax(0,1fr)}}
+.pz{min-height:180px;border-radius:12px;border:2px dashed var(--border);padding:10px;display:flex;flex-direction:column;gap:6px;background:var(--surface-2);min-width:0}
+.pz h5{margin:0 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.pitem{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:2px;border-radius:8px;text-align:left;overflow-x:auto;cursor:pointer;color:var(--text)}
+.pitem:hover{background:var(--primary-soft)}
+.pmv{margin-left:auto;display:flex;gap:4px}
+.pmv button{border:1px solid var(--border);background:var(--surface);border-radius:6px;width:30px;height:30px;color:var(--text);cursor:pointer}
+/* trace table */
+.tablewrap{overflow-x:auto}
+.sctrace,table.plain{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.sctrace th,.sctrace td,table.plain th,table.plain td{border:1px solid var(--border);padding:7px 8px;text-align:center;font-size:.9rem}
+table.plain td{text-align:left}
+.sctrace th,table.plain th{background:var(--surface-2)}
+.sctrace td.ev{text-align:left}
+.sctrace input{width:64px;text-align:center;font:inherit;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);padding:3px}
+.sctrace input.ok{border-color:var(--ok);background:var(--ok-soft)}
+.sctrace input.no{border-color:var(--bad);background:var(--bad-soft)}
+table.plain select,table.plain input{font:inherit;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);padding:4px;min-width:90px}
+/* hotspot */
+.schot{position:relative}
+.schot img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--border)}
+.schot .zone{position:absolute;border:0;background:transparent;border-radius:10px;cursor:pointer}
+.schot .zone:focus-visible{outline:3px dashed var(--primary)}
+.schot .zone.show{outline:4px solid var(--ok);background:rgba(31,157,85,.15)}
+.schot .zone.miss{outline:4px solid var(--bad);background:rgba(214,69,69,.15)}
+.hot-prompt{font-size:1.15rem;font-weight:800;margin:0 0 10px}
+/* you do */
+details.sol{border:1px solid var(--border);border-radius:12px;padding:10px 14px;background:var(--surface)}
+details.sol summary{cursor:pointer;font-weight:700}
+details.sol[open] summary{margin-bottom:10px}
+.chkrow{display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
+.chkrow input{width:20px;height:20px}
+/* lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(10,12,25,.86);z-index:200;display:grid;place-items:center;padding:16px}
+.lightbox img{max-width:min(1400px,100%);max-height:100%;border-radius:10px}
+.lightbox button{position:absolute;top:14px;right:14px}
+@media (prefers-reduced-motion:reduce){.builder .snap{animation:none}}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/scratchblocks@3.6.4/build/scratchblocks.min.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <button class="brand" id="homeBtn" aria-label="Go to quest map">
+      <span class="logo" aria-hidden="true" style="font-size:1.2rem;font-weight:900">🍎</span>
+      <span>Fruit Catch Quest<small>Year 7 · Unit 6 · Scratch programming</small></span>
+    </button>
+    <div class="xpbox" aria-live="polite">
+      <span class="rank" id="rankName"></span>
+      <div class="bar" title="Progress to next rank"><i id="xpBar"></i></div>
+      <span class="xpnum" id="xpNum">0 XP</span>
+    </div>
+    <nav class="navbtns" aria-label="Unit tools">
+      <button class="icon-btn" id="labsBtn">🧪 Labs</button>
+      <button class="icon-btn" id="koBtn">📘 Knowledge organiser</button>
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">🌓</button>
+    </nav>
+  </div>
+</header>
+<main id="app"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+const UNIT = {
+  store: 'y7u6-fruit-catch-v1',
+  tag: '🍎 Year 7 · Unit 6', title: 'Fruit Catch Quest',
+  intro: 'Build one real game in <b>Scratch</b>, a little more each level: move the cat, make apples rain, keep score, lose lives and add a bonus fruit. On the way you learn the three big ideas of programming: <b>sequence</b>, <b>selection</b> and <b>iteration</b>.',
+  layers: [['➡️ Sequence & events', 'Levels 1–2', '#4c97ff'], ['🔁 Iteration', 'Level 3', '#e69100'], ['❓ Selection & variables', 'Levels 4–5', '#2b9ed1'], ['🐞 Testing & sharing', 'Level 6', '#cf63cf']],
+  ranks: ['Sprite Spotter', 'Block Snapper', 'Event Handler', 'Loop Looper', 'Condition Checker', 'Variable Keeper', 'Broadcaster', 'Bug Hunter', 'Scratch Master'],
+  boss: { name: 'The Bug Swarm', short: 'Bug Swarm', icon: '🐛', color: '#b91c1c', desc: 'A 15-question battle across all six levels. You have 3 hearts — debug the Bug Swarm before it eats your game!', bq: '15 questions from all six levels. Every correct answer squashes a bug. Three wrong answers and the bugs crash your game!', award: 'Bug Swarm squashed', win: 'The Bug Swarm is squashed!', lose: 'Out of hearts — the bugs crashed your game!' },
+  master: 'Scratch Master', certIcon: '🍎🏆',
+  certText: 'has completed <b>Year 7 Unit 6: Scratch Programming</b>, built Fruit Catch and squashed the Bug Swarm, earning the rank',
+  teacherNotes: ['This unit is the Fruit Catch Scratch course rebuilt into the Year 7 format. Each level is one lesson: Meet Scratch, Move the cat, Make it rain apples, Catch & score, Lives, speed & game over, and Polish, test & share.', 'Pupils build the real game at scratch.mit.edu. The page gives the demo video, a block-by-block build, screenshot steps, a stage simulator and bronze/silver/gold challenges (Cautious/Challenge/Confident).', 'Videos and screenshots load from the course’s GitHub repository, so the page needs an internet connection.'],
+  labColor: '#7c4dcc'
+};
+
+"use strict";
+/* =====================================================================
+   CORE: helpers, saved progress, XP, ranks, badges
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'html') el.innerHTML = v;
+    else if (k === 'style') el.style.cssText = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    el.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return el;
+}
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const once = f => { let used = false; return f ? r => { if (!used) { used = true; f(r); } } : null; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const after = (n, done) => { let c = 0, sum = 0; return r => { c++; sum += (r ?? 1); if (c === n) done(sum / n); }; };
+const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+
+const STORE = UNIT.store;
+let S = { xp: 0, done: {}, notes: {}, unlockAll: false, theme: null, name: '' };
+try { const raw = localStorage.getItem(STORE); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) { /* storage unavailable */ }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+
+const RANKS = UNIT.ranks.map((n, i) => [[0, 120, 280, 460, 680, 940, 1220, 1520, 1850][i], n]);
+function rankOf(xp) { let i = 0; RANKS.forEach((r, k) => { if (xp >= r[0]) i = k; }); return i; }
+function refreshHeader() {
+  const i = rankOf(S.xp), cur = RANKS[i][0], nxt = RANKS[i + 1] ? RANKS[i + 1][0] : cur + 1;
+  $('#rankName').textContent = `Lv ${i + 1} · ${RANKS[i][1]}`;
+  $('#xpNum').textContent = `${S.xp} XP`;
+  $('#xpBar').style.width = (RANKS[i + 1] ? Math.min(100, (S.xp - cur) / (nxt - cur) * 100) : 100) + '%';
+}
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+function confetti() {
+  if (reduced()) return;
+  const box = h('div', { class: 'confetti', 'aria-hidden': 'true' });
+  const cols = ['#0f766e', '#f59e0b', '#16a34a', '#db2777', '#2563eb', '#7c3aed'];
+  for (let i = 0; i < 70; i++) box.append(h('i', { style: `left:${Math.random() * 100}%;background:${cols[i % cols.length]};animation-delay:${Math.random() * .6}s` }));
+  document.body.append(box); setTimeout(() => box.remove(), 2600);
+}
+function modal(title, body, btnText = 'Keep going') {
+  const m = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': title });
+  const close = () => m.remove();
+  const b = h('button', { class: 'btn', onclick: close }, btnText);
+  m.append(h('div', { class: 'card pop stack' }, h('h2', {}, title), typeof body === 'string' ? h('p', { html: body }) : body, b));
+  m.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.body.append(m); b.focus();
+}
+function award(key, xp, label) {
+  if (S.done[key]) { toast('✅ Already completed — great practice!'); return false; }
+  const before = rankOf(S.xp);
+  S.done[key] = true; S.xp += xp; save(); refreshHeader();
+  toast(`+${xp} XP · ${label || 'Step complete'} 🎉`);
+  const after2 = rankOf(S.xp);
+  if (after2 > before) { confetti(); modal('⬆️ Level up!', `You are now <b>Level ${after2 + 1}: ${RANKS[after2][1]}</b>.`); }
+  return true;
+}
+
+/* =====================================================================
+   WIDGETS — each calls onDone(ratio 0..1) once the learner finishes
+   ===================================================================== */
+function Quiz(questions, onDone, opts = {}) {
+  const pass = opts.pass ?? 0.6;
+  const wrap = h('div');
+  function build() {
+    wrap.innerHTML = '';
+    let answered = 0, right = 0;
+    const res = h('div', { class: 'fb', 'aria-live': 'polite' });
+    questions.forEach((q, qi) => {
+      const box = h('div', { class: 'q' }, h('div', { class: 'qtext' }, `${qi + 1}. `, q.q));
+      if (q.visual) box.append(q.visual());
+      const opsEl = h('div', { class: 'opts' });
+      const why = h('div', { class: 'why' });
+      const order = opts.keepOrder || q.keep ? q.options.map((_, i) => i) : shuffle(q.options.map((_, i) => i));
+      order.forEach(oi => {
+        const b = h('button', { class: 'opt' }, h('span', { 'aria-hidden': 'true' }, '○'), q.options[oi]);
+        b.onclick = () => {
+          [...opsEl.children].forEach(x => x.disabled = true);
+          const ok = oi === q.a; answered++; if (ok) right++;
+          b.classList.add(ok ? 'right' : 'wrong'); b.firstChild.textContent = ok ? '✓' : '✗';
+          if (!ok) { const c = [...opsEl.children][order.indexOf(q.a)]; c.classList.add('right'); c.firstChild.textContent = '✓'; }
+          why.innerHTML = (ok ? '<b style="color:var(--ok)">Correct!</b> ' : '<b style="color:var(--bad)">Not quite.</b> ') + (q.why || '');
+          if (answered === questions.length) finish();
+        };
+        opsEl.append(b);
+      });
+      box.append(opsEl, why); wrap.append(box);
+    });
+    wrap.append(res);
+    function finish() {
+      const r = right / questions.length;
+      res.className = 'fb ' + (r >= pass ? 'ok' : 'bad');
+      res.textContent = `Score: ${right} / ${questions.length}. ` + (r >= pass ? 'Brilliant — you have shown you understand this!' : 'Re-read the explanations above, then try again.');
+      if (r >= pass) onDone && onDone(r);
+      else wrap.append(h('button', { class: 'btn sec', onclick: build }, '🔁 Try again'));
+    }
+  }
+  build();
+  return wrap;
+}
+
+function Match(pairs, onDone, opts = {}) {
+  const wrap = h('div');
+  const L = h('div', { style: 'display:grid;gap:8px' }), R = h('div', { style: 'display:grid;gap:8px' });
+  let sel = null, matched = 0, errors = 0;
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  pairs.forEach((p, i) => {
+    const b = h('button', { class: 'mi' }, p[0]);
+    b.onclick = () => { if (b.classList.contains('done')) return; [...L.children].forEach(x => x.classList.remove('sel')); b.classList.add('sel'); sel = i; fb.textContent = 'Now choose the matching ' + (opts.rightName || 'definition') + ' →'; fb.className = 'fb'; };
+    L.append(b);
+  });
+  shuffle(pairs.map((p, i) => i)).forEach(i => {
+    const b = h('button', { class: 'mi' }, pairs[i][1]);
+    b.onclick = () => {
+      if (b.classList.contains('done')) return;
+      if (sel == null) { fb.textContent = '← Pick an item on the left first.'; return; }
+      if (sel === i) {
+        b.classList.add('done', 'pop'); const lb = L.children[i]; lb.classList.remove('sel'); lb.classList.add('done');
+        lb.prepend(h('span', { 'aria-hidden': 'true' }, '✓ ')); b.prepend(h('span', { 'aria-hidden': 'true' }, '✓ '));
+        sel = null; matched++; fb.className = 'fb ok'; fb.textContent = 'Match! ' + (matched === pairs.length ? 'All matched 🎉' : '');
+        if (matched === pairs.length) onDone && onDone(pairs.length / (pairs.length + errors));
+      } else { errors++; b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 400); fb.className = 'fb bad'; fb.textContent = 'Not a match — read both carefully and try again.'; }
+    };
+    R.append(b);
+  });
+  wrap.append(h('div', { class: 'match' }, L, R), fb);
+  return wrap;
+}
+
+function Sort(items, bins, onDone) {
+  const wrap = h('div');
+  const pool = h('div', { class: 'pool', 'aria-label': 'Items to sort' });
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  let sel = null, left = items.length, errors = 0;
+  const binEls = {};
+  shuffle(items).forEach(it => {
+    const c = h('button', { class: 'chip', draggable: 'true' }, it.t);
+    c._it = it;
+    c.onclick = () => { if (c.classList.contains('ok')) return; [...pool.children].forEach(x => x.classList.remove('sel')); c.classList.add('sel'); sel = c; fb.className = 'fb'; fb.textContent = `Where does “${it.t}” belong? Choose a box below.`; };
+    c.ondragstart = e => { sel = c; e.dataTransfer.setData('text/plain', 'x'); };
+    pool.append(c);
+  });
+  const binWrap = h('div', { class: 'bins' });
+  bins.forEach(b => {
+    const inner = h('div', { class: 'inner' });
+    const el = h('button', { class: 'bin', 'aria-label': 'Place in ' + b.label }, h('h4', {}, h('span', { 'aria-hidden': 'true' }, b.icon || '📦'), b.label), b.desc ? h('div', { class: 'muted', style: 'font-size:.85rem' }, b.desc) : null, inner);
+    el.onclick = () => place(b.id);
+    el.ondragover = e => { e.preventDefault(); el.classList.add('hot'); };
+    el.ondragleave = () => el.classList.remove('hot');
+    el.ondrop = e => { e.preventDefault(); el.classList.remove('hot'); place(b.id); };
+    binEls[b.id] = inner; binWrap.append(el);
+  });
+  function place(id) {
+    if (!sel) { fb.className = 'fb'; fb.textContent = 'Tap an item in the grey box first.'; return; }
+    const it = sel._it;
+    if (it.bin === id) {
+      sel.classList.remove('sel'); sel.classList.add('ok'); sel.draggable = false; binEls[id].append(sel); sel = null; left--;
+      fb.className = 'fb ok'; fb.textContent = '✓ Correct. ' + (it.why || '');
+      if (!left) { fb.textContent = '🎉 All sorted correctly!'; onDone && onDone(items.length / (items.length + errors)); }
+    } else {
+      errors++; const s = sel; s.classList.add('shake'); setTimeout(() => s.classList.remove('shake'), 400);
+      fb.className = 'fb bad'; fb.textContent = '✗ Not that one. ' + (it.hint || 'Think about what it does.');
+    }
+  }
+  wrap.append(pool, binWrap, fb);
+  return wrap;
+}
+
+function Order(steps, onDone, opts = {}) {
+  const wrap = h('div');
+  const list = h('ol', { class: 'ord' });
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  let order = shuffle(steps.map((_, i) => i));
+  while (steps.length > 1 && order.every((v, i) => v === i)) order = shuffle(order);
+  let tries = 0, dragI = null;
+  function draw(marks) {
+    list.innerHTML = '';
+    order.forEach((si, pos) => {
+      const li = h('li', { draggable: 'true', class: marks ? (marks[pos] ? 'good' : 'badpos') : '' }, h('span', {}, steps[si]),
+        h('button', { class: 'mv', 'aria-label': 'Move up', onclick: () => mv(pos, -1) }, '↑'),
+        h('button', { class: 'mv', 'aria-label': 'Move down', onclick: () => mv(pos, 1) }, '↓'));
+      li.ondragstart = () => { dragI = pos; li.classList.add('drag'); };
+      li.ondragend = () => li.classList.remove('drag');
+      li.ondragover = e => e.preventDefault();
+      li.ondrop = e => { e.preventDefault(); if (dragI == null) return; const [x] = order.splice(dragI, 1); order.splice(pos, 0, x); dragI = null; draw(); };
+      list.append(li);
+    });
+  }
+  function mv(p, d) { const q = p + d; if (q < 0 || q >= order.length) return; [order[p], order[q]] = [order[q], order[p]]; draw(); }
+  const chk = h('button', { class: 'btn', onclick: () => {
+    tries++;
+    const marks = order.map((v, i) => v === i);
+    draw(marks);
+    const n = marks.filter(Boolean).length;
+    if (n === steps.length) { fb.className = 'fb ok'; fb.textContent = '🎉 Perfect order! ' + (opts.okMsg || ''); chk.disabled = true; onDone && onDone(tries === 1 ? 1 : tries === 2 ? .8 : .6); }
+    else { fb.className = 'fb bad'; fb.textContent = `${n} of ${steps.length} are in the right place (green). Move the orange ones.` + (tries >= 2 && opts.hint ? ' Hint: ' + opts.hint : ''); }
+  } }, 'Check my order');
+  draw();
+  wrap.append(list, h('div', { class: 'row', style: 'margin-top:12px' }, chk), fb);
+  return wrap;
+}
+
+function Gap(lines, onDone, opts = {}) {
+  const wrap = h('div', { class: 'gap' });
+  const sels = [];
+  lines.forEach(line => {
+    const div = h('div', { class: 'line' });
+    line.split(/(\{\{.*?\}\})/).forEach(part => {
+      const m = part.match(/^\{\{(.*)\}\}$/);
+      if (!m) { div.append(part); return; }
+      const ch = m[1].split('|'); const s = h('select', { 'aria-label': 'Choose the missing word' }, h('option', { value: '' }, '— choose —'), shuffle(ch).map(c => h('option', { value: c }, c)));
+      s._ans = ch[0]; s.onchange = () => s.classList.remove('ok', 'bad'); sels.push(s); div.append(s);
+    });
+    wrap.append(div);
+  });
+  const fb = h('div', { class: 'fb', 'aria-live': 'polite' });
+  let tries = 0;
+  const btn = h('button', { class: 'btn', onclick: () => {
+    tries++; let n = 0;
+    sels.forEach(s => { const ok = s.value === s._ans; s.classList.toggle('ok', ok); s.classList.toggle('bad', !ok); if (ok) n++; });
+    if (n === sels.length) { fb.className = 'fb ok'; fb.textContent = '🎉 All correct!'; btn.disabled = true; onDone && onDone(tries === 1 ? 1 : .7); }
+    else { fb.className = 'fb bad'; fb.textContent = `${n} / ${sels.length} correct. Change the red ones.`; }
+  } }, 'Check answers');
+  wrap.append(h('div', { class: 'row', style: 'margin-top:12px' }, btn), fb);
+  return wrap;
+}
+
+function Hints(list, label = '💡 Need a hint?') {
+  const box = h('div', { class: 'hintbox' });
+  let i = 0;
+  const b = h('button', { class: 'btn ghost', onclick: () => { if (i < list.length) { box.append(h('div', { class: 'hint pop' }, `Hint ${i + 1}: `, list[i])); i++; } if (i >= list.length) { b.disabled = true; b.textContent = 'No more hints'; } else b.textContent = `💡 Another hint (${list.length - i} left)`; } }, label + ` (${list.length})`);
+  box.append(b);
+  return box;
+}
+
+function Write(cfg, onDone) {
+  onDone = once(onDone);
+  const key = cfg.key;
+  const wrap = h('div');
+  const ta = h('textarea', { 'aria-label': cfg.label || 'Your answer', placeholder: cfg.placeholder || 'Type your answer here…' });
+  ta.value = (S.notes && S.notes[key]) || '';
+  const count = h('div', { class: 'muted', style: 'font-size:.85rem;margin-top:4px' });
+  const words = () => ta.value.trim().split(/\s+/).filter(Boolean).length;
+  const upd = () => { count.textContent = `${words()} words (aim for at least ${cfg.minWords || 20})`; S.notes[key] = ta.value; save(); check(); };
+  ta.oninput = upd;
+  if (cfg.prompt) wrap.append(h('div', { class: 'callout' }, cfg.prompt));
+  if (cfg.starters) {
+    wrap.append(h('div', { class: 'muted', style: 'font-weight:700;margin:8px 0 6px' }, '🪜 Sentence starters (click to add):'),
+      h('div', { class: 'row', style: 'gap:6px' }, cfg.starters.map(s => h('button', { class: 'chip', onclick: () => { ta.value += (ta.value && !ta.value.endsWith('\n') ? '\n' : '') + s + ' '; ta.focus(); upd(); } }, s))));
+  }
+  if (cfg.bank) wrap.append(h('div', { class: 'callout tip' }, h('b', {}, 'Key words to use: '), cfg.bank.join(' · ')));
+  const checks = h('div', { class: 'checks' }, h('div', { style: 'font-weight:800' }, '✅ Success criteria — tick each one when your answer does it:'));
+  const boxes = (cfg.checklist || []).map(c => { const i = h('input', { type: 'checkbox', onchange: () => check() }); checks.append(h('label', {}, i, c)); return i; });
+  const btn = h('button', { class: 'btn', disabled: true }, cfg.submitText || 'Submit my answer');
+  const modelBox = h('div');
+  function check() { btn.disabled = !(words() >= (cfg.minWords || 20) && boxes.every(b => b.checked)); }
+  btn.onclick = () => {
+    if (cfg.model) modelBox.replaceChildren(h('div', { class: 'callout ok' }, h('b', {}, '🔍 Compare with a model answer: '), h('div', { html: cfg.model }), h('p', { class: 'muted', style: 'margin-top:8px' }, 'What did you include that the model did not? What could you add to improve yours?')));
+    onDone && onDone(1);
+  };
+  wrap.append(ta, count, checks, h('div', { class: 'row' }, btn), modelBox);
+  upd();
+  return wrap;
+}
+
+function Model(title, steps, onDone) {
+  const box = h('div', { class: 'model' });
+  let i = 0;
+  const dots = h('div', { class: 'dots', 'aria-hidden': 'true' }, steps.map(() => h('i')));
+  const body = h('div', { class: 'mb' });
+  const prev = h('button', { class: 'btn sec small', onclick: () => go(i - 1) }, '← Back');
+  const next = h('button', { class: 'btn small' }, 'Next step →');
+  const lbl = h('span', { class: 'muted', style: 'font-size:.85rem' });
+  function go(n) {
+    if (n < 0 || n >= steps.length) return;
+    i = n; const st = steps[i];
+    body.replaceChildren(h('div', { class: 'think' }, h('span', { class: 'av', 'aria-hidden': 'true' }, st.who || '🧑‍🏫'), h('div', {}, h('b', {}, st.title || ''), h('div', { html: st.say || '' }))));
+    if (st.show) body.append(typeof st.show === 'function' ? st.show() : st.show);
+    [...dots.children].forEach((d, k) => d.classList.toggle('on', k <= i));
+    prev.disabled = i === 0; lbl.textContent = `Step ${i + 1} of ${steps.length}`;
+    if (i === steps.length - 1) { next.textContent = '✓ Got it'; next.onclick = () => { onDone && onDone(1); next.disabled = true; }; }
+    else { next.textContent = 'Next step →'; next.onclick = () => go(i + 1); next.disabled = false; }
+  }
+  box.append(h('div', { class: 'mh' }, h('span', {}, '🎬 ', title), h('div', { class: 'row' }, lbl, dots)), body, h('div', { class: 'mh' }, prev, next));
+  go(0);
+  return box;
+}
+
+function Flips(cards, onDone) {
+  const g = h('div', { class: 'grid3' });
+  const seen = new Set();
+  cards.forEach((c, i) => {
+    const f = h('button', { class: 'flip', 'aria-label': `Flip card: ${c.w}` },
+      h('div', { class: 'in' },
+        h('div', { class: 'fa' }, h('div', { class: 'big', 'aria-hidden': 'true' }, c.icon), h('h4', {}, c.w), h('div', { class: 'muted', style: 'font-size:.8rem' }, 'Tap to flip')),
+        h('div', { class: 'fb2' }, h('h4', {}, c.w), h('div', { html: c.d }), c.eg ? h('div', { class: 'muted', style: 'font-size:.85rem', html: 'e.g. ' + c.eg }) : null)));
+    f.onclick = () => { f.classList.toggle('on'); seen.add(i); if (seen.size === cards.length && onDone) { onDone(1); onDone = null; } };
+    g.append(f);
+  });
+  return g;
+}
+
+const LEVELS = [
+  { id: 'cautious', icon: '🌱', name: 'Cautious', xp: 35, desc: 'Lots of support: word banks, structure and hints.' },
+  { id: 'challenge', icon: '🔥', name: 'Challenge', xp: 50, desc: 'Some support. You reason and check more for yourself.' },
+  { id: 'confident', icon: '🚀', name: 'Confident', xp: 70, desc: 'Stretch task. Little support — think like an expert.' }
+];
+function Levels(stageKey, tasks) {
+  const wrap = h('div');
+  const area = h('div');
+  const picks = h('div', { class: 'levels', role: 'radiogroup', 'aria-label': 'Choose your level' });
+  const btns = LEVELS.map(L => {
+    const k = stageKey + ':' + L.id;
+    const b = h('button', { class: 'lvlpick', role: 'radio', 'aria-checked': 'false' }, h('span', { style: 'font-size:1.6rem', 'aria-hidden': 'true' }, L.icon), h('b', {}, L.name), h('span', { class: 'muted', style: 'font-size:.88rem' }, L.desc), h('span', { class: 'xp' }, `+${L.xp} XP`), S.done[k] ? h('span', { class: 'done' }, '✓ Completed') : null);
+    b.onclick = () => open(L, b);
+    picks.append(b); return b;
+  });
+  const isDone = L => !!S.done[stageKey + ':' + L.id];
+  const openId = id => { const i = LEVELS.findIndex(x => x.id === id); open(LEVELS[i], btns[i]); };
+  const nextAbove = L => LEVELS.slice(LEVELS.indexOf(L) + 1).find(x => !isDone(x)) || null;
+  const nextToDo = () => { let top = -1; LEVELS.forEach((x, i) => { if (isDone(x)) top = i; }); return top < 0 ? LEVELS[0] : LEVELS.slice(top + 1).find(x => !isDone(x)) || null; };
+  Lesson.levelNav = { next: nextToDo, open: openId, refresh: null };
+  function open(L, b) {
+    btns.forEach(x => { x.classList.remove('on'); x.setAttribute('aria-checked', 'false'); }); b.classList.add('on'); b.setAttribute('aria-checked', 'true');
+    const k = stageKey + ':' + L.id;
+    const t = tasks[L.id];
+    area.replaceChildren(h('h3', {}, `${L.icon} ${L.name}: ${t.title}`), t.render(once(r => {
+      if (award(k, Math.round(L.xp * Math.max(.6, r || 1)), `${L.name} task`)) { if (!b.querySelector('.done')) b.append(h('span', { class: 'done' }, '✓ Completed')); }
+      Lesson.markStage();
+      const up = nextAbove(L), exitHash = `#/${Lesson.L.id}/${Lesson.i + 1}`;
+      area.append(h('div', { class: 'callout ok pop' },
+        up ? h('p', {}, h('b', {}, `🏆 ${L.name} level complete! `), `You are ready to level up to ${up.icon} ${up.name} for +${up.xp} XP.`)
+          : h('p', {}, h('b', {}, '🏆 Every level complete — you are working like an expert! '), 'Now show what you know in the Exit ticket.'),
+        h('div', { class: 'row' }, up ? h('button', { class: 'btn', onclick: () => openId(up.id) }, `⬆ Level up: ${up.icon} ${up.name} →`) : h('button', { class: 'btn', onclick: () => go(exitHash) }, '🎟️ Go to the Exit ticket →'))));
+      Lesson.levelNav && Lesson.levelNav.refresh && Lesson.levelNav.refresh();
+    })));
+    area.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+  wrap.append(h('p', {}, h('b', {}, 'Choose your level. '), 'Start where you feel ready, then level up: 🌱 Cautious → 🔥 Challenge → 🚀 Confident. Aim to finish all three before the Exit ticket.'), picks, area);
+  return wrap;
+}
+
+/* Timed game: gen() returns { q, a, why } — answers chosen from cfg.choices (or q.options) */
+function Blitz(cfg, onDone) {
+  onDone = once(onDone);
+  const wrap = h('div', { class: 'blitz' });
+  const best = () => +(S.notes[cfg.key + ':best'] || 0);
+  function intro() {
+    wrap.replaceChildren(h('div', { class: 'stack', style: 'text-align:center' }, h('div', { style: 'font-size:3rem' }, cfg.icon || '⚡'), h('h3', {}, cfg.title), h('p', { style: 'margin:0 auto' }, cfg.rules), h('div', { class: 'muted' }, `Target: ${cfg.target} points · Your best: ${best()}`), h('div', {}, h('button', { class: 'btn', onclick: play }, '▶ Start (' + cfg.seconds + ' s)'))));
+  }
+  function play() {
+    let score = 0, streak = 0, left = cfg.seconds, q, timer;
+    const qEl = h('div', { class: 'bq' }), ans = h('div'), fb = h('div', { class: 'fb', 'aria-live': 'polite' }), sc = h('b'), tm = h('div', { class: 'tbar' }, h('i'));
+    const COL = ['var(--ok)', 'var(--bad)', 'var(--info)', 'var(--warn)'];
+    function next() {
+      q = cfg.gen(); qEl.innerHTML = q.q;
+      const ch = q.options || cfg.choices;
+      ans.replaceChildren(h('div', { class: 'row', style: 'justify-content:center' }, ch.map((c, k) => h('button', { class: 'btn', style: `background:${cfg.choices ? COL[k % 4] : 'var(--primary)'};min-width:120px;color:#fff`, onclick: () => mark(c) }, c))));
+    }
+    function mark(a) {
+      const ok = a === q.a;
+      if (ok) { streak++; score += streak >= 3 ? 2 : 1; fb.className = 'fb ok'; fb.textContent = `✓ ${q.a}` + (streak >= 3 ? `  🔥 streak ×${streak} (double points!)` : ''); }
+      else { streak = 0; fb.className = 'fb bad'; fb.innerHTML = `✗ The answer was <b>${q.a}</b>. ${q.why || ''}`; }
+      sc.textContent = `Score: ${score}`; next();
+    }
+    wrap.replaceChildren(h('div', { class: 'stack', style: 'text-align:center' }, h('div', { class: 'row', style: 'justify-content:space-between' }, sc, h('span', { class: 'muted' }, cfg.title)), tm, qEl, ans, fb));
+    sc.textContent = 'Score: 0'; next();
+    timer = setInterval(() => {
+      left -= .1; tm.firstChild.style.width = Math.max(0, left / cfg.seconds * 100) + '%';
+      if (!wrap.isConnected) { clearInterval(timer); return; }
+      if (left <= 0) {
+        clearInterval(timer);
+        if (score > best()) { S.notes[cfg.key + ':best'] = score; save(); }
+        const won = score >= cfg.target;
+        wrap.replaceChildren(h('div', { class: 'stack', style: 'text-align:center' }, h('div', { style: 'font-size:3rem' }, won ? '🏆' : '⏱'), h('h3', {}, `Time! You scored ${score}`), h('p', { style: 'margin:0 auto' }, won ? 'Target reached — brilliant!' : `Target is ${cfg.target}. Have another go!`), h('div', {}, h('button', { class: 'btn', onclick: play }, '🔁 Play again'))));
+        if (won) onDone && onDone(1);
+      }
+    }, 100);
+  }
+  intro();
+  return wrap;
+}
+
+function BossBattle(qs, onDone) {
+  const wrap = h('div');
+  function start() {
+    let i = 0, hearts = 3; const order = shuffle(qs);
+    const hp = h('div', { class: 'hpbar' }, h('i')), heartsEl = h('div', { style: 'font-size:1.4rem' }), boss = h('div', { class: 'boss', 'aria-hidden': 'true' }, UNIT.boss.icon), area = h('div');
+    function ui() { hp.firstChild.style.width = (100 - i / order.length * 100) + '%'; heartsEl.textContent = '❤️'.repeat(hearts) + '🖤'.repeat(3 - hearts); }
+    function ask() {
+      ui(); const q = order[i];
+      const opts = shuffle(q.options.map((o, k) => k));
+      area.replaceChildren(h('div', { class: 'qtext' }, `Attack ${i + 1} of ${order.length}: `, q.q), q.visual ? q.visual() : null,
+        h('div', { class: 'opts' }, opts.map(k => h('button', { class: 'opt', onclick: e => {
+          area.querySelectorAll('.opt').forEach(b => b.disabled = true);
+          if (k === q.a) { e.currentTarget.classList.add('right'); boss.classList.remove('hit'); void boss.offsetWidth; boss.classList.add('hit'); i++; ui(); setTimeout(() => i >= order.length ? win() : ask(), 700); }
+          else { e.currentTarget.classList.add('wrong'); hearts--; ui(); area.append(h('div', { class: 'why' }, h('b', { style: 'color:var(--bad)' }, `The ${UNIT.boss.short} strikes back! `), 'Correct answer: ', h('b', {}, q.options[q.a]), '. ', q.why || '')); setTimeout(() => hearts <= 0 ? lose() : (i++, i >= order.length ? win() : ask()), 2400); }
+        } }, q.options[k]))));
+    }
+    function win() { wrap.replaceChildren(h('div', { class: 'stack', style: 'text-align:center' }, h('div', { style: 'font-size:4rem' }, '🏆'), h('h2', {}, UNIT.boss.win), h('p', { style: 'margin:0 auto' }, `You finished with ${hearts} heart${hearts === 1 ? '' : 's'} left.`))); onDone && onDone(1); }
+    function lose() { wrap.replaceChildren(h('div', { class: 'stack', style: 'text-align:center' }, h('div', { style: 'font-size:4rem' }, '💥'), h('h2', {}, UNIT.boss.lose), h('p', { style: 'margin:0 auto' }, 'Revise with the Knowledge Organiser, then reboot and try again.'), h('div', {}, h('button', { class: 'btn', onclick: start }, '🔁 Try again')))); }
+    wrap.replaceChildren(h('div', { class: 'row', style: 'justify-content:space-between;align-items:center' }, h('div', {}, h('b', {}, 'You'), heartsEl), boss, h('div', { style: 'min-width:200px' }, h('b', {}, `${UNIT.boss.short} HP`), hp)), area);
+    ask();
+  }
+  wrap.append(h('div', { style: 'text-align:center' }, h('div', { style: 'font-size:4rem' }, UNIT.boss.icon), h('p', { style: 'margin:0 auto 12px' }, `Answer correctly to damage the ${UNIT.boss.short}. A wrong answer costs one of your 3 hearts.`), h('button', { class: 'btn', onclick: start }, '⚔️ Start the battle')));
+  return wrap;
+}
+
+"use strict";
+/* Fruit Catch course data (from the Year-7-Scratch-Course repo) */
+const FC = [
+/* ================= LESSON 1 ================= */
+{
+  n:1, id:'lesson-1', title:'Meet Scratch', concept:'Sequence & coordinates', c:'var(--motion)', dark:false,
+  bq:'How do we give a computer step-by-step instructions?',
+  art:['cat1','apple'],
+  objectives:[
+    'Name the four main areas of the Scratch editor.',
+    'Add a sprite and a backdrop from the library.',
+    'Use x and y coordinates to place a sprite on the stage.',
+    'Build a script that runs when the green flag is clicked.'
+  ],
+  vocab:[['Sprite','A character or object in your project, such as the cat or the apple.'],['Stage','The 480 × 360 area where your project runs.'],['Script','A stack of blocks snapped together. It runs from top to bottom.'],['Algorithm','A set of step-by-step instructions to solve a problem.'],['Coordinates','Two numbers (x, y) that give a position. The centre is (0, 0).'],['Sequence','Instructions that run one after another, in order.']],
+  starter:[
+    {q:'What is an algorithm?', o:['A type of computer','A set of step-by-step instructions','A picture on the screen','A website'], a:1, why:'An algorithm is a precise set of steps. A recipe is an algorithm for cooking.'},
+    {q:'Why does the ORDER of instructions matter?', o:['It does not matter','Computers do exactly what we say, in the order we say it','Computers pick the best order themselves','Only the first instruction runs'], a:1, why:'Computers follow instructions exactly and in sequence. Wrong order, wrong result.'},
+    {q:'Which of these is an INPUT device?', o:['Monitor','Speaker','Keyboard','Printer'], a:2, why:'Keyboards send information INTO the computer. We will use the arrow keys as input in Lesson 2.'}
+  ],
+  ido:{ video:'media/ido-L1.mp4', poster:'media/01-interface.jpg',
+    notice:['The block palette is sorted by colour: blue Motion, purple Looks, yellow Events.','Blocks only run when they are snapped under a hat block like "when green flag clicked".','y: -120 puts the cat near the bottom because negative y means down.'],
+    build:{ sprite:'cat1', name:'Cat (Sprite1)', lines:[
+      ['when green flag clicked','events','A hat block starts the script when the green flag is clicked.'],
+      ['go to x: (0) y: (-120)','motion','Move to the middle (x: 0), near the bottom (y: -120).'],
+      ['say [Catch the apples!] for (2) seconds','looks','Show a speech bubble for 2 seconds.']
+    ]}
+  },
+  wedo:{ intro:'Follow each step with your teacher. Tick it off when it works on your screen.', steps:[
+    {h:'Open Scratch and start a project', html:'Go to <b>scratch.mit.edu</b>, sign in, then click <b>Create</b>. You will see the editor below.', img:'01-interface.jpg'},
+    {h:'Name your project', html:'Click the title box at the top and type <b>Fruit Catch – your name</b>. Press <span class="kbd">Enter</span>.'},
+    {h:'Add the Apple sprite', html:'Hover over the cat button in the bottom-right corner, then click the magnifying glass (<b>Choose a Sprite</b>).', img:'02-choose-sprite-menu.jpg'},
+    {h:'Search for the apple', html:'Type <b>Apple</b> in the search box and click it.', img:'03-search-apple.jpg'},
+    {h:'Choose a backdrop', html:'Click <b>Choose a Backdrop</b> (far bottom-right) and pick <b>Blue Sky</b>.', img:'06-backdrop-library.jpg'},
+    {h:'Build the cat’s first script', html:'Click <b>Sprite1</b> (the cat) in the sprite pane. Then drag in these three blocks and snap them together:', code:'when green flag clicked\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds', img:'10-L1-code-run.jpg'},
+    {h:'Test and save', html:'Click the green flag. The cat should jump to the bottom and talk. Then click <b>File → Save now</b>.'}
+  ]},
+  activities:[
+    {type:'hotspot', title:'Label the editor', intro:'Click the right part of the screenshot for each prompt.'},
+    {type:'coords', title:'Coordinate explorer', intro:'Drag the cat around the stage. Watch x and y change. Then try the missions.'}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Say more', task:'Make the cat say two different things, one after the other.', hint:'Add a second <b>say [ ] for (2) seconds</b> block under the first one.', sol:'when green flag clicked\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds\nsay [Use the arrow keys!] for (2) seconds'},
+    {lvl:'silver', t:'Apple at the top', task:'Give the Apple its own script so it always starts at the top-middle of the stage.', hint:'Click the Apple sprite first. The top of the stage is around y: 150.', sol:'when green flag clicked\ngo to x: (0) y: (150)'},
+    {lvl:'gold', t:'Slide on stage', task:'Make the cat start off the left side and glide into the middle.', hint:'Use <b>go to x: (-200) y: (-120)</b>, then a <b>glide</b> block from Motion.', sol:'when green flag clicked\ngo to x: (-200) y: (-120)\nglide (1) secs to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'}
+  ],
+  exit:[
+    {q:'What are the coordinates of the centre of the stage?', o:['(240, 180)','(0, 0)','(100, 100)','(-240, -180)'], a:1, why:'The centre is x: 0, y: 0. The stage runs from -240 to 240 across and -180 to 180 up and down.'},
+    {q:'Which block makes a script start when the green flag is clicked?', o:['go to x: y:','say for 2 seconds','when green flag clicked','next costume'], a:2, why:'Yellow Events hat blocks start scripts.'},
+    {q:'The cat is at y: -120. Where is it?', o:['Near the top','Near the bottom','Far left','Far right'], a:1, why:'Negative y values are below the centre, so -120 is near the bottom.'}
+  ],
+  sim:1
+},
+/* ================= LESSON 2 ================= */
+{
+  n:2, id:'lesson-2', title:'Move the cat', concept:'Events & input', c:'var(--events)', dark:true,
+  bq:'How can a program respond to the player?',
+  art:['cat2'],
+  objectives:[
+    'Explain what an event is.',
+    'Use "when key pressed" blocks to control a sprite.',
+    'Use direction and rotation style so the cat faces the way it moves.',
+    'Animate a sprite by changing its costume.'
+  ],
+  vocab:[['Event','Something that happens, like a key press or a click, that starts a script.'],['Input','Data that goes into the computer, such as pressing a key.'],['Output','What the computer does in response, like moving the cat.'],['x position','How far left or right a sprite is. Bigger x = further right.'],['Direction','Which way a sprite faces. 90 is right, -90 is left.'],['Costume','One of a sprite’s pictures. Switching costumes makes animation.']],
+  starter:[
+    {q:'A sprite is at x: 0. You run "change x by 50". Where is it now?', o:['x: -50','x: 50','x: 0','y: 50'], a:1, why:'Change x by 50 adds 50, so 0 + 50 = 50 (moves right).'},
+    {q:'Which way does y increase?', o:['Left','Right','Up','Down'], a:2, why:'Bigger y means higher up the stage.'},
+    {q:'What does a "hat" block do?', o:['Ends a script','Starts a script when something happens','Changes a sprite’s hat','Deletes blocks'], a:1, why:'Hat blocks have a rounded top. Nothing can go above them, so they start scripts.'}
+  ],
+  ido:{ video:'media/ido-L2.mp4', poster:'media/20-L2-code.jpg',
+    notice:['Each arrow key has its own script. The scripts are events that wait for input.','"point in direction" makes the cat face the way it moves.','"next costume" swaps between two pictures so the cat looks like it is walking.'],
+    build:{ sprite:'cat2', name:'Cat (Sprite1)', lines:[
+      ['when [right arrow v] key pressed','events','This event fires every time the right arrow is pressed.'],
+      ['point in direction (90)','motion','Face right. 90 degrees points to the right.'],
+      ['change x by (15)','motion','Move 15 steps to the right.'],
+      ['next costume','looks','Swap picture so the cat looks like it is walking.']
+    ]}
+  },
+  wedo:{ intro:'We will add two new scripts to the cat and improve the flag script.', steps:[
+    {h:'Select the cat', html:'Click <b>Sprite1</b> in the sprite pane so you are editing the cat’s code.'},
+    {h:'Stop the cat going upside down', html:'Under <b>when green flag clicked</b>, add <b>set rotation style [left-right]</b> and <b>point in direction (90)</b> from Motion.', code:'when green flag clicked\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'},
+    {h:'Add a key event', html:'From <b>Events</b>, drag out <b>when [space] key pressed</b>. Click the drop-down and choose <b>right arrow</b>.'},
+    {h:'Move right', html:'Snap these under it: <b>point in direction (90)</b>, <b>change x by (15)</b> and <b>next costume</b> (Looks).', code:'when [right arrow v] key pressed\npoint in direction (90)\nchange x by (15)\nnext costume'},
+    {h:'Duplicate for left', html:'Right-click the hat block and choose <b>Duplicate</b>. Change it to <b>left arrow</b>, direction <b>-90</b> and x by <b>-15</b>.', code:'when [left arrow v] key pressed\npoint in direction (-90)\nchange x by (-15)\nnext costume', img:'20-L2-code.jpg'},
+    {h:'Test', html:'Click the green flag, then press <span class="kbd">←</span> and <span class="kbd">→</span>. The cat should walk both ways and always stay the right way up. Save your work.'}
+  ]},
+  activities:[
+    {type:'parsons', title:'Build the left-arrow script', intro:'Tap blocks to add them in the right order. One block is a trap and is not needed.',
+      answer:['when [left arrow v] key pressed','point in direction (-90)','change x by (-15)','next costume'],
+      distract:['change y by (-15)']},
+    {type:'predict', title:'Predict it', items:[
+      {q:'You delete "set rotation style [left-right]". What happens when you press the left arrow?', o:['Nothing changes','The cat turns upside down','The cat moves up','The cat disappears'], a:1, why:'Without left-right rotation style, pointing in direction -90 flips the cat over, so it walks upside down.'},
+      {q:'You change "change x by (15)" to "change x by (40)". What happens?', o:['The cat moves faster (bigger jumps)','The cat moves slower','The cat moves up','Nothing'], a:0, why:'Each key press now moves 40 steps instead of 15.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Speed up', task:'Make the cat move faster in both directions.', hint:'Change both <b>change x by</b> numbers. Keep the left one negative.', sol:'when [right arrow v] key pressed\npoint in direction (90)\nchange x by (25)\nnext costume'},
+    {lvl:'silver', t:'Jump!', task:'When the space bar is pressed, make the cat jump up and come back down.', hint:'Use <b>change y by (60)</b>, then <b>wait</b>, then <b>change y by (-60)</b>.', sol:'when [space v] key pressed\nchange y by (60)\nwait (0.3) seconds\nchange y by (-60)'},
+    {lvl:'gold', t:'Click to talk', task:'When the player clicks the cat, it should say a random tip about the game.', hint:'Use <b>when this sprite clicked</b>. For a bonus, use <b>pick random</b> with <b>if</b> blocks to choose between tips.', sol:'when this sprite clicked\nsay [Watch out for falling fruit!] for (2) seconds'}
+  ],
+  exit:[
+    {q:'What is an event?', o:['A block that repeats code','Something that happens, like a key press, that starts a script','A type of variable','A sprite’s picture'], a:1, why:'Events, like a key press or a click, trigger scripts to run.'},
+    {q:'Which direction makes the cat face LEFT?', o:['90','0','-90','180'], a:2, why:'90 is right, -90 is left, 0 is up and 180 is down.'},
+    {q:'Pressing the arrow key is an example of…', o:['Output','Input','Storage','Processing'], a:1, why:'A key press is input. The cat moving is the output.'}
+  ],
+  sim:2
+},
+/* ================= LESSON 3 ================= */
+{
+  n:3, id:'lesson-3', title:'Make it rain apples', concept:'Iteration (loops)', c:'var(--control)', dark:true,
+  bq:'How do loops stop us repeating ourselves?',
+  art:['apple','apple'],
+  objectives:[
+    'Explain what iteration means.',
+    'Use a count-controlled loop (repeat) and an infinite loop (forever).',
+    'Use pick random to make a game less predictable.',
+    'Work out how far a sprite moves inside a loop.'
+  ],
+  vocab:[['Iteration','Repeating a set of instructions. Another word for looping.'],['Repeat','A loop that runs a set number of times. Count-controlled.'],['Forever','A loop that never stops (until the program stops).'],['Random','Unpredictable. "pick random" chooses a different number each time.'],['Nesting','Putting one block inside another, like a repeat inside a forever.'],['Efficient','Doing a job with less code. Loops make code efficient.']],
+  starter:[
+    {q:'Which block makes the cat face left?', o:['point in direction (90)','point in direction (-90)','change x by (-15)','next costume'], a:1, why:'Direction -90 faces left.'},
+    {q:'Why do we use "set rotation style [left-right]"?', o:['To make the cat faster','To stop the cat turning upside down','To change costume','To start the game'], a:1, why:'Left-right style only lets the sprite flip, never rotate upside down.'},
+    {q:'How many times would you need to write "change y by (-5)" to move 325 steps down?', o:['5','65','325','100'], a:1, why:'325 ÷ 5 = 65. Writing it 65 times would be a lot of blocks. A loop does it with one!'}
+  ],
+  ido:{ video:'media/ido-L3.mp4', poster:'media/30-L3-code.jpg',
+    notice:['The repeat loop is nested inside the forever loop.','pick random gives a new x position each time, so you never know where the apple will fall.','65 repeats × 5 steps = 325 steps. From y: 170 that ends at y: -155, just above the ground.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events','Start when the flag is clicked.'],
+      ['forever','control','Everything inside will repeat until the game stops.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Jump to a random spot along the top of the stage.'],
+      ['repeat (65)','control','A count-controlled loop: run the code inside 65 times.'],
+      ['change y by (-5)','motion','Move down 5 steps each time round the loop.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Today the Apple gets its own script.', steps:[
+    {h:'Select the Apple', html:'Click the <b>Apple</b> sprite. Its code area should be empty (unless you did the Lesson 1 silver challenge, which you can delete).'},
+    {h:'Add a forever loop', html:'Drag in <b>when green flag clicked</b>, then a <b>forever</b> block from <b>Control</b>.'},
+    {h:'Start at a random place', html:'Inside forever, add <b>go to x: () y: ()</b>. Drop a green <b>pick random (-200) to (200)</b> block into the x slot. Set y to <b>170</b>.'},
+    {h:'Fall with a repeat loop', html:'Under the go to block, add <b>repeat (65)</b> with <b>change y by (-5)</b> inside it.', code:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (65)\n    change y by (-5)\n  end\nend', img:'30-L3-code.jpg'},
+    {h:'Test', html:'Click the flag. The apple should fall, then start again from a new place at the top. Save.'}
+  ]},
+  activities:[
+    {type:'looplab', title:'Loop lab', intro:'Change the loop. Can you make the apple stop exactly on the grass line at y: -150?'},
+    {type:'predict', title:'Repeat or forever?', items:[
+      {q:'You want the cat to spin round exactly once (36 turns of 10°). Which loop?', o:['repeat (36)','forever'], a:0, why:'You know how many times, so a count-controlled repeat loop is right.'},
+      {q:'You want background music to play for the whole game. Which loop?', o:['repeat (10)','forever'], a:1, why:'The music never needs to stop during the game, so use forever.'},
+      {q:'What happens if you swap "repeat (65)" for "forever" inside the apple script?', o:['Nothing changes','The apple falls off the bottom and never comes back','The apple falls faster','The apple goes up'], a:1, why:'An inner forever never ends, so the code after it never runs again and the apple keeps going down.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Faster fruit', task:'Make the apple fall twice as fast but still stop near the ground.', hint:'Double the step and halve the repeats: 10 steps × 32 repeats ≈ 320.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (32)\n    change y by (-10)\n  end\nend'},
+    {lvl:'silver', t:'Spinning apple', task:'Make the apple spin as it falls.', hint:'Add a <b>turn ↻ (5) degrees</b> block inside the repeat loop.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (65)\n    change y by (-5)\n    turn @turnRight (5) degrees\n  end\nend'},
+    {lvl:'gold', t:'A second fruit', task:'Add a Strawberry that also falls from a random place.', hint:'Add the Strawberry sprite, then drag the Apple’s script onto the Strawberry in the sprite pane to copy it.', sol:'when green flag clicked\nforever\n  go to x: (pick random (-200) to (200)) y: (170)\n  repeat (40)\n    change y by (-8)\n  end\nend'}
+  ],
+  exit:[
+    {q:'What is iteration?', o:['Making a choice','Repeating instructions','Storing a number','Drawing a sprite'], a:1, why:'Iteration means looping: repeating instructions.'},
+    {q:'An apple starts at y: 170 and runs "repeat (10): change y by (-10)". Where does it end?', o:['y: 160','y: 70','y: 100','y: -10'], a:1, why:'10 × -10 = -100, and 170 - 100 = 70.'},
+    {q:'Which is a count-controlled loop?', o:['forever','repeat (10)','when flag clicked','if then'], a:1, why:'repeat (10) runs a set number of times.'}
+  ],
+  sim:3
+},
+/* ================= LESSON 4 ================= */
+{
+  n:4, id:'lesson-4', title:'Catch & score', concept:'Selection & variables', c:'var(--sensing)', dark:false,
+  bq:'How does a game make decisions?',
+  art:['cat1','apple'],
+  objectives:[
+    'Explain what selection (if…then) does.',
+    'Use a sensing condition: touching another sprite.',
+    'Create a variable and change it while the game runs.',
+    'Use a comparison (y position < -160) as a condition.'
+  ],
+  vocab:[['Selection','Choosing what to do based on a condition. In Scratch: if … then.'],['Condition','A question with a true or false answer, like "touching cat?"'],['Boolean','A value that is only ever true or false. Hexagon-shaped blocks.'],['Variable','A named store for data that can change, like score.'],['Initialise','Give a variable its starting value, such as set score to 0.'],['Comparison','Checking two values with <, > or =.']],
+  starter:[
+    {q:'Which loop runs forever?', o:['repeat (10)','forever','if then','wait (1)'], a:1, why:'forever is an infinite loop.'},
+    {q:'"repeat (4): change y by (-20)". How far does the sprite move?', o:['20 down','80 down','80 up','4 down'], a:1, why:'4 × -20 = -80, so 80 steps down.'},
+    {q:'What does pick random (1) to (6) do?', o:['Always gives 6','Gives a number from 1 to 6, like a dice','Gives 1 then 6','Picks a sprite'], a:1, why:'It picks a different number between 1 and 6 each time.'}
+  ],
+  ido:{ video:'media/ido-L4.mp4', poster:'media/40-L4-code.jpg',
+    notice:['The repeat loop is gone. Now the apple moves a little bit each time round forever, and checks two questions every time.','Conditions are hexagons. They fit in the hexagon gap in an if block.','After scoring, the apple must jump back to the top or it would keep scoring while it touches the cat.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events','Start the apple’s script.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Start at a random place at the top.'],
+      ['forever','control','Keep running these checks all game.'],
+      ['change y by (-5)','motion','Fall a little bit.'],
+      ['if <touching (Sprite1 v)?> then','control','Question 1: is the apple touching the cat?'],
+      ['change [score v] by (1)','variables','Yes! Add 1 to the score.'],
+      ['start sound (Chomp v)','sound','Play a crunch sound as feedback.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Go back to the top for the next catch.'],
+      ['end','control',''],
+      ['if <(y position) < [-160]> then','control','Question 2: has the apple reached the ground?'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion','Missed it. Back to the top.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'We will make a score variable, then rebuild the apple script with two if blocks.', steps:[
+    {h:'Make a variable', html:'Go to <b>Variables</b> and click <b>Make a Variable</b>. Name it <b>score</b> and keep <b>For all sprites</b> selected. Click OK.', img:'41-make-variable.jpg'},
+    {h:'Initialise the score', html:'Click the cat. At the top of its flag script (just under the hat block) add <b>set [score] to (0)</b>.', code:'when green flag clicked\nset [score v] to [0]\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds'},
+    {h:'Rebuild the apple loop', html:'Click the Apple. Drag the <b>repeat</b> loop out and delete it. Move <b>go to x: (pick random…) y: (170)</b> above forever. Put <b>change y by (-5)</b> inside forever.'},
+    {h:'Add the catch check', html:'From Control add <b>if &lt; &gt; then</b>. From Sensing drop <b>touching (Sprite1)?</b> into the hexagon gap. Inside: <b>change score by 1</b>, <b>start sound (Chomp)</b>, and go back to the top.'},
+    {h:'Add the ground check', html:'Add a second <b>if</b>. From Operators use <b>( ) &lt; ( )</b>. Put <b>y position</b> (Motion) on the left and type <b>-160</b> on the right. Inside: go back to the top.', code:'when green flag clicked\ngo to x: (pick random (-200) to (200)) y: (170)\nforever\n  change y by (-5)\n  if <touching (Sprite1 v)?> then\n    change [score v] by (1)\n    start sound (Chomp v)\n    go to x: (pick random (-200) to (200)) y: (170)\n  end\n  if <(y position) < [-160]> then\n    go to x: (pick random (-200) to (200)) y: (170)\n  end\nend', img:'40-L4-code.jpg'},
+    {h:'Test', html:'Play! The score in the top-left of the stage should go up by exactly 1 each catch. Save.'}
+  ]},
+  activities:[
+    {type:'condlab', title:'Condition tester', intro:'Drag the apple around the stage. Watch each condition switch between true and false.'},
+    {type:'predict', title:'Bug hunt', items:[
+      {q:'Aisha’s score jumps up by about 10 for every catch. What did she forget inside the touching if block?', o:['start sound','go back to the top after scoring','set score to 0','change y by -5'], a:1, why:'If the apple stays touching the cat, the if is true on every loop, adding 1 again and again. Sending it back to the top fixes it.'},
+      {q:'Ben’s score starts at 12 instead of 0 when he restarts. What is missing?', o:['set [score] to (0) when the flag is clicked','change score by 1','a forever loop','a new sprite'], a:0, why:'Variables keep their value until you initialise them. Set score to 0 at the start.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Change the sound', task:'Pick a different catch sound for the apple.', hint:'Use the <b>Sounds</b> tab to add a sound from the library, then choose it in <b>start sound</b>.', sol:'start sound (Pop v)'},
+    {lvl:'silver', t:'Level up message', task:'When the score reaches 10, make the cat say “Level up!”.', hint:'In the cat’s sprite: <b>forever</b> with <b>if &lt;(score) = 10&gt; then</b>. Or wait until.', sol:'when green flag clicked\nwait until <(score) = [10]>\nsay [Level up!] for (2) seconds'},
+    {lvl:'gold', t:'Smooth movement', task:'Replace the key events with smooth controls that work while a key is held down.', hint:'Use <b>forever</b> with two <b>if &lt;key (right arrow) pressed?&gt; then</b> blocks.', sol:'when green flag clicked\nforever\n  if <key (right arrow v) pressed?> then\n    point in direction (90)\n    change x by (8)\n  end\n  if <key (left arrow v) pressed?> then\n    point in direction (-90)\n    change x by (-8)\n  end\nend'}
+  ],
+  exit:[
+    {q:'What shape are condition (Boolean) blocks?', o:['Rounded','Hexagon','Square','Hat'], a:1, why:'Boolean blocks are hexagons and give true or false.'},
+    {q:'Why do we "set score to 0" when the flag is clicked?', o:['To make the game harder','So every new game starts from zero','To play a sound','To move the cat'], a:1, why:'This is called initialising the variable.'},
+    {q:'The apple is at y: -170. Is "y position < -160" true or false?', o:['True','False'], a:0, why:'-170 is lower than -160, so the condition is true.'}
+  ],
+  sim:4
+},
+/* ================= LESSON 5 ================= */
+{
+  n:5, id:'lesson-5', title:'Lives, speed & game over', concept:'Variables, operators & broadcasts', c:'var(--looks)', dark:false,
+  bq:'How do games get harder, and how do they end?',
+  art:['cat1'],
+  objectives:[
+    'Use more than one variable in a program.',
+    'Use operators (=, <, join) to compare and combine values.',
+    'Send and receive a broadcast message between sprites.',
+    'Trace how variable values change as a program runs.'
+  ],
+  vocab:[['Broadcast','A message one sprite sends so other sprites can react.'],['Operator','A block that does maths or comparisons: +, −, <, =, join.'],['Trace table','A table that tracks how variable values change, step by step.'],['Join','Sticks two pieces of text together, like "Score: " and 5.'],['Difficulty','How hard a game is. Speeding up raises the difficulty.'],['Game state','Whether the game is playing or over.']],
+  starter:[
+    {q:'What is a variable?', o:['A sprite','A named store for data that can change','A sound','A loop'], a:1, why:'Variables store data, like score, that can change.'},
+    {q:'What does "if <touching (Sprite1)?> then" check?', o:['If the apple is touching the cat','If a key is pressed','If score is 0','If the flag was clicked'], a:0, why:'Sprite1 is the cat, so it checks if the apple touches it.'},
+    {q:'score = 4. The program runs "change score by 1" twice. What is score now?', o:['5','6','2','4'], a:1, why:'4 + 1 + 1 = 6.'}
+  ],
+  ido:{ video:'media/ido-L5.mp4', poster:'media/50-L5-apple-code.jpg',
+    notice:['speed starts at -4. Because it is negative, "change y by (speed)" moves the apple DOWN.','Every catch makes speed 0.5 more negative, so apples fall faster and the game gets harder.','The apple broadcasts "game over". The cat receives it and shows the score. Sprites talk using messages.'],
+    build:{ sprite:'apple', name:'Apple', lines:[
+      ['when green flag clicked','events',''],
+      ['show','looks','Make sure the apple is visible at the start.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['forever','control',''],
+      ['change y by (speed)','motion','Fall by the value of speed (starts at -4).'],
+      ['if <touching (Sprite1 v)?> then','control',''],
+      ['change [score v] by (1)','variables',''],
+      ['change [speed v] by (-0.5)','variables','Get faster after every catch.'],
+      ['start sound (Chomp v)','sound',''],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['end','control',''],
+      ['if <(y position) < [-160]> then','control',''],
+      ['change [lives v] by (-1)','variables','Missed one: lose a life.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['end','control',''],
+      ['if <(lives) = [0]> then','control','No lives left?'],
+      ['hide','looks',''],
+      ['broadcast (game over v)','events','Tell every sprite the game is over.'],
+      ['stop [this script v]','control','Stop the apple’s loop.'],
+      ['end','control',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Two more variables, a faster apple, and a proper ending.', steps:[
+    {h:'Make two variables', html:'Make <b>lives</b> and <b>speed</b> (For all sprites). Untick the box next to <b>speed</b> so it does not show on the stage.'},
+    {h:'Initialise them', html:'In the cat’s flag script add <b>set [lives] to (3)</b> and <b>set [speed] to (-4)</b> under set score.', code:'when green flag clicked\nset [score v] to [0]\nset [lives v] to [3]\nset [speed v] to [-4]\nset rotation style [left-right v]\npoint in direction (90)\ngo to x: (0) y: (-120)\nsay [Catch the apples!] for (2) seconds', img:'51-L5-cat-code.jpg'},
+    {h:'Use speed', html:'In the apple’s forever loop, drag the orange <b>(speed)</b> reporter into <b>change y by ( )</b>.'},
+    {h:'Speed up and lose lives', html:'Inside the touching if, add <b>change [speed] by (-0.5)</b>. Inside the ground if, add <b>change [lives] by (-1)</b>.'},
+    {h:'Detect game over', html:'Add a third <b>if</b> using <b>( ) = ( )</b> from Operators: <b>(lives) = 0</b>. Inside: <b>hide</b>, <b>broadcast (new message: game over)</b>, <b>stop [this script]</b>. Add <b>show</b> under the apple’s flag hat.', img:'50-L5-apple-code.jpg'},
+    {h:'Receive the message', html:'Click the cat. Add <b>when I receive [game over]</b>, then <b>say (join [Game over! Score: ] (score)) for (3) seconds</b>, then <b>stop [all]</b>.', code:'when I receive [game over v]\nsay (join [Game over! Score: ] (score)) for (3) seconds\nstop [all v]', img:'52-L5-gameover.jpg'},
+    {h:'Test', html:'Miss three apples on purpose. Does the game end and show your score? Save.'}
+  ]},
+  activities:[
+    {type:'trace', title:'Trace table', intro:'The game starts, then these events happen in order. Fill in the values after each event, then check.'},
+    {type:'predict', title:'Think like a programmer', items:[
+      {q:'What happens if speed starts at 4 instead of -4?', o:['Apples fall faster','Apples float upwards','Nothing changes','The game ends'], a:1, why:'change y by 4 moves up, so apples rise off the top and are never caught.'},
+      {q:'Why does the apple use "stop [this script]" after broadcasting?', o:['To save memory','Otherwise it would broadcast "game over" again and again, restarting the cat’s message','To hide the apple','To reset the score'], a:1, why:'Lives stays at 0, so the if would be true on every loop.'}
+    ]}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'More lives', task:'Give the player 5 lives instead of 3.', hint:'Change the number in <b>set [lives] to</b>.', sol:'set [lives v] to [5]'},
+    {lvl:'silver', t:'Game over screen', task:'Make the stage switch to a different backdrop when the game ends.', hint:'Add a second backdrop. On the <b>Stage</b>, use <b>when I receive [game over]</b> and <b>switch backdrop to</b>. Switch back to Blue Sky when the flag is clicked.', sol:'when I receive [game over v]\nswitch backdrop to (Game Over v)'},
+    {lvl:'gold', t:'High score', task:'Keep a high score that only changes when you beat it.', hint:'Make a <b>high score</b> variable. Do NOT reset it on green flag. When the game ends, compare it with score.', sol:'when I receive [game over v]\nif <(score) > (high score)> then\n  set [high score v] to (score)\nend'}
+  ],
+  exit:[
+    {q:'speed is -4. After two catches (change speed by -0.5 each), what is speed?', o:['-3','-5','-4.5','-6'], a:1, why:'-4 - 0.5 - 0.5 = -5.'},
+    {q:'What does a broadcast do?', o:['Plays a sound','Sends a message that other sprites can react to','Makes a variable','Draws a sprite'], a:1, why:'Broadcasts let sprites communicate.'},
+    {q:'What does join [Score: ] (score) give if score = 7?', o:['Score: 7','7','Score:','join 7'], a:0, why:'Join sticks the two values together.'}
+  ],
+  sim:5
+},
+/* ================= LESSON 6 ================= */
+{
+  n:6, id:'lesson-6', title:'Polish, test & share', concept:'Testing & evaluation', c:'var(--sound)', dark:false,
+  bq:'What makes a game great, and how do we know it works?',
+  art:['bananas','cat1'],
+  objectives:[
+    'Add a bonus sprite using repeat until and an "or" condition.',
+    'Test a game against a test plan and fix bugs.',
+    'Give and use peer feedback (What Went Well / Even Better If).',
+    'Share a finished project on Scratch.'
+  ],
+  vocab:[['Bug','A mistake in code that makes a program behave wrongly.'],['Debugging','Finding and fixing bugs.'],['Test plan','A list of tests with the expected result and the actual result.'],['Repeat until','A loop that repeats until a condition becomes true.'],['Evaluation','Judging how well your game meets its goals.'],['Remix','Making your own version of someone else’s shared project.']],
+  starter:[
+    {q:'What does "broadcast (game over)" do?', o:['Ends Scratch','Sends a message to all sprites','Plays a sound','Resets lives'], a:1, why:'Any sprite with "when I receive [game over]" will run.'},
+    {q:'lives = 1 and the player misses an apple. What happens next?', o:['lives = 0, so game over is broadcast','lives = 2','score goes up','nothing'], a:0, why:'Lives drops to 0, the third if is true and the apple broadcasts game over.'},
+    {q:'Which operator joins text together?', o:['+','join','<','='], a:1, why:'join combines two pieces of text.'}
+  ],
+  ido:{ video:'media/ido-L6.mp4', poster:'media/61-L6-bananas.jpg',
+    notice:['Bananas wait a random time, so the bonus is a surprise.','repeat until stops when EITHER condition is true: caught OR missed.','Sound and costumes give feedback to the player, which makes games feel better.'],
+    build:{ sprite:'bananas', name:'Bananas', lines:[
+      ['when green flag clicked','events',''],
+      ['hide','looks','Hidden until it is time to fall.'],
+      ['forever','control',''],
+      ['wait (pick random (4) to (8)) seconds','control','A surprise delay.'],
+      ['go to x: (pick random (-200) to (200)) y: (170)','motion',''],
+      ['show','looks',''],
+      ['repeat until <<touching (Sprite1 v)?> or <(y position) < [-160]>>','control','Fall until caught OR missed.'],
+      ['change y by (-7)','motion','Bananas fall faster than apples.'],
+      ['end','control',''],
+      ['if <touching (Sprite1 v)?> then','control',''],
+      ['change [score v] by (3)','variables','Bonus! 3 points.'],
+      ['start sound (Bite v)','sound',''],
+      ['end','control',''],
+      ['hide','looks',''],
+      ['end','control','']
+    ]}
+  },
+  wedo:{ intro:'Add a bonus fruit, add finishing touches, then test and share.', steps:[
+    {h:'Add Bananas', html:'Choose a Sprite → <b>Food</b> → <b>Bananas</b>. Set its size to <b>60</b> in the sprite info panel.', img:'60-food-library.jpg'},
+    {h:'Build the bonus script', html:'Build this script on the Bananas sprite. The <b>or</b> block is in Operators.', code:'when green flag clicked\nhide\nforever\n  wait (pick random (4) to (8)) seconds\n  go to x: (pick random (-200) to (200)) y: (170)\n  show\n  repeat until <<touching (Sprite1 v)?> or <(y position) < [-160]>>\n    change y by (-7)\n  end\n  if <touching (Sprite1 v)?> then\n    change [score v] by (3)\n    start sound (Bite v)\n  end\n  hide\nend', img:'61-L6-bananas.jpg'},
+    {h:'Finishing touches', html:'Add <b>start sound (Meow)</b> to the cat’s flag script. On the Stage, add <b>when green flag clicked → switch backdrop to (Blue Sky)</b>.'},
+    {h:'Test with the test plan', html:'Work through the test plan below. Fix anything that fails, then test again.'},
+    {h:'Share', html:'Click <b>Share</b> at the top of the editor. Write instructions (“Use ← and → to catch fruit”) and give credit in Notes and Credits.'}
+  ]},
+  activities:[
+    {type:'testplan', title:'Test plan', intro:'Run each test on YOUR game. Choose Pass or Fail. For any fail, write what happened.'},
+    {type:'play', title:'Play the finished game', intro:'This is what a finished Fruit Catch looks like. Use ← → (or the buttons).'},
+    {type:'review', title:'Peer review', intro:'Play a partner’s game. Write one What Went Well and one Even Better If.'}
+  ],
+  youdo:[
+    {lvl:'bronze', t:'Rotten apple', task:'Add a hazard: a rotten apple that costs a life if you catch it.', hint:'Duplicate the Apple, recolour it in the Costumes tab, and change its code to <b>change [lives] by (-1)</b> when touching.', sol:'if <touching (Sprite1 v)?> then\n  change [lives v] by (-1)\n  go to x: (pick random (-200) to (200)) y: (170)\nend'},
+    {lvl:'silver', t:'Countdown timer', task:'Give the player 60 seconds. When time runs out, broadcast game over.', hint:'Make a <b>time</b> variable. On the Stage: set time to 60, then repeat 60: wait 1, change time by -1.', sol:'when green flag clicked\nset [time v] to [60]\nrepeat (60)\n  wait (1) seconds\n  change [time v] by (-1)\nend\nbroadcast (game over v)'},
+    {lvl:'gold', t:'Start screen', task:'Add a title screen with a Play button sprite. The game only starts when Play is clicked.', hint:'The Play sprite broadcasts <b>start</b>. Change your fruit scripts to begin with <b>when I receive [start]</b>.', sol:'when this sprite clicked\nhide\nbroadcast (start v)'}
+  ],
+  exit:[
+    {q:'When does "repeat until <<touching (Sprite1)?> or <(y position) < -160>>" stop?', o:['Only when touching the cat','Only when it reaches the ground','When EITHER is true','Never'], a:2, why:'"or" is true if at least one side is true.'},
+    {q:'What is debugging?', o:['Adding sprites','Finding and fixing mistakes in code','Sharing a project','Drawing costumes'], a:1, why:'Bugs are mistakes. Debugging finds and fixes them.'},
+    {q:'Which of these is a good test?', o:['"Play the game"','"Catch an apple: score should go up by exactly 1"','"Check it works"','"Look at the code"'], a:1, why:'A good test says what you do and the exact result you expect.'}
+  ],
+  sim:6
+}
+];
+
+"use strict";
+/* =====================================================================
+   FRUIT CATCH SIMS — ported from the Year 7 Scratch course
+   ===================================================================== */
+const MEDIA = (window.Y7_SCRATCH_MEDIA || 'https://cdn.jsdelivr.net/gh/Mohanad-Nassar/Year-7-Scratch-Course-@main/media/');
+const M = n => MEDIA + n;
+const CATC = { motion: '#4c97ff', looks: '#9966ff', sound: '#cf63cf', events: '#ffbf00', control: '#ffab19', sensing: '#5cb1d6', operators: '#59c059', variables: '#ff8c1a' };
+const el = (tag, attrs = {}, html) => { const e = document.createElement(tag); for (const k in attrs) { if (k === 'class') e.className = attrs[k]; else if (k === 'style') e.style.cssText = attrs[k]; else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); } if (html != null) e.innerHTML = html; return e; };
+const fcGet = (k, d) => { try { const v = S.notes['fc:' + k]; return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const fcSet = (k, v) => { S.notes['fc:' + k] = JSON.stringify(v); save(); };
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function blocksSVG(code, scale = 0.68) {
+  const host = el('div', { class: 'sb-wrap' });
+  const render = () => {
+    try {
+      if (!window.scratchblocks) throw 0;
+      const doc = scratchblocks.parse(code, { languages: ['en'] });
+      const svg = scratchblocks.render(doc, { style: 'scratch3', scale });
+      svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Scratch blocks: ' + code.replace(/\n/g, '; '));
+      host.replaceChildren(svg); return true;
+    } catch (e) { host.replaceChildren(el('pre', { class: 'blocks' }, esc(code))); return false; }
+  };
+  if (!render()) { let n = 0; const t = setInterval(() => { if (window.scratchblocks && render() || ++n > 40) clearInterval(t); }, 250); }
+  return host;
+}
+function shot(name, alt) { return `<img class="shot" loading="lazy" src="${M(name)}" alt="${alt || 'Screenshot of the Scratch editor'}" width="1436" height="840">`; }
+document.addEventListener('click', e => { const s = e.target.closest && e.target.closest('.shot'); if (!s) return; const lb = el('div', { class: 'lightbox', role: 'dialog', 'aria-label': 'Enlarged screenshot' }); const img = el('img', { src: s.src, alt: s.alt }); const b = el('button', { class: 'btn', type: 'button' }, '✕ Close'); lb.append(img, b); const close = () => lb.remove(); b.onclick = close; lb.onclick = ev => { if (ev.target === lb) close(); }; document.body.append(lb); b.focus(); });
+
+/* ---------- images + audio ---------- */
+const IMG = {};
+['cat1', 'cat2', 'apple', 'bananas'].forEach(n => { IMG[n] = new Image(); IMG[n].crossOrigin = 'anonymous'; IMG[n].src = M(n + '.png'); });
+IMG.sky = new Image(); IMG.sky.crossOrigin = 'anonymous'; IMG.sky.src = M('bluesky.jpg');
+const SIZE = { cat1: 0.416, cat2: 0.416, apple: 0.25, bananas: 0.24 };
+const FALLBACK = { cat1: '🐱', cat2: '🐱', apple: '🍎', bananas: '🍌' };
+let actx = null;
+function blip(freq = 520, dur = 0.12, type = 'square') {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, actx.currentTime); o.frequency.exponentialRampToValueAtTime(freq * 0.55, actx.currentTime + dur);
+    g.gain.setValueAtTime(0.06, actx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + dur);
+  } catch (e) { }
+}
+function setupCanvas(cv) { const dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = 480 * dpr; cv.height = 360 * dpr; const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return ctx; }
+const sx = x => 240 + x, sy = y => 180 - y;
+const imgOk = im => im && im.complete && im.naturalWidth;
+function drawSprite(ctx, name, x, y, flip) {
+  const im = IMG[name];
+  if (!imgOk(im)) { ctx.save(); ctx.font = (name.startsWith('cat') ? 64 : 36) + 'px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.translate(sx(x), sy(y)); if (flip) ctx.scale(-1, 1); ctx.fillText(FALLBACK[name], 0, 0); ctx.restore(); return; }
+  const w = im.naturalWidth * SIZE[name], hh = im.naturalHeight * SIZE[name];
+  ctx.save(); ctx.translate(sx(x), sy(y)); if (flip) ctx.scale(-1, 1); ctx.drawImage(im, -w / 2, -hh / 2, w, hh); ctx.restore();
+}
+function spriteBox(name, x, y, inset = 0.72) { const im = IMG[name]; const w = ((im && im.naturalWidth) || (name.startsWith('cat') ? 190 : 150)) * SIZE[name] * inset, hh = ((im && im.naturalHeight) || (name.startsWith('cat') ? 200 : 150)) * SIZE[name] * inset; return { l: x - w / 2, r: x + w / 2, b: y - hh / 2, t: y + hh / 2 }; }
+const overlap = (a, b) => a.l < b.r && a.r > b.l && a.b < b.t && a.t > b.b;
+function drawSky(ctx) { if (imgOk(IMG.sky)) ctx.drawImage(IMG.sky, 0, 0, 480, 360); else { const g = ctx.createLinearGradient(0, 0, 0, 360); g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#e0f7ff'); ctx.fillStyle = g; ctx.fillRect(0, 0, 480, 360); } }
+function rr(ctx, x, y, w, hh, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, hh, r); else ctx.rect(x, y, w, hh); }
+function drawBubble(ctx, text, x, y) {
+  ctx.save(); ctx.font = '600 14px system-ui, sans-serif';
+  const w = Math.min(220, ctx.measureText(text).width + 24), hh = 34;
+  let bx = sx(x) + 30, by = sy(y) - 80; if (bx + w > 474) bx = sx(x) - 30 - w;
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 2; rr(ctx, bx, by, w, hh, 14); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); const tx = bx < sx(x) ? bx + w - 26 : bx + 18; ctx.moveTo(tx, by + hh - 1); ctx.lineTo(tx + 8, by + hh + 12); ctx.lineTo(tx + 14, by + hh - 1); ctx.fill();
+  ctx.fillStyle = '#575e75'; ctx.textBaseline = 'middle'; ctx.fillText(text, bx + 12, by + hh / 2, w - 24); ctx.restore();
+}
+function drawMonitor(ctx, label, val, i) {
+  ctx.save(); ctx.font = '600 12px system-ui, sans-serif';
+  const lw = ctx.measureText(label).width, vw = Math.max(28, ctx.measureText(String(val)).width + 16), x = 6, y = 6 + i * 26, w = lw + vw + 22;
+  ctx.fillStyle = 'rgba(230,240,255,.95)'; ctx.strokeStyle = '#c4ccdf'; rr(ctx, x, y, w, 22, 5); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#575e75'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + 7, y + 11);
+  ctx.fillStyle = '#ff8c1a'; rr(ctx, x + lw + 14, y + 3, vw, 16, 4); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText(String(val), x + lw + 14 + vw / 2, y + 11); ctx.restore();
+}
+const onImgs = fn => Object.values(IMG).forEach(i => { if (!i.complete) i.addEventListener('load', fn); });
+
+/* ---------- the game simulator: level n = the game after lesson n ---------- */
+let activeGame = null;
+class FruitGame {
+  constructor(host, level, onScore) {
+    this.level = level; this.host = host; this.onScore = onScore;
+    const bar = el('div', { class: 'stagebar' });
+    this.flagBtn = el('button', { class: 'btn small flag', type: 'button', 'aria-label': 'Green flag: start' }, '⚑ Start');
+    this.stopBtn = el('button', { class: 'btn small stop', type: 'button', 'aria-label': 'Stop' }, '■ Stop');
+    this.info = el('span', { class: 'readout', 'aria-live': 'polite' }, '');
+    bar.append(this.flagBtn, this.stopBtn, this.info);
+    this.box = el('div', { class: 'stagebox', tabindex: '0', 'aria-label': 'Game stage. Use left and right arrow keys after pressing Start.' });
+    this.cv = el('canvas', { width: 480, height: 360 }); this.box.appendChild(this.cv);
+    host.append(bar, this.box);
+    if (level >= 2) {
+      const tp = el('div', { class: 'touchpad' });
+      this.lb = el('button', { type: 'button', 'aria-label': 'Move left' }, '←'); this.rb = el('button', { type: 'button', 'aria-label': 'Move right' }, '→');
+      tp.append(this.lb, this.rb); host.appendChild(tp);
+      const hold = (dir, btn) => { let t = null; const go2 = e => { e.preventDefault(); this.press(dir); clearInterval(t); t = setInterval(() => this.press(dir), 90); }; const end = () => clearInterval(t); btn.addEventListener('pointerdown', go2); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, end)); };
+      hold(1, this.rb); hold(-1, this.lb);
+    }
+    this.ctx = setupCanvas(this.cv);
+    this.flagBtn.onclick = () => this.start(); this.stopBtn.onclick = () => this.stop(true);
+    this.reset(); this.running = false; this.over = false;
+    onImgs(() => this.draw()); this.draw(); this.updateInfo();
+  }
+  reset() {
+    this.cat = { x: 0, y: -120, dir: 90, cos: 0 }; this.say = null; this.score = 0; this.lives = 3; this.speed = -4; this.overT = null;
+    this.apple = { x: this.level === 1 ? 110 : 0, y: this.level === 1 ? 120 : 150, vis: true, rep: 0 };
+    this.ban = { x: 120, y: 150, vis: false, state: 'wait', t: 0 }; this.over = false; this.stopMsg = null;
+  }
+  top(o) { o.x = Math.round(Math.random() * 400 - 200); o.y = 170; }
+  start() {
+    if (activeGame && activeGame !== this) activeGame.stop(false);
+    activeGame = this; this.reset(); this.running = true; this.frame = 0;
+    this.say = { text: 'Catch the apples!', until: 60 };
+    if (this.level >= 3) this.top(this.apple);
+    if (this.level >= 6) { this.ban.t = 30 * (4 + Math.random() * 4); blip(660, .2, 'triangle'); }
+    this.box.focus({ preventScroll: true });
+    cancelAnimationFrame(this.raf); this.last = performance.now(); this.acc = 0;
+    const loop = now => { if (!this.box.isConnected) { this.running = false; return; } this.acc += now - this.last; this.last = now; let n = 0; while (this.acc >= 1000 / 30 && n < 4) { this.step(); this.acc -= 1000 / 30; n++; } this.draw(); if (this.running) this.raf = requestAnimationFrame(loop); };
+    this.raf = requestAnimationFrame(loop);
+  }
+  stop(user) { this.running = false; cancelAnimationFrame(this.raf); if (user) this.stopMsg = 'Stopped'; this.draw(); this.updateInfo(); }
+  press(dir) { if (!this.running || this.level < 2) return; this.cat.dir = dir > 0 ? 90 : -90; this.cat.x = Math.max(-225, Math.min(225, this.cat.x + 15 * dir)); this.cat.cos ^= 1; }
+  step() {
+    this.frame++;
+    if (this.say && this.say.until && this.frame > this.say.until) this.say = null;
+    const L = this.level, a = this.apple, catB = spriteBox(this.cat.cos ? 'cat2' : 'cat1', this.cat.x, this.cat.y, 0.62);
+    if (this.overT != null) { if (this.frame > this.overT) { this.running = false; this.say = null; this.stopMsg = 'Game over'; this.updateInfo(); this.onScore && this.onScore(this.score); } return; }
+    if (L === 3) { a.y -= 5; a.rep++; if (a.rep >= 65) { a.rep = 0; this.top(a); } }
+    if (L === 4) { a.y -= 5; if (overlap(spriteBox('apple', a.x, a.y), catB)) { this.score++; blip(440); this.top(a); this.onScore && this.onScore(this.score); } if (a.y < -160) this.top(a); }
+    if (L >= 5 && a.vis) {
+      a.y += this.speed;
+      if (overlap(spriteBox('apple', a.x, a.y), catB)) { this.score++; this.speed -= 0.5; blip(440); this.top(a); }
+      if (a.y < -160) { this.lives--; blip(160, .18, 'sawtooth'); this.top(a); }
+      if (this.lives === 0) { a.vis = false; this.ban.vis = false; this.ban.state = 'done'; this.say = { text: 'Game over! Score: ' + this.score }; this.overT = this.frame + 90; this.over = true; }
+    }
+    if (L >= 6 && this.ban.state !== 'done') {
+      const b = this.ban;
+      if (b.state === 'wait') { if (--b.t <= 0) { this.top(b); b.vis = true; b.state = 'fall'; } }
+      else if (b.state === 'fall') { b.y -= 7; const hit = overlap(spriteBox('bananas', b.x, b.y), catB); if (hit || b.y < -160) { if (hit) { this.score += 3; blip(880, .2, 'triangle'); } b.vis = false; b.state = 'wait'; b.t = 30 * (4 + Math.random() * 4); } }
+    }
+    if (this.frame % 6 === 0) this.updateInfo();
+  }
+  updateInfo() { const L = this.level; const parts = [`x: ${this.cat.x}`]; if (L >= 4) parts.push(`score: ${this.score}`); if (L >= 5) parts.push(`lives: ${this.lives}`, `speed: ${this.speed}`); this.info.textContent = parts.join('   '); }
+  draw() {
+    const c = this.ctx; drawSky(c);
+    if (this.apple.vis) drawSprite(c, 'apple', this.apple.x, this.apple.y);
+    if (this.ban.vis) drawSprite(c, 'bananas', this.ban.x, this.ban.y);
+    drawSprite(c, this.cat.cos ? 'cat2' : 'cat1', this.cat.x, this.cat.y, this.cat.dir < 0);
+    if (this.say) drawBubble(c, this.say.text, this.cat.x, this.cat.y);
+    if (this.level >= 4) drawMonitor(c, 'score', this.score, 0);
+    if (this.level >= 5) drawMonitor(c, 'lives', this.lives, 1);
+    if (!this.running) {
+      c.save(); c.fillStyle = 'rgba(20,22,38,.35)'; c.fillRect(0, 0, 480, 360);
+      c.fillStyle = '#fff'; c.font = '700 26px system-ui, sans-serif'; c.textAlign = 'center';
+      c.fillText(this.stopMsg === 'Game over' ? 'Game over! Score: ' + this.score : 'Press ⚑ Start', 240, 172);
+      c.font = '500 14px system-ui, sans-serif'; c.fillText(this.level >= 2 ? 'Then use ← and → to move the cat' : 'Watch what the cat’s script does', 240, 198); c.restore();
+    }
+  }
+}
+document.addEventListener('keydown', e => {
+  if (!activeGame || !activeGame.running || !activeGame.box.isConnected) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const r = activeGame.box.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; e.preventDefault(); activeGame.press(e.key === 'ArrowRight' ? 1 : -1); }
+});
+function Game(level, onDone) { const host = el('div', { class: 'gamehost' }); new FruitGame(host, level, onDone ? (() => { const d = once(onDone); return () => d(1); })() : null); return host; }
+
+/* ---------- I do: watch the script build, block by block ---------- */
+function Builder(b, onDone) {
+  onDone = once(onDone);
+  const box = el('div', { class: 'builder' }), canvas = el('div', { class: 'canvas' }), side = el('div');
+  const steps = b.lines.map((l, i) => i).filter(i => b.lines[i][0] !== 'end');
+  let k = 0, timer = null;
+  side.innerHTML = `<div class="code-card"><h4><img src="${M(b.sprite + '.png')}" alt="">${b.name}</h4></div>`;
+  const counter = el('p', { class: 'eyebrow' }), sayEl = el('p', { class: 'scsay' }), chip = el('span', { class: 'added' });
+  const prog = el('div', { class: 'scprog' }, '<i></i>');
+  const prev = el('button', { class: 'btn sec small', type: 'button', 'aria-label': 'Previous block' }, '◀');
+  const play = el('button', { class: 'btn small', type: 'button' }, '▶ Watch it build');
+  const next = el('button', { class: 'btn sec small', type: 'button', 'aria-label': 'Next block' }, '▶|');
+  const ctrls = el('div', { class: 'row' }); ctrls.append(prev, play, next, prog);
+  side.append(counter, chip, sayEl, ctrls);
+  const render = anim => {
+    const upto = steps[k]; let depth = 0; const lines = [];
+    for (let i = 0; i <= upto; i++) { const t = b.lines[i][0]; lines.push(t); if (/^(forever|repeat|if )/.test(t)) depth++; if (t === 'end') depth--; }
+    for (let i = upto + 1; i < b.lines.length && b.lines[i][0] === 'end' && depth > 0; i++) { lines.push('end'); depth--; }
+    while (depth-- > 0) lines.push('end');
+    const svg = blocksSVG(lines.join('\n'), 0.9); if (anim && !reduceMotion) svg.classList.add('snap');
+    canvas.replaceChildren(svg);
+    const L = b.lines[upto];
+    counter.textContent = `Block ${k + 1} of ${steps.length}`;
+    chip.style.background = CATC[L[1]] || '#4c97ff'; chip.style.color = L[1] === 'events' || L[1] === 'control' ? '#2f2200' : '#fff';
+    chip.textContent = '+ ' + L[1].charAt(0).toUpperCase() + L[1].slice(1) + ' block';
+    sayEl.textContent = L[2] || 'This block closes the loop above it.';
+    prog.firstChild.style.width = ((k + 1) / steps.length * 100) + '%';
+    prev.disabled = k === 0; next.disabled = k === steps.length - 1;
+    if (k === steps.length - 1) onDone && onDone(1);
+  };
+  const stopPlay = () => { clearInterval(timer); timer = null; play.textContent = '▶ Watch it build'; };
+  prev.onclick = () => { stopPlay(); k = Math.max(0, k - 1); render(true); };
+  next.onclick = () => { stopPlay(); k = Math.min(steps.length - 1, k + 1); render(true); };
+  play.onclick = () => { if (timer) return stopPlay(); if (k === steps.length - 1) k = -1; play.textContent = '❚❚ Pause'; const adv = () => { k++; render(true); if (k >= steps.length - 1) stopPlay(); }; adv(); timer = setInterval(() => { if (!box.isConnected) return stopPlay(); adv(); }, 2200); };
+  box.append(canvas, side); render(false);
+  return box;
+}
+
+/* ---------- We do: tick-off steps with screenshots ---------- */
+function StepsList(lesson, onDone) {
+  onDone = once(onDone);
+  const key = 'steps:' + lesson.n; let done = fcGet(key, []);
+  const total = lesson.wedo.steps.length;
+  const wrap = el('div'); const head = el('div', { class: 'row' }); const prog = el('div', { class: 'scprog' }, '<i></i>'); const lbl = el('span', { class: 'eyebrow' });
+  head.append(lbl, prog);
+  const ol = el('ol', { class: 'scsteps' });
+  const upd = () => { const n = done.length; lbl.textContent = `${n} of ${total} steps done`; prog.firstChild.style.width = (n / total * 100) + '%'; if (n === total) onDone && onDone(1); };
+  lesson.wedo.steps.forEach((s, i) => {
+    const li = el('li', { class: 'scstep' + (done.includes(i) ? ' done' : '') });
+    const chk = el('button', { class: 'chk', type: 'button', 'aria-pressed': String(done.includes(i)), 'aria-label': `Mark step ${i + 1} done` }, done.includes(i) ? '✓' : String(i + 1));
+    chk.onclick = () => { if (done.includes(i)) done = done.filter(x => x !== i); else done.push(i); fcSet(key, done); const d = done.includes(i); li.classList.toggle('done', d); chk.textContent = d ? '✓' : String(i + 1); chk.setAttribute('aria-pressed', String(d)); upd(); };
+    const body = el('div', { class: 'body' });
+    body.appendChild(el('h4', {}, s.h)); body.appendChild(el('p', {}, s.html));
+    if (s.code) body.appendChild(blocksSVG(s.code, 0.68));
+    if (s.img) body.appendChild(el('figure', {}, shot(s.img, s.h) + '<figcaption>Screenshot from Scratch. Click to enlarge.</figcaption>'));
+    li.append(chk, body); ol.appendChild(li);
+  });
+  wrap.append(el('p', { style: 'margin-bottom:12px' }, lesson.wedo.intro), head, el('div', { style: 'height:12px' }), ol); upd();
+  return wrap;
+}
+
+/* ---------- activities (each calls onDone when finished) ---------- */
+function Hotspot(onDone) {
+  onDone = once(onDone);
+  const zones = [
+    { id: 'flag', name: 'the green flag button (it starts the project)', r: [66.6, 6, 2.8, 4.2] },
+    { id: 'stage', name: 'the Stage (where the game runs)', r: [67, 10.5, 32.4, 41.9] },
+    { id: 'palette', name: 'the block palette (where you find blocks)', r: [0, 10.5, 21, 85.5] },
+    { id: 'code', name: 'the code area (where you build scripts)', r: [21.2, 10.5, 45, 85.5] },
+    { id: 'sprites', name: 'the sprite pane (choose which sprite to edit)', r: [67, 53.6, 27, 45.8] }];
+  const order = ['stage', 'palette', 'code', 'sprites', 'flag'];
+  let qi = 0, right = 0;
+  const w = el('div'), prompt = el('p', { class: 'hot-prompt', 'aria-live': 'polite' });
+  const box = el('div', { class: 'schot' }); box.innerHTML = `<img src="${M('01-interface.jpg')}" alt="The Scratch editor with block palette, code area, stage and sprite pane" width="1436" height="840">`;
+  const fb = el('p', { class: 'fb' }); const again = el('button', { class: 'btn ghost', type: 'button' }, '↺ Start again'); again.hidden = true;
+  zones.forEach(z => { const b = el('button', { class: 'zone', type: 'button', 'aria-label': z.name, style: `left:${z.r[0]}%;top:${z.r[1]}%;width:${z.r[2]}%;height:${z.r[3]}%` }); b.dataset.id = z.id; box.appendChild(b); });
+  const ask = () => { if (qi >= order.length) { prompt.textContent = `Done! ${right} / ${order.length} first time.`; again.hidden = false; onDone && onDone(Math.max(.6, right / order.length)); return; } prompt.innerHTML = `Click ${zones.find(z => z.id === order[qi]).name}`; };
+  box.addEventListener('click', e => {
+    const b = e.target.closest('.zone'); if (!b || qi >= order.length) return;
+    const ok = b.dataset.id === order[qi];
+    b.classList.add(ok ? 'show' : 'miss'); setTimeout(() => b.classList.remove('show', 'miss'), 900);
+    fb.className = 'fb ' + (ok ? 'ok' : 'bad'); fb.textContent = ok ? 'Yes, that’s it!' : 'Not that one. Try again.';
+    if (ok) { if (!b.dataset.missed) right++; qi++; ask(); } else box.querySelectorAll('.zone').forEach(z => { if (z.dataset.id === order[qi]) z.dataset.missed = 1; });
+  });
+  again.onclick = () => { qi = 0; right = 0; box.querySelectorAll('.zone').forEach(z => delete z.dataset.missed); again.hidden = true; fb.textContent = ''; ask(); };
+  ask(); w.append(prompt, box, fb, again); return w;
+}
+function Coords(onDone) {
+  onDone = once(onDone);
+  const w = el('div', { class: 'grid2' }), left = el('div'), right = el('div');
+  const sbx = el('div', { class: 'stagebox' }), cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  const ro = el('p', { class: 'readout', style: 'margin-top:8px' }); left.appendChild(ro);
+  const ctx = setupCanvas(cv), cat = { x: 0, y: 0 };
+  const missions = [{ t: 'Put the cat in its game spot: x: 0, y: -120', x: 0, y: -120 }, { t: 'Top-right corner area: x: 180, y: 120', x: 180, y: 120 }, { t: 'Left side, halfway up: x: -180, y: 0', x: -180, y: 0 }, { t: 'Where the apple starts falling: x: 0, y: 170', x: 0, y: 170 }];
+  const doneSet = new Set(), list = el('ul', { class: 'sclist' });
+  const draw = () => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = 'rgba(30,40,90,.18)'; ctx.lineWidth = 1;
+    for (let x = -240; x <= 240; x += 60) { ctx.beginPath(); ctx.moveTo(sx(x), 0); ctx.lineTo(sx(x), 360); ctx.stroke(); }
+    for (let y = -180; y <= 180; y += 60) { ctx.beginPath(); ctx.moveTo(0, sy(y)); ctx.lineTo(480, sy(y)); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(30,40,90,.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 180); ctx.lineTo(480, 180); ctx.moveTo(240, 0); ctx.lineTo(240, 360); ctx.stroke();
+    ctx.fillStyle = 'rgba(20,25,60,.75)'; ctx.font = '600 11px monospace';
+    [-180, -120, -60, 60, 120, 180].forEach(x => ctx.fillText(String(x), sx(x) + 3, 194)); [-120, -60, 60, 120].forEach(y => ctx.fillText(String(y), 244, sy(y) - 3));
+    ctx.fillText('x →', 450, 174); ctx.fillText('y ↑', 248, 14);
+    drawSprite(ctx, 'cat1', cat.x, cat.y);
+    ctx.strokeStyle = '#ff8c1a'; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(sx(cat.x), 180); ctx.lineTo(sx(cat.x), sy(cat.y)); ctx.moveTo(240, sy(cat.y)); ctx.lineTo(sx(cat.x), sy(cat.y)); ctx.stroke(); ctx.restore();
+    ro.innerHTML = `<span>x: <b>${cat.x}</b></span><span>y: <b>${cat.y}</b></span><span>→ go to x: (${cat.x}) y: (${cat.y})</span>`;
+    missions.forEach((m, i) => { if (Math.abs(cat.x - m.x) <= 15 && Math.abs(cat.y - m.y) <= 15) doneSet.add(i); });
+    list.innerHTML = missions.map((m, i) => `<li style="${doneSet.has(i) ? 'color:var(--ok);font-weight:700' : ''}">${doneSet.has(i) ? '✓ ' : ''}${m.t}</li>`).join('');
+    if (doneSet.size === missions.length) onDone && onDone(1);
+  };
+  let drag = false;
+  const pos = e => { const r = cv.getBoundingClientRect(); cat.x = Math.round(((e.clientX - r.left) / r.width * 480 - 240) / 5) * 5; cat.y = Math.round((180 - (e.clientY - r.top) / r.height * 360) / 5) * 5; cat.x = Math.max(-240, Math.min(240, cat.x)); cat.y = Math.max(-180, Math.min(180, cat.y)); draw(); };
+  cv.addEventListener('pointerdown', e => { drag = true; cv.setPointerCapture(e.pointerId); pos(e); });
+  cv.addEventListener('pointermove', e => { if (drag) pos(e); }); cv.addEventListener('pointerup', () => drag = false);
+  sbx.tabIndex = 0; sbx.setAttribute('aria-label', 'Coordinate stage. Use arrow keys to move the cat by 10.');
+  sbx.addEventListener('keydown', e => { const m = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] }[e.key]; if (m) { e.preventDefault(); cat.x = Math.max(-240, Math.min(240, cat.x + m[0])); cat.y = Math.max(-180, Math.min(180, cat.y + m[1])); draw(); } });
+  right.append(el('h4', { style: 'margin-bottom:8px' }, 'Missions'), list, el('p', { class: 'scnote', style: 'margin-top:14px' }, 'The stage is 480 steps wide (x: -240 to 240) and 360 steps tall (y: -180 to 180). Up is positive y. Right is positive x.'));
+  w.append(left, right); onImgs(draw); draw(); return w;
+}
+function LoopLab(onDone) {
+  onDone = once(onDone);
+  const w = el('div', { class: 'grid2' }), left = el('div'), right = el('div', { style: 'display:flex;flex-direction:column;gap:12px' });
+  const sbx = el('div', { class: 'stagebox' }), cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  const ctx = setupCanvas(cv); let n = 30, s = 5, cur = 170, anim = null;
+  const id = 'r' + Math.random().toString(36).slice(2, 7);
+  const rN = el('input', { type: 'range', min: 1, max: 100, value: n, id: id + 'n' }), rS = el('input', { type: 'range', min: 1, max: 15, value: s, id: id + 's' });
+  const lN = el('label', { for: id + 'n' }), lS = el('label', { for: id + 's' }), code = el('div'), out = el('p', { class: 'readout' }), res = el('p', { class: 'fb' });
+  const run = el('button', { class: 'btn flag', type: 'button' }, '⚑ Run loop');
+  const draw = trail => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = '#d64545'; ctx.setLineDash([6, 5]); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, sy(-150)); ctx.lineTo(480, sy(-150)); ctx.stroke();
+    ctx.fillStyle = '#7a1f1f'; ctx.font = '600 12px monospace'; ctx.fillText('target  y: -150', 8, sy(-150) - 6);
+    if (trail) { ctx.fillStyle = 'rgba(214,69,69,.55)'; for (let y = 170; y >= cur; y -= s) { ctx.beginPath(); ctx.arc(240, sy(y), 2, 0, 7); ctx.fill(); } }
+    ctx.restore(); drawSprite(ctx, 'apple', 0, cur);
+  };
+  const upd = () => { n = +rN.value; s = +rS.value; lN.innerHTML = `repeat <b>${n}</b> times`; lS.innerHTML = `change y by <b>-${s}</b>`; code.replaceChildren(blocksSVG(`go to x: (0) y: (170)\nrepeat (${n})\n  change y by (-${s})\nend`, 0.68)); out.innerHTML = `<span>distance = ${n} × ${s} = <b>${n * s}</b></span><span>end y = 170 − ${n * s} = <b>${170 - n * s}</b></span>`; if (!anim) { cur = 170; draw(false); } };
+  rN.oninput = upd; rS.oninput = upd;
+  run.onclick = () => {
+    cancelAnimationFrame(anim); cur = 170; let i = 0; res.textContent = '';
+    const tick = () => { if (i < n) { cur -= s; i++; draw(true); anim = requestAnimationFrame(tick); } else { anim = null; const ok = Math.abs(cur + 150) <= 3; res.className = 'fb ' + (ok ? 'ok' : 'bad'); res.innerHTML = ok ? `<b>Bullseye!</b> ${n} × ${s} = ${n * s} steps, landing at y: ${cur}.` : (cur < -180 ? `It fell off the bottom of the stage (y: ${cur}). Use fewer repeats or smaller steps.` : `It stopped at y: ${cur}. ${cur > -150 ? 'Not far enough yet.' : 'Too far.'} Try again.`); if (ok) onDone && onDone(1); } };
+    tick();
+  };
+  right.append(lN, rN, lS, rS, code, out, h('div', { class: 'row' }, run), res);
+  w.append(left, right); onImgs(() => draw(false)); upd(); return w;
+}
+function CondLab(onDone) {
+  onDone = once(onDone);
+  const w = el('div', { class: 'grid2' }), left = el('div'), right = el('div', { style: 'display:flex;flex-direction:column;gap:12px' });
+  const sbx = el('div', { class: 'stagebox' }), cv = el('canvas'); sbx.appendChild(cv); left.appendChild(sbx);
+  left.appendChild(el('p', { class: 'muted', style: 'font-size:.85rem;margin-top:6px' }, 'Drag the apple. The dashed line is y: -160. Make each condition TRUE at least once.'));
+  const ctx = setupCanvas(cv), ap = { x: 60, y: 60 }, seen = new Set();
+  const b1 = el('div', { class: 'bool' }), b2 = el('div', { class: 'bool' }), act = el('p', { class: 'scnote' });
+  const draw = () => {
+    drawSky(ctx); ctx.save(); ctx.strokeStyle = '#7a3b00'; ctx.setLineDash([6, 5]); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, sy(-160)); ctx.lineTo(480, sy(-160)); ctx.stroke(); ctx.restore();
+    drawSprite(ctx, 'cat1', 0, -120); drawSprite(ctx, 'apple', ap.x, ap.y);
+    const t = overlap(spriteBox('apple', ap.x, ap.y), spriteBox('cat1', 0, -120, 0.62)), g = ap.y < -160;
+    if (t) seen.add('t'); if (g) seen.add('g');
+    b1.className = 'bool' + (t ? ' true' : ''); b1.innerHTML = `&lt;touching (Sprite1)?&gt; <b>${t}</b>`;
+    b2.className = 'bool' + (g ? ' true' : ''); b2.innerHTML = `&lt;(y position) &lt; -160&gt; <span class="mono">y=${ap.y}</span> <b>${g}</b>`;
+    act.innerHTML = t ? '<b>Catch!</b> The first if runs: score + 1, crunch sound, back to the top.' : g ? '<b>Missed.</b> The second if runs: back to the top (and from Level 5, lose a life).' : 'Both conditions are <b>false</b>, so the code inside both if blocks is skipped. The apple just keeps falling.';
+    if (seen.size === 2) onDone && onDone(1);
+  };
+  let drag = false;
+  const pos = e => { const r = cv.getBoundingClientRect(); ap.x = Math.round((e.clientX - r.left) / r.width * 480 - 240); ap.y = Math.round(180 - (e.clientY - r.top) / r.height * 360); ap.x = Math.max(-230, Math.min(230, ap.x)); ap.y = Math.max(-180, Math.min(175, ap.y)); draw(); };
+  cv.addEventListener('pointerdown', e => { drag = true; cv.setPointerCapture(e.pointerId); pos(e); });
+  cv.addEventListener('pointermove', e => { if (drag) pos(e); }); cv.addEventListener('pointerup', () => drag = false);
+  sbx.tabIndex = 0; sbx.setAttribute('aria-label', 'Condition stage. Arrow keys move the apple.');
+  sbx.addEventListener('keydown', e => { const m = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] }[e.key]; if (m) { e.preventDefault(); ap.x += m[0]; ap.y += m[1]; draw(); } });
+  right.append(el('h4', {}, 'Live conditions'), b1, b2, act, blocksSVG('if <touching (Sprite1 v)?> then\n  change [score v] by (1)\nend\nif <(y position) < [-160]> then\n  go to x: (pick random (-200) to (200)) y: (170)\nend', 0.62));
+  w.append(left, right); onImgs(draw); draw(); return w;
+}
+function TraceTable(onDone) {
+  onDone = once(onDone);
+  const rows = [['Green flag clicked', 0, 3, -4], ['Catch an apple', 1, 3, -4.5], ['Catch an apple', 2, 3, -5], ['Miss an apple', 2, 2, -5], ['Catch an apple', 3, 2, -5.5], ['Miss an apple', 3, 1, -5.5], ['Miss an apple', 3, 0, -5.5]];
+  const w = el('div'), tw = el('div', { class: 'tablewrap' }), t = el('table', { class: 'sctrace' });
+  t.innerHTML = '<thead><tr><th>#</th><th>Event</th><th>score</th><th>lives</th><th>speed</th></tr></thead>';
+  const tb = el('tbody'), inputs = [];
+  rows.forEach((r, i) => {
+    const tr = el('tr'); tr.appendChild(el('td', {}, String(i + 1))); tr.appendChild(el('td', { class: 'ev' }, r[0]));
+    for (let c = 1; c <= 3; c++) { const td = el('td'); if (i === 0) td.innerHTML = `<b>${r[c]}</b>`; else { const inp = el('input', { type: 'text', inputmode: 'decimal', 'aria-label': `${['score', 'lives', 'speed'][c - 1]} after event ${i + 1}` }); inp.dataset.ans = r[c]; inputs.push(inp); td.appendChild(inp); } tr.appendChild(td); }
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb); tw.appendChild(t);
+  const fb = el('p', { class: 'fb' }), check = el('button', { class: 'btn', type: 'button' }, 'Check my table'), showA = el('button', { class: 'btn ghost', type: 'button' }, 'Show answers');
+  let tries = 0;
+  check.onclick = () => { tries++; let ok = 0; inputs.forEach(i => { const good = parseFloat(i.value) === parseFloat(i.dataset.ans); i.className = good ? 'ok' : 'no'; if (good) ok++; }); fb.className = 'fb ' + (ok === inputs.length ? 'ok' : 'bad'); fb.innerHTML = ok === inputs.length ? '<b>Perfect trace!</b> After event 7, lives = 0, so the apple broadcasts game over.' : `${ok} / ${inputs.length} correct. Remember: speed only changes on a catch, lives only on a miss.`; if (ok === inputs.length) onDone && onDone(tries === 1 ? 1 : .8); };
+  showA.onclick = () => { inputs.forEach(i => { i.value = i.dataset.ans; i.className = 'ok'; }); fb.className = 'fb'; fb.textContent = 'Answers shown. Read down each column and check you understand every change.'; onDone && onDone(.6); };
+  w.append(tw, h('div', { class: 'row', style: 'margin-top:10px' }, check, showA), fb); return w;
+}
+function Parsons(a, onDone) {
+  onDone = once(onDone);
+  const w = el('div');
+  const all = shuffle([...a.answer.map((t, i) => ({ t, i })), ...a.distract.map(t => ({ t, i: -1 }))]);
+  let chosen = [];
+  const g = el('div', { class: 'parsons' }), pool = el('div', { class: 'pz' }, '<h5>Blocks</h5>'), ans = el('div', { class: 'pz' }, '<h5>Your script</h5>'), fb = el('p', { class: 'fb' });
+  const draw = () => {
+    pool.querySelectorAll('.pitem').forEach(n => n.remove()); ans.querySelectorAll('.pitem').forEach(n => n.remove());
+    all.forEach(it => { if (chosen.includes(it)) return; const b = el('button', { class: 'pitem', type: 'button', 'aria-label': 'Add block: ' + it.t }); b.appendChild(blocksSVG(it.t, 0.62)); b.onclick = () => { chosen.push(it); draw(); }; pool.appendChild(b); });
+    chosen.forEach((it, k) => {
+      const row = el('div', { class: 'pitem' }); row.appendChild(blocksSVG(it.t, 0.62));
+      const mv = el('span', { class: 'pmv' });
+      mv.append(el('button', { type: 'button', 'aria-label': 'Move up', onclick: () => { if (k > 0) { [chosen[k - 1], chosen[k]] = [chosen[k], chosen[k - 1]]; draw(); } } }, '↑'), el('button', { type: 'button', 'aria-label': 'Move down', onclick: () => { if (k < chosen.length - 1) { [chosen[k + 1], chosen[k]] = [chosen[k], chosen[k + 1]]; draw(); } } }, '↓'), el('button', { type: 'button', 'aria-label': 'Remove', onclick: () => { chosen.splice(k, 1); draw(); } }, '✕'));
+      row.appendChild(mv); ans.appendChild(row);
+    });
+  };
+  const check = el('button', { class: 'btn', type: 'button' }, 'Check'), reset = el('button', { class: 'btn ghost', type: 'button' }, '↺ Reset');
+  check.onclick = () => {
+    const ok = chosen.length === a.answer.length && chosen.every((it, k) => it.i === k);
+    fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = ok ? '<b>Correct!</b> The hat block goes first, then face left, move left, and change costume.' : chosen.some(c => c.i === -1) ? 'One of your blocks is the trap. Moving left changes x, not y.' : chosen.length < a.answer.length ? `Not finished yet. You need ${a.answer.length} blocks.` : 'Check the order. Which block has to be at the top?';
+    if (ok) onDone && onDone(1);
+  };
+  reset.onclick = () => { chosen = []; fb.textContent = ''; draw(); };
+  g.append(pool, ans); w.append(g, h('div', { class: 'row', style: 'margin-top:10px' }, check, reset), fb); draw(); return w;
+}
+function TestPlan(onDone) {
+  onDone = once(onDone);
+  const tests = [['Click the green flag', 'Score 0, lives 3, cat at the bottom saying “Catch the apples!”'], ['Press → and ←', 'Cat moves and faces the right way, never upside down'], ['Catch an apple', 'Score goes up by exactly 1, crunch sound plays'], ['Miss an apple', 'Lives goes down by 1, apple restarts at the top'], ['Catch 4 apples', 'Apples fall noticeably faster'], ['Catch the bananas', 'Score goes up by 3'], ['Lose all lives', 'Apple disappears, cat says “Game over! Score: …”, game stops'], ['Click the green flag again', 'Everything resets: score 0, lives 3, apple visible']];
+  const saved = fcGet('tests', {});
+  const tw = el('div', { class: 'tablewrap' }), t = el('table', { class: 'plain' });
+  t.innerHTML = '<thead><tr><th>#</th><th>Test</th><th>Expected result</th><th>Result</th><th>What happened?</th></tr></thead>';
+  const tb = el('tbody'), sels = [], fb = el('p', { class: 'fb' });
+  const chk = () => { const s = fcGet('tests', {}); const n = tests.filter((_, i) => (s[i] || {}).r).length; const fails = tests.filter((_, i) => (s[i] || {}).r === 'fail' && !((s[i] || {}).n || '').trim()).length; fb.className = 'fb' + (n === tests.length && !fails ? ' ok' : ''); fb.textContent = n === tests.length ? (fails ? 'Write what happened for every test that failed.' : '✓ Test plan complete! Fix any fails and test them again.') : `${n} of ${tests.length} tests recorded.`; if (n === tests.length && !fails) onDone && onDone(1); };
+  tests.forEach((r, i) => {
+    const tr = el('tr'); tr.innerHTML = `<td>${i + 1}</td><td>${r[0]}</td><td>${r[1]}</td>`;
+    const td = el('td'), sel = el('select', { 'aria-label': 'Result for test ' + (i + 1) }); sel.innerHTML = '<option value="">–</option><option value="pass">Pass ✓</option><option value="fail">Fail ✗</option>'; sel.value = (saved[i] || {}).r || '';
+    const td2 = el('td'), inp = el('input', { type: 'text', 'aria-label': 'Notes for test ' + (i + 1), placeholder: 'Only if it failed' }); inp.value = (saved[i] || {}).n || '';
+    const sv = () => { const s = fcGet('tests', {}); s[i] = { r: sel.value, n: inp.value }; fcSet('tests', s); chk(); };
+    sel.onchange = sv; inp.oninput = sv; td.appendChild(sel); td2.appendChild(inp); tr.append(td, td2); tb.appendChild(tr); sels.push(sel);
+  });
+  t.appendChild(tb); tw.appendChild(t); chk();
+  return h('div', {}, tw, fb);
+}
+function Review(onDone) {
+  onDone = once(onDone);
+  const w = el('div', { class: 'grid2' }), s = fcGet('review', { www: '', ebi: '' });
+  const a = el('textarea', { rows: 4, placeholder: 'What went well… e.g. The bananas bonus is a great surprise.', 'aria-label': 'What Went Well' }); a.value = s.www;
+  const b = el('textarea', { rows: 4, placeholder: 'Even better if… e.g. It would be even better if there was a start screen.', 'aria-label': 'Even Better If' }); b.value = s.ebi;
+  const fb = el('p', { class: 'fb' });
+  const sv = () => { fcSet('review', { www: a.value, ebi: b.value }); const ok = a.value.trim().split(/\s+/).length >= 6 && b.value.trim().split(/\s+/).length >= 6; fb.className = 'fb' + (ok ? ' ok' : ''); fb.textContent = ok ? '✓ Feedback written — share it with your partner.' : 'Write at least one full sentence in each box.'; if (ok) onDone && onDone(1); };
+  a.oninput = sv; b.oninput = sv;
+  w.append(h('div', {}, h('label', { class: 'lab' }, 'What Went Well (WWW)'), a), h('div', {}, h('label', { class: 'lab' }, 'Even Better If (EBI)'), b));
+  const box = h('div', {}, w, fb); sv(); return box;
+}
+function Activity(a, lesson, onDone) {
+  const t = a.type;
+  const body = t === 'hotspot' ? Hotspot(onDone) : t === 'coords' ? Coords(onDone) : t === 'looplab' ? LoopLab(onDone) : t === 'condlab' ? CondLab(onDone) : t === 'trace' ? TraceTable(onDone)
+    : t === 'parsons' ? Parsons(a, onDone) : t === 'predict' ? Quiz(a.items.map(it => ({ q: it.q, options: it.o, a: it.a, why: it.why })), onDone) : t === 'testplan' ? TestPlan(onDone) : t === 'review' ? Review(onDone)
+    : t === 'play' ? h('div', { style: 'max-width:520px' }, Game(6, onDone)) : h('div');
+  return h('div', { class: 'stack', style: 'margin-top:24px' }, h('h3', {}, '🧩 ', a.title), a.intro ? h('p', { class: 'muted' }, a.intro) : null, body);
+}
+
+"use strict";
+/* =====================================================================
+   FRUIT CATCH QUEST — lessons built from the FC course data
+   ===================================================================== */
+const P = html => h('p', { html });
+const Tip = html => h('div', { class: 'callout tip', html });
+const Info = html => h('div', { class: 'callout', html });
+const Sect = (t, ...kids) => h('div', { class: 'stack', style: 'margin-top:24px' }, h('h3', {}, t), ...kids);
+const Reflect = (key, done) => Write({ key, prompt: h('span', {}, h('b', {}, '🎟️ What did you learn today? '), 'Write 2–3 sentences using the key words.'), minWords: 12, starters: ['Today I learned that…', 'The … block makes the sprite…', 'In my game I used … because…'], checklist: ['I used at least one key word correctly', 'I described a block I used'] }, done);
+const toQ = it => ({ q: it.q, options: it.o, a: it.a, why: it.why });
+
+const META = [
+  { color: '#3d7fe0', icon: '🐱', badge: '🐱', why: '<b>Why this?</b> Every program is a <b>sequence</b> of instructions, and Scratch lets you snap them together like puzzle pieces. <b>Why now?</b> You have written algorithms and flowcharts on paper — now you make a computer follow one.', ki: ['🐱', '🎭', '🧱', '📋', '📍', '➡️'] },
+  { color: '#b07d00', icon: '⌨️', badge: '⌨️', why: '<b>Why this?</b> Games react to the player. An <b>event</b> (like a key press) starts a script. <b>Why now?</b> Your cat is on the stage — now the player needs to control it.', ki: ['⚡', '🎩', '🧭', '👕', '↔️', '🔄'] },
+  { color: '#d97b00', icon: '🌧️', badge: '🔁', why: '<b>Why this?</b> <b>Loops</b> repeat code so you don’t have to write it 100 times. Every game uses them. <b>Why now?</b> The cat can move — now the apples need to keep falling.', ki: ['🔁', '♾️', '🔂', '🎲', '⬇️', '🔢'] },
+  { color: '#1f8fbf', icon: '🎯', badge: '🎯', why: '<b>Why this?</b> <b>Selection</b> (if … then) lets a program make decisions, and <b>variables</b> remember things like the score. <b>Why now?</b> Apples are falling — now the cat has to catch them.', ki: ['❓', '✅', '👆', '📦', '🏆', '🔊'] },
+  { color: '#7c4dcc', icon: '❤️', badge: '❤️', why: '<b>Why this?</b> Real games have a challenge: lives to lose, speed that rises and a clear ending. <b>Why now?</b> You can catch and score — now you make the game fair, harder and able to end.', ki: ['❤️', '⚡', '📣', '🛑', '🙈', '📊'] },
+  { color: '#b545b5', icon: '🚀', badge: '🚀', why: '<b>Why this?</b> Programmers <b>test</b> their work and fix bugs before anyone else plays it. <b>Why now?</b> Your game works — now you polish it, test it properly and share it.', ki: ['🍌', '🧪', '🐞', '✅', '🌍', '💬'] }
+];
+const LVL = { bronze: 'cautious', silver: 'challenge', gold: 'confident' };
+
+function YouDoTask(L, t, done) {
+  const key = `L${L.n}.yd.${t.lvl}`, saved = fcGet(key, [false, false, false]);
+  const items = ['I built it in Scratch', 'I clicked the green flag and tested it', 'It does what the task asks'];
+  const btn = h('button', { class: 'btn', type: 'button' }, '✅ I built it and it works');
+  const upd = () => { btn.disabled = !saved.every(Boolean); };
+  const checks = h('div', { class: 'stack', style: 'gap:6px' }, items.map((txt, i) => { const cb = h('input', { type: 'checkbox' }); cb.checked = saved[i]; cb.onchange = () => { saved[i] = cb.checked; fcSet(key, saved); upd(); }; return h('label', { class: 'chkrow' }, cb, ' ', txt); }));
+  btn.onclick = () => done && done(1); upd();
+  return h('div', { class: 'stack' },
+    h('div', { class: 'callout', html: '🛠️ <b>Your task:</b> ' + t.task }),
+    Tip('Build this in Scratch at <b>scratch.mit.edu</b>, in your own Fruit Catch project. Save it often!'),
+    Hints([h('span', { html: t.hint })]),
+    h('details', { class: 'sol' }, h('summary', {}, '👀 Stuck? See one possible solution'), blocksSVG(t.sol, 0.68)),
+    h('div', { class: 'card' }, h('h4', {}, 'Before you tick it off'), checks, h('div', { class: 'row', style: 'margin-top:10px' }, btn)));
+}
+
+const LESSONS = FC.map((L, i) => {
+  const m = META[i];
+  return {
+    id: 'L' + L.n, color: m.color, icon: m.icon, title: L.title, bq: L.bq, badge: m.badge, why: m.why,
+    objectives: L.objectives,
+    keywords: L.vocab.map(([w, d], k) => [m.ki[k] || '🧩', w, d]),
+    stages: [
+      { type: 'recall', title: i === 0 ? 'Recall: algorithms' : 'Recall: last lesson', obj: [], xp: 10, render: done => Quiz(L.starter.map(toQ), done) },
+      { type: 'learn', title: L.concept, obj: [0, 1], xp: 15, render: done => { const d = after(2, done); return h('div', {},
+        P(`Big idea today: <b>${L.concept}</b>. Flip each card, then try the activities below.`),
+        Flips(L.vocab.map(([w, dd], k) => ({ icon: m.ki[k] || '🧩', w, d: dd })), d),
+        ...L.activities.map(a => Activity(a, L, d))); } },
+      { type: 'ido', title: 'Watch me build it', obj: [1, 2], xp: 15, render: done => h('div', {},
+        P('Watch the video of the finished step, then watch the script build up one block at a time.'),
+        h('div', { class: 'vidwrap' }, h('video', { controls: '', preload: 'metadata', playsinline: '', src: M(L.ido.video.replace(/^media\//, '')), poster: M(L.ido.poster.replace(/^media\//, '')) })),
+        Sect('👀 Things to notice', h('ul', { class: 'sclist' }, L.ido.notice.map(t => h('li', { html: t })))),
+        Sect('🧱 Block by block', Builder(L.ido.build, done)),
+        Sect('🎮 Try the game so far', P(L.n >= 2 ? 'Press ⚑ Start, then use ← and → (or the buttons) to move the cat.' : 'Press ⚑ Start and watch what the cat’s script does.'), h('div', { style: 'max-width:520px' }, Game(L.sim, null)))) },
+      { type: 'wedo', title: 'Build it together', obj: [1, 2, 3], xp: 25, render: done => h('div', {},
+        Info('Open <b>scratch.mit.edu</b> and your Fruit Catch project. Follow each step, then tick it off. Click a screenshot to make it bigger.'),
+        StepsList(L, done)) },
+      { type: 'youdo', title: 'Challenges', obj: [0, 1, 2, 3], render: () => Levels(`L${L.n}.youdo`, Object.fromEntries(L.youdo.map(t => [LVL[t.lvl], { title: t.t, render: done => YouDoTask(L, t, done) }]))) },
+      { type: 'exit', title: 'Exit ticket', obj: [0, 1, 2, 3], xp: 20, render: done => { const d = after(2, done); return h('div', {}, Quiz(L.exit.map(toQ), d), Sect('Reflection', Reflect(`L${L.n}.exit`, d))); } }
+    ]
+  };
+});
+
+/* ========================= FINAL BOSS ========================= */
+const BOSS = [
+  { q: 'Where is the centre of the Scratch stage?', options: ['x: 0, y: 0', 'x: 240, y: 180', 'x: 100, y: 100', 'x: -240, y: -180'], a: 0 },
+  { q: 'Which area of Scratch is where your game runs?', options: ['The Stage', 'The block palette', 'The code area', 'The sprite pane'], a: 0 },
+  { q: 'Which block starts a script when the game begins?', options: ['when green flag clicked', 'forever', 'go to x: y:', 'next costume'], a: 0 },
+  { q: 'A sprite at y: -120 is…', options: ['Near the bottom of the stage', 'Near the top', 'On the left edge', 'Off the stage'], a: 0 },
+  { q: '“when right arrow key pressed” is an example of…', options: ['An event', 'A loop', 'A variable', 'A costume'], a: 0 },
+  { q: 'To move LEFT you change…', options: ['x by a negative number', 'y by a negative number', 'x by a positive number', 'the costume'], a: 0 },
+  { q: 'Why set rotation style to left-right?', options: ['So the cat doesn’t turn upside down', 'So it moves faster', 'So it changes colour', 'So it says hello'], a: 0 },
+  { q: 'repeat (10) with change y by (-5) inside moves the sprite…', options: ['50 steps down', '10 steps down', '5 steps down', '15 steps up'], a: 0 },
+  { q: 'Which loop never stops on its own?', options: ['forever', 'repeat (10)', 'repeat until', 'if then'], a: 0 },
+  { q: 'Running code only when something is true is called…', options: ['Selection', 'Sequence', 'Iteration', 'Decomposition'], a: 0 },
+  { q: 'A variable is…', options: ['A named store for a value that can change, like score', 'A type of sprite', 'A sound effect', 'A backdrop'], a: 0 },
+  { q: 'Why “set score to 0” when the green flag is clicked?', options: ['So each new game starts from zero', 'To make the score go up', 'To stop the game', 'It is not needed'], a: 0 },
+  { q: 'Score 2, lives 3. You miss an apple. Now…', options: ['score 2, lives 2', 'score 1, lives 3', 'score 3, lives 3', 'score 2, lives 4'], a: 0 },
+  { q: 'What does “broadcast [game over]” do?', options: ['Sends a message other sprites can react to', 'Deletes the game', 'Plays a sound', 'Adds a life'], a: 0 },
+  { q: 'Testing every feature with an expected result is a…', options: ['Test plan', 'Costume', 'Broadcast', 'Backdrop'], a: 0 }
+];
+
+/* ========================= KNOWLEDGE ORGANISER ========================= */
+UNIT.ko = () => {
+  const KW = [['Sprite', 'A character or object in your project, e.g. the cat or the apple.'], ['Stage', 'The 480 × 360 area where your project runs.'], ['Script', 'A stack of blocks snapped together. It runs from top to bottom.'], ['Algorithm', 'A set of step-by-step instructions to solve a problem.'], ['Coordinates', 'Two numbers (x, y) that give a position. The centre is (0, 0).'], ['Sequence', 'Instructions that run one after another, in order.'], ['Event', 'Something that happens (a key press, a click) that starts a script.'], ['Iteration', 'Repeating code using a loop: forever, repeat or repeat until.'], ['Selection', 'Making a decision: code inside if … then only runs when the condition is true.'], ['Condition', 'A question with a true or false answer, e.g. touching Sprite1?'], ['Variable', 'A named store for a value that can change, e.g. score or lives.'], ['Broadcast', 'A message sent to every sprite so they can react at the same time.'], ['Bug', 'A mistake in a program that stops it working as expected.'], ['Debugging', 'Finding and fixing bugs.']];
+  const CAT = [['Motion', '#4c97ff', 'go to, change x by, point in direction'], ['Looks', '#9966ff', 'say, next costume, show, hide'], ['Sound', '#cf63cf', 'start sound'], ['Events', '#ffbf00', 'when green flag clicked, when key pressed, broadcast'], ['Control', '#ffab19', 'forever, repeat, if … then, stop'], ['Sensing', '#5cb1d6', 'touching …?'], ['Operators', '#59c059', 'pick random, <, >, ='], ['Variables', '#ff8c1a', 'set score to 0, change score by 1']];
+  return [
+    h('div', { class: 'card', style: 'margin-bottom:16px' }, h('h3', {}, '❓ Key knowledge'), h('ul', {}, ['Name the main areas of the Scratch editor', 'Use x and y coordinates to position sprites', 'Use events to start scripts', 'Use loops (iteration) to repeat code', 'Use if … then (selection) to make decisions', 'Use variables to keep score and lives', 'Test a program with a test plan and fix bugs'].map(q => h('li', {}, q)))),
+    h('div', { class: 'ko' },
+      h('div', { class: 'card' }, h('h3', {}, '🔑 Key words'), KW.map(([w, dd], n) => h('div', { class: 'kwrow' }, h('span', { class: 'ic', style: 'font-weight:800;color:var(--primary)' }, n + 1), h('div', {}, h('b', {}, w), h('div', { class: 'muted' }, dd))))),
+      h('div', { class: 'stack' },
+        h('div', { class: 'card' }, h('h3', {}, '🎨 Block colours'), CAT.map(([n, c, e]) => h('div', { class: 'kwrow' }, h('span', { class: 'ic', style: `background:${c};border-radius:6px;width:22px;height:22px;display:inline-block` }), h('div', {}, h('b', {}, n), h('div', { class: 'muted' }, e))))),
+        h('div', { class: 'card' }, h('h3', {}, '🧭 The three constructs'), P('<b>Sequence</b>: blocks run in order, top to bottom.<br><b>Selection</b>: <code>if … then</code> runs code only when a condition is true.<br><b>Iteration</b>: <code>forever</code> and <code>repeat</code> loop code.')),
+        h('div', { class: 'card' }, h('h3', {}, '📍 The stage'), P('x goes from <b>-240</b> (left) to <b>240</b> (right). y goes from <b>-180</b> (bottom) to <b>180</b> (top). The centre is <b>(0, 0)</b>.'))))
+  ];
+};
+
+/* ========================= LABS ========================= */
+const LABS = [
+  { id: 'game', e: '🍎', n: 'Play Fruit Catch', l: 'Level 6', r: () => h('div', { style: 'max-width:560px' }, P('The finished game. Catch apples (+1) and bananas (+3). Miss 3 apples and it is game over.'), Game(6, null)) },
+  { id: 'editor', e: '🖥️', n: 'Scratch editor tour', l: 'Level 1', r: () => Hotspot(null) },
+  { id: 'coords', e: '📍', n: 'Coordinate explorer', l: 'Level 1', r: () => Coords(null) },
+  { id: 'loops', e: '🔁', n: 'Loop lab', l: 'Level 3', r: () => LoopLab(null) },
+  { id: 'cond', e: '❓', n: 'Condition tester', l: 'Level 4', r: () => CondLab(null) },
+  { id: 'trace', e: '📊', n: 'Trace table', l: 'Level 5', r: () => TraceTable(null) }
+];
+
+"use strict";
+/* =====================================================================
+   APP SHELL: routing, home (unit map), lesson view, knowledge organiser, labs, boss
+   ===================================================================== */
+const STYPE = {
+  recall: ['🧠', 'Recall', 'Do Now — answer in silence'], learn: ['📖', 'Learn', 'New knowledge'], ido: ['👀', 'I do', 'Watch the model'],
+  wedo: ['🤝', 'We do', 'Guided practice'], youdo: ['🚀', 'You do', 'Independent practice'], exit: ['🎟️', 'Exit ticket', 'Show what you know']
+};
+const app = $('#app');
+const sKey = (L, i) => `${L.id}.${i}`;
+const stageDone = (L, i) => !!S.done[sKey(L, i)];
+const lessonDone = L => L.stages.every((s, i) => stageDone(L, i));
+const lessonPct = L => Math.round(L.stages.filter((s, i) => stageDone(L, i)).length / L.stages.length * 100);
+const unlocked = idx => idx === 0 || S.unlockAll || lessonDone(LESSONS[idx - 1]);
+const bossUnlocked = () => S.unlockAll || LESSONS.every(lessonDone);
+const objMet = (L, k) => { const st = L.stages.map((s, i) => [s, i]).filter(([s]) => s.obj.includes(k)); return st.length > 0 && st.every(([, i]) => stageDone(L, i)); };
+
+const Lesson = {
+  L: null, i: 0, levelNav: null,
+  markStage() {
+    const L = this.L; if (!L) return;
+    const k = sKey(L, this.i);
+    if (!S.done[k]) { S.done[k] = true; save(); }
+    drawChrome();
+    if (lessonDone(L) && !S.done[L.id + '.badge']) {
+      S.done[L.id + '.badge'] = true; S.xp += 50; save(); refreshHeader(); confetti();
+      const idx = LESSONS.indexOf(L);
+      modal(`${L.badge} Level complete!`, `You earned the <b>${L.title}</b> badge and a <b>+50 XP</b> bonus.<br>${LESSONS[idx + 1] ? `🔓 <b>Level ${idx + 2}: ${LESSONS[idx + 1].title}</b> is now unlocked.` : `🔓 The <b>${UNIT.boss.name}</b> boss is now unlocked!`}`);
+    }
+  }
+};
+
+/* -------- routing -------- */
+function go(hash) { if (location.hash === hash) route(); else location.hash = hash; }
+function route() {
+  const p = location.hash.replace(/^#\/?/, '').split('/');
+  window.scrollTo(0, 0);
+  if (p[0] === 'ko') return renderKO();
+  if (p[0] === 'labs') return renderLabs(p[1]);
+  if (p[0] === 'boss') return renderBoss();
+  const idx = LESSONS.findIndex(L => L.id === p[0]);
+  if (idx >= 0 && unlocked(idx)) return renderLesson(LESSONS[idx], Math.max(0, Math.min(+p[1] || 0, LESSONS[idx].stages.length - 1)));
+  renderHome();
+}
+window.addEventListener('hashchange', route);
+
+/* -------- home -------- */
+function nextStep() {
+  for (let i = 0; i < LESSONS.length; i++) { const L = LESSONS[i]; if (!unlocked(i)) break; const s = L.stages.findIndex((_, k) => !stageDone(L, k)); if (s >= 0) return `#/${L.id}/${s}`; }
+  return bossUnlocked() ? '#/boss' : '#/L1/0';
+}
+function renderHome() {
+  Lesson.L = null;
+  const done = LESSONS.filter(lessonDone).length, n = LESSONS.length;
+  const badges = LESSONS.filter(L => S.done[L.id + '.badge']).length + (S.done.boss ? 1 : 0);
+  app.style.removeProperty('--lc');
+  app.replaceChildren(
+    h('section', { class: 'hero' },
+      h('div', {}, h('div', { class: 'tag', style: 'margin-bottom:12px' }, UNIT.tag), h('h1', {}, UNIT.title),
+        P(UNIT.intro),
+        h('div', { class: 'row', style: 'margin-top:16px' }, h('button', { class: 'btn', onclick: () => go(nextStep()) }, done || S.xp ? '▶ Continue where I left off' : '▶ Start Level 1'), h('button', { class: 'btn sec', onclick: () => go('#/labs') }, '🧪 Open the labs'))),
+      h('div', {}, h('div', { class: 'statrow' }, h('div', { class: 'stat' }, h('b', {}, S.xp), h('span', {}, 'XP earned')), h('div', { class: 'stat' }, h('b', {}, `${done}/${n}`), h('span', {}, 'Levels complete')), h('div', { class: 'stat' }, h('b', {}, `${badges}/${n + 1}`), h('span', {}, 'Badges'))),
+        h('div', { class: 'layers', 'aria-label': 'What you will learn' }, UNIT.layers.map(([t, sm, c]) => h('div', { style: `background:${c}` }, t, h('small', {}, sm)))))),
+    h('div', { class: 'card tight', style: 'margin-bottom:24px' }, h('div', { class: 'row', style: 'justify-content:space-between' }, h('b', {}, 'How every level works'),
+      h('div', { class: 'row', style: 'gap:6px' }, Object.values(STYPE).map(([i, t], k, a) => [h('span', { class: 'tag' }, i, ' ', t), k < a.length - 1 ? h('span', { 'aria-hidden': 'true', class: 'muted' }, '→') : null])))),
+    h('h2', {}, '🗺️ Your quest map'),
+    h('div', { class: 'map' },
+      LESSONS.map((L, idx) => {
+        const u = unlocked(idx), pct = lessonPct(L);
+        return h('button', { class: 'lvl', style: `--lc:${L.color}`, disabled: !u, onclick: () => go(`#/${L.id}/0`), 'aria-label': `Level ${idx + 1}: ${L.title}${u ? '' : ' (locked)'}` },
+          !u ? h('span', { class: 'lock', 'aria-hidden': 'true' }, '🔒') : lessonDone(L) ? h('span', { class: 'lock', 'aria-hidden': 'true' }, '✅') : null,
+          h('span', { class: 'num' }, `Level ${idx + 1}`), h('span', { class: 'ico', 'aria-hidden': 'true' }, L.icon), h('h3', {}, L.title), h('span', { class: 'q' }, L.bq),
+          h('div', { class: 'minibar' }, h('i', { style: `width:${pct}%` })), h('span', { class: 'stars' }, `${pct}% complete`));
+      }),
+      h('button', { class: 'lvl', style: `--lc:${UNIT.boss.color || '#b45309'}`, disabled: !bossUnlocked(), onclick: () => go('#/boss') },
+        !bossUnlocked() ? h('span', { class: 'lock', 'aria-hidden': 'true' }, '🔒') : S.done.boss ? h('span', { class: 'lock' }, '🏆') : null,
+        h('span', { class: 'num' }, 'Final level'), h('span', { class: 'ico', 'aria-hidden': 'true' }, UNIT.boss.icon), h('h3', {}, UNIT.boss.name), h('span', { class: 'q' }, UNIT.boss.desc))),
+    h('h2', { style: 'margin-top:48px' }, '🏅 Badges'),
+    h('div', { class: 'badges' }, LESSONS.map(L => h('div', { class: 'badge' + (S.done[L.id + '.badge'] ? ' got' : '') }, h('div', { class: 'b' }, L.badge), L.title)), h('div', { class: 'badge' + (S.done.boss ? ' got' : '') }, h('div', { class: 'b' }, '🏆'), UNIT.master)),
+    h('details', { class: 'card', style: 'margin-top:48px' }, h('summary', { style: 'font-weight:800;cursor:pointer' }, '🧑‍🏫 Teacher tools'),
+      h('div', { class: 'stack', style: 'margin-top:16px' },
+        h('label', { class: 'row', style: 'font-weight:600' }, h('input', { type: 'checkbox', checked: S.unlockAll, style: 'width:20px;height:20px', onchange: e => { S.unlockAll = e.target.checked; save(); renderHome(); } }), 'Unlock every level (for teaching out of order or revision)'),
+        P('Progress and written answers are saved in this browser only. On shared computers, pupils should finish a level in one sitting. The 🧪 Labs page has every simulation in one place for demonstrating on the board.'),
+        ...UNIT.teacherNotes.map(t => P(t)),
+        h('button', { class: 'btn sec', style: 'color:var(--bad)', onclick: () => { if (confirm('Reset ALL progress, XP and saved answers on this computer? This cannot be undone.')) { S = { xp: 0, done: {}, notes: {}, unlockAll: false, theme: S.theme, name: '' }; save(); refreshHeader(); renderHome(); toast('Progress reset'); } } }, 'Reset all progress'))));
+}
+
+/* -------- lesson -------- */
+let chrome = {};
+function drawChrome() {
+  const L = Lesson.L; if (!L || !chrome.steps) return;
+  chrome.objs.replaceChildren(...L.objectives.map((o, k) => h('div', { class: 'obj' + (objMet(L, k) ? ' met' : '') }, h('span', { class: 'tk', 'aria-hidden': 'true' }, objMet(L, k) ? '✓' : k + 1), h('span', {}, o, objMet(L, k) ? h('span', { class: 'sr' }, ' (achieved)') : ''))));
+  chrome.steps.replaceChildren(...L.stages.map((s, i) => h('button', { class: 'st' + (i === Lesson.i ? ' cur' : '') + (stageDone(L, i) ? ' done' : ''), 'aria-current': i === Lesson.i ? 'step' : null, onclick: () => go(`#/${L.id}/${i}`) },
+    h('span', { class: 'd', 'aria-hidden': 'true' }, stageDone(L, i) ? '✓' : STYPE[s.type][0]), h('span', {}, h('small', {}, `${i + 1}. ${STYPE[s.type][1]}`), s.title))));
+  chrome.pct.style.width = lessonPct(L) + '%';
+  if (chrome.status) chrome.status.textContent = stageDone(L, Lesson.i) ? '✅ Step complete' : 'Complete the activity to earn XP';
+}
+function renderLesson(L, i) {
+  Lesson.L = L; Lesson.i = i; Lesson.levelNav = null;
+  const idx = LESSONS.indexOf(L), st = L.stages[i];
+  const nextLabel = `Next: ${i < L.stages.length - 1 ? STYPE[L.stages[i + 1].type][1] : ''} →`;
+  let nextAction = () => go(`#/${L.id}/${i + 1}`);
+  const nextBtn = i < L.stages.length - 1 ? h('button', { class: 'btn', onclick: () => nextAction() }, nextLabel) : null;
+  const skipBtn = h('button', { class: 'btn ghost small', hidden: true, onclick: () => go(`#/${L.id}/${i + 1}`) }, 'Skip to Exit ticket');
+  app.style.setProperty('--lc', L.color);
+  const objs = h('div', { class: 'objs' }), steps = h('nav', { class: 'steps', 'aria-label': 'Lesson steps' }), pct = h('i');
+  chrome = { objs, steps, pct };
+  const done = once(r => { if (st.xp) award(sKey(L, i), Math.round(st.xp * Math.max(.5, r ?? 1)), STYPE[st.type][1]); Lesson.markStage(); });
+  const [ic, tName, tDesc] = STYPE[st.type];
+  const order = ['ido', 'wedo', 'youdo'];
+  const body = h('div', { class: 'card' },
+    h('div', { class: 'stage-h' }, h('span', { class: 'stype' }, ic, ' ', tName), h('span', { class: 'muted', style: 'font-weight:600' }, tDesc),
+      h('div', { class: 'gradual', style: 'margin-left:auto', 'aria-label': 'Gradual release' }, order.map(o => h('span', { class: o === st.type ? 'on' : '' }, STYPE[o][1])))),
+    h('h2', {}, st.title),
+    st.obj.length ? h('div', { class: 'objref' }, '🎯 Working towards: ', st.obj.map(k => L.objectives[k]).join(' · ')) : h('div', { class: 'objref' }, '🧠 Retrieval practice — strengthens your memory of earlier learning.'),
+    st.type === 'learn' ? h('div', { class: 'callout tip', style: 'margin-top:16px', html: '💭 ' + L.why }) : null,
+    h('div', { style: 'margin-top:16px' }, st.render(done)),
+    h('div', { class: 'stage-f' },
+      i > 0 ? h('button', { class: 'btn sec', onclick: () => go(`#/${L.id}/${i - 1}`) }, '← Back') : h('button', { class: 'btn sec', onclick: () => go('#/') }, '← Quest map'),
+      chrome.status = h('span', { class: 'muted', style: 'font-size:.85rem' }),
+      nextBtn ? h('div', { class: 'row' }, skipBtn, nextBtn)
+        : h('button', { class: 'btn', onclick: () => go(LESSONS[idx + 1] && unlocked(idx + 1) ? `#/${LESSONS[idx + 1].id}/0` : '#/') }, LESSONS[idx + 1] && unlocked(idx + 1) ? `Next level: ${LESSONS[idx + 1].title} →` : 'Back to quest map')));
+  app.replaceChildren(
+    h('header', { class: 'lhead' }, h('div', { class: 'k' }, `Level ${idx + 1} of ${LESSONS.length} · ${L.icon} ${L.title}`), h('h1', {}, 'Big Question: ', L.bq),
+      h('div', { class: 'bq' }, 'By the end of this level I can:'), objs,
+      h('div', { class: 'minibar', style: 'margin-top:16px;background:rgba(255,255,255,.25)' }, pct)),
+    h('details', { class: 'card tight', style: 'margin-bottom:16px' }, h('summary', { style: 'font-weight:800;cursor:pointer' }, '📌 Key words for this level'),
+      h('div', { class: 'grid2', style: 'margin-top:8px' }, L.keywords.map(([i2, w, d]) => h('div', { class: 'kwrow' }, h('span', { class: 'ic', 'aria-hidden': 'true' }, i2), h('div', {}, h('b', {}, w), h('div', { class: 'muted' }, d)))))),
+    h('div', { class: 'lwrap' }, steps, body));
+  if (Lesson.levelNav && nextBtn) {
+    const nav = Lesson.levelNav;
+    nav.refresh = () => {
+      const nl = nav.next();
+      if (nl) { nextBtn.textContent = `Next: ${nl.icon} ${nl.name} level →`; nextAction = () => nav.open(nl.id); skipBtn.hidden = false; }
+      else { nextBtn.textContent = nextLabel; nextAction = () => go(`#/${L.id}/${i + 1}`); skipBtn.hidden = true; }
+    };
+    nav.refresh();
+  }
+  drawChrome();
+}
+
+/* -------- knowledge organiser: UNIT.ko() returns the body -------- */
+function renderKO() {
+  Lesson.L = null; app.style.removeProperty('--lc');
+  app.replaceChildren(
+    h('div', { class: 'row', style: 'justify-content:space-between;margin-bottom:16px' }, h('h1', { style: 'margin:0' }, '📘 Knowledge organiser'), h('div', { class: 'row' }, h('button', { class: 'btn sec', onclick: () => window.print() }, '🖨 Print'), h('button', { class: 'btn', onclick: () => go('#/') }, '← Quest map'))),
+    ...UNIT.ko());
+}
+
+/* -------- labs (LABS defined with the content) -------- */
+function renderLabs(id) {
+  Lesson.L = null; app.style.setProperty('--lc', UNIT.labColor);
+  const lab = LABS.find(x => x.id === id);
+  if (lab) {
+    app.replaceChildren(h('header', { class: 'lhead' }, h('div', { class: 'k' }, `🧪 Labs · ${lab.l}`), h('h1', {}, lab.e + ' ' + lab.n), h('div', { class: 'bq' }, 'Free exploration — no XP, no pressure. Great for demonstrating on the board.')),
+      h('div', { class: 'card' }, lab.r(), h('div', { class: 'stage-f' }, h('button', { class: 'btn sec', onclick: () => go('#/labs') }, '← All labs'), h('button', { class: 'btn ghost', onclick: () => go('#/') }, 'Quest map'))));
+    return;
+  }
+  app.replaceChildren(h('header', { class: 'lhead' }, h('div', { class: 'k' }, 'Free exploration'), h('h1', {}, '🧪 Labs'), h('div', { class: 'bq' }, 'Every simulation from the unit in one place.')),
+    h('div', { class: 'labs' }, LABS.map(x => h('button', { class: 'lvl', style: `--lc:${UNIT.labColor};min-height:150px`, onclick: () => go('#/labs/' + x.id) }, h('span', { class: 'num' }, x.l), h('span', { class: 'ico', 'aria-hidden': 'true' }, x.e), h('h3', {}, x.n)))),
+    h('div', { class: 'stage-f' }, h('button', { class: 'btn sec', onclick: () => go('#/') }, '← Quest map')));
+}
+
+/* -------- final boss -------- */
+function renderBoss() {
+  Lesson.L = null; app.style.setProperty('--lc', UNIT.boss.color || '#b45309');
+  if (!bossUnlocked()) { renderHome(); return; }
+  const cert = h('div');
+  function certificate() {
+    const nm = h('div', { style: 'font-size:1.8rem;font-weight:800;margin:8px 0' }, S.name || 'Your name');
+    const name = h('input', { type: 'text', value: S.name || '', 'aria-label': 'Your name', placeholder: 'Type your name', style: 'max-width:300px', oninput: e => { S.name = e.target.value; save(); nm.textContent = S.name || 'Your name'; } });
+    cert.replaceChildren(h('div', { class: 'card', style: 'text-align:center;border:6px double var(--accent);margin-top:24px' },
+      h('div', { style: 'font-size:3rem' }, UNIT.certIcon), h('div', { class: 'muted', style: 'font-weight:800;letter-spacing:.08em' }, 'CERTIFICATE OF ACHIEVEMENT'), nm,
+      P(UNIT.certText), h('div', { style: 'font-size:1.3rem;font-weight:800;color:var(--primary)' }, RANKS[rankOf(S.xp)][1]), P(`with <b>${S.xp} XP</b>.`)),
+      h('div', { class: 'row', style: 'margin-top:12px;justify-content:center' }, name, h('button', { class: 'btn sec', onclick: () => window.print() }, '🖨 Print certificate')));
+  }
+  app.replaceChildren(
+    h('header', { class: 'lhead' }, h('div', { class: 'k' }, 'Final level'), h('h1', {}, UNIT.boss.icon + ' ' + UNIT.boss.name), h('div', { class: 'bq' }, UNIT.boss.bq)),
+    h('div', { class: 'card' }, BossBattle(BOSS, () => { if (award('boss', 150, UNIT.boss.award)) { S.done.boss = true; save(); confetti(); } certificate(); }), cert,
+      h('div', { class: 'stage-f' }, h('button', { class: 'btn sec', onclick: () => go('#/') }, '← Quest map'))));
+  if (S.done.boss) certificate();
+}
+
+/* -------- theme + init -------- */
+function applyTheme() { if (S.theme) document.documentElement.setAttribute('data-theme', S.theme); else document.documentElement.removeAttribute('data-theme'); }
+$('#themeBtn').onclick = () => {
+  let sysDark = false; try { sysDark = matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { /* ignore */ }
+  const dark = S.theme ? S.theme === 'dark' : sysDark;
+  S.theme = dark ? 'light' : 'dark'; save(); applyTheme();
+};
+$('#homeBtn').onclick = () => go('#/');
+$('#koBtn').onclick = () => go('#/ko');
+$('#labsBtn').onclick = () => go('#/labs');
+applyTheme(); refreshHeader(); route();
+
+</script>
+</body>
+</html>
